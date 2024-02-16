@@ -34,6 +34,8 @@ export function Homepage() {
       setFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
+        const base64String = reader.result;
+        console.log(base64String);
         setImageUrl(reader.result);
       };
       reader.readAsDataURL(file);
@@ -42,15 +44,11 @@ export function Homepage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    // const formData = new FormData();
-    // formData.append("text", text); // Assuming 'text' is the state variable holding your text input
-    // formData.append("file", file); 
   
     // Prepare the data as a JSON object
     const data = { 
       text: text,
-      file: file
+      file: imageUrl
     }; // Assuming 'text' is the state variable holding your text input
 
     console.log('file: ', file);
