@@ -21,6 +21,22 @@ export function Homepage() {
   const [file, setFile] = useState(null);
   const [text, setText] = useState(''); // State to hold text input
   const [imageUrl, setImageUrl] = useState('');
+  const [originalImageUrl, setOriginalImageUrl] = useState(''); // State to store the original image URL so each render it uses this one
+  const [selectedSegment, setSelectedSegment] = useState(''); // State to track selected segment
+  const [selectedBrand, setSelectedBrand] = useState('') // State to track selected brand
+
+  // Handle segment selection
+  const handleSegmentSelect = (segment) => {
+    setSelectedSegment(segment); // Update the selected segment state
+  };
+
+  // Check if text input should be enabled
+  const isTextInputEnabled = ['Access Interview (short)', 'Access Interview (long)'].includes(selectedSegment);
+
+  // Handle brand selection
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand(brand); // 
+  }
 
   const handleTextChange = (e) => {
     setText(e.target.value); // Update text state on change
@@ -34,8 +50,8 @@ export function Homepage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
-        console.log(base64String);
         setImageUrl(reader.result);
+        setOriginalImageUrl(reader.result); // Store the original image URL
       };
       reader.readAsDataURL(file);
     }
@@ -47,7 +63,8 @@ export function Homepage() {
     // Prepare the data as a JSON object
     const data = { 
       text: text,
-      file: imageUrl
+      file: originalImageUrl,
+      segment: selectedSegment,
     }; // Assuming 'text' is the state variable holding your text input
 
     console.log('file: ', file);
@@ -90,7 +107,41 @@ export function Homepage() {
               <CardDescription>Only the best thumbnails.</CardDescription>
             </CardHeader>
             <CardContent>
+            <div className="grid gap-2">
+                <label className="text-sm font-medium mt-4">Brand</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="!rounded-lg !text-left w-full" id="style" variant="outline">
+                      {selectedBrand || 'Select Brand'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => handleBrandSelect('Access Hollywood')}>Access Hollywood</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <div className="grid gap-2">
+                <label className="text-sm font-medium mt-4">Segment</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="!rounded-lg !text-left w-full" id="theme" variant="outline">
+                      {selectedSegment || 'Select Segment'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Standard')}>Access Standard</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Royals')}>Access Royals</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Interview (short)')}>Access Interview (short)</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Interview (long)')}>Access Interview (long)</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Exclusive')}>Access Exclusive</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Daily')}>Access Daily</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Award Season')}>Access Award Season</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Reality Nightcap')}>Access Reality Nightcap</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSegmentSelect('Access Housewives Nightcap')}>Access Housewives Nightcap</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="grid mt-4 gap-2">
                   <label className="text-sm font-medium" htmlFor="upload">
                     Upload Image
                   </label>
@@ -119,40 +170,10 @@ export function Homepage() {
                   id="text"
                   placeholder="Enter text to include in the thumbnail" 
                   onChange={handleTextChange}
+                  disabled={!isTextInputEnabled}
                   />
               </div>
-              <div className="grid gap-2">
-                <label className="text-sm font-medium mt-4">Brand</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button className="!rounded-lg !text-left w-full" id="style" variant="outline">
-                      Access Hollywood
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>Access Hollywood</DropdownMenuItem>
-                    <DropdownMenuItem>Karamo Show</DropdownMenuItem>
-                    <DropdownMenuItem>Steve Wilkos</DropdownMenuItem>
-                    <DropdownMenuItem>Maury Show</DropdownMenuItem>
-                    <DropdownMenuItem>Jerry Springer TV</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="grid gap-2">
-                <label className="text-sm font-medium mt-4">Segment</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button className="!rounded-lg !text-left w-full" id="theme" variant="outline">
-                      Access Generic
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>Access Generic</DropdownMenuItem>
-                    <DropdownMenuItem>Access Interview</DropdownMenuItem>
-                    <DropdownMenuItem>Access Awards</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+              
               <Button onClick={handleSubmit} className="w-full my-4">Generate Thumbnail</Button>
             </CardContent>
           </div>

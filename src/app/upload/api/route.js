@@ -7,8 +7,18 @@ export async function GET(req) {
 }
 
 
+const segmentToPngMap = {
+    'Access Standard': './public/pngs/E.png',
+    'Access Royals': './public/pngs/G.png',
+    'Access Interview (short)': './public/pngs/I.png',
+    'Access Interview (long)': './public/pngs/E.png',
+    'Access Exclusive': './public/pngs/E.png',
+    // Add more mappings as needed
+};
+
+
 export async function POST(req, res) {
-    const { text, file } = await req.json();
+    const { text, file, segment } = await req.json();
 
     // decode the base64 string
     const base64String = file.split(';base64,').pop();
@@ -16,13 +26,12 @@ export async function POST(req, res) {
 
     // use sharp to process the image
     try {
+
+        // Select the PNG overlay based on the segment
+        const overlayPng = segmentToPngMap[segment] || './public/pngs/E.png'; 
+
         const processedImage = await sharp(buffer)
-            // .composite([{
-            //     input: await createTextOverlay(text, 800, 800), // create the text overlay
-            //     gravity: 'centre'
-            // }])
-            .flatten( { background: '#ff6600' } )
-            .rotate(-90)
+            .composite([{ input: overlayPng, gravity: 'southeast', text: 'howdy' }])
             .toFormat('webp')
             .toBuffer();
 
