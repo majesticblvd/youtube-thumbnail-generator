@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react"
 import { useFormState } from 'react-dom'
-import { createThumbnail } from "@/app/actions"
 
 const initialState = {
   message: null,
@@ -63,11 +62,22 @@ export function Homepage() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      if (data.base64Image) {
+        setImageUrl(data.base64Image); // Correctly access and update state
+      }
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   }
+
+  // look for changes in the imageUrl state
+  useEffect(() => {
+    if (imageUrl) {
+      // Create the thumbnail
+      console.log('imageUrl: ', imageUrl);
+    }
+  }, [imageUrl]);
 
 
   return (
@@ -77,7 +87,7 @@ export function Homepage() {
           <div className="space-y-4">
             <CardHeader className="pb-0">
               <CardTitle>Thumbnail Generator</CardTitle>
-              <CardDescription>Create stunning thumbnails for your posts.</CardDescription>
+              <CardDescription>Only the best thumbnails.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-2">
