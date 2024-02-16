@@ -9,5 +9,9 @@ export async function GET(req) {
 
 
 export async function POST(req, res) {
-    
-  }
+    const { text } = await req.json();
+  
+    console.log('Text from form: ', text);
+  
+    return Response.json({ test: 'hello there' });
+}

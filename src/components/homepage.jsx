@@ -42,16 +42,25 @@ export function Homepage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    // const formData = new FormData();
+    // formData.append("text", text); // Assuming 'text' is the state variable holding your text input
+    // formData.append("file", file); 
   
     // Prepare the data as a JSON object
-    const data = { text: text }; // Assuming 'text' is the state variable holding your text input
+    const data = { 
+      text: text,
+      file: file
+    }; // Assuming 'text' is the state variable holding your text input
+
+    console.log('file: ', file);
   
-    fetch('/api/upload', {
+    fetch('/upload/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: data,
+      body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(data => {
