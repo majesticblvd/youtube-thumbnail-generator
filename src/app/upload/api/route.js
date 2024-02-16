@@ -8,11 +8,11 @@ export async function GET(req) {
 
 
 const segmentToPngMap = {
-    'Access Standard': '/E.png',
-    'Access Royals': '/G.png',
-    'Access Interview (short)': '/I.png',
-    'Access Interview (long)': '/E.png',
-    'Access Exclusive': '/E.png',
+    'Access Standard': '/pngs/E.png',
+    'Access Royals': '/pngs/G.png',
+    'Access Interview (short)': '/pngs/I.png',
+    'Access Interview (long)': '/pngs/E.png',
+    'Access Exclusive': '/pngs/E.png',
     // Add more mappings as needed
 };
 
