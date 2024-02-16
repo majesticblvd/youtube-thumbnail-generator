@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react"
 import { useFormState } from 'react-dom'
+import Image from "next/image"
 
 const initialState = {
   message: null,
@@ -180,7 +181,7 @@ export function Homepage() {
           <div
             className="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
             {imageUrl ? (
-              <img
+              <Image
                 alt="Uploaded Thumbnail"
                 className="object-cover w-full h-48"
                 src={imageUrl}
@@ -188,16 +189,21 @@ export function Homepage() {
                   aspectRatio: "400/200",
                   objectFit: "cover",
                 }}
+                width={400}
+                height={200}
+
               />
             ) : (
-              <img
+              <Image
                 alt="Placeholder"
                 className="object-cover w-full h-48"
-                src="/placeholder.svg"
+                src={'/pngs/E.png'}
                 style={{
                   aspectRatio: "400/200",
                   objectFit: "cover",
                 }}
+                width={400}
+                height={200}
               />
             )}
           </div>

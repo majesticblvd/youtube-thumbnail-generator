@@ -8,11 +8,11 @@ export async function GET(req) {
 
 
 const segmentToPngMap = {
-    'Access Standard': '/pngs/E.png',
-    'Access Royals': '/pngs/G.png',
-    'Access Interview (short)': '/pngs/I.png',
-    'Access Interview (long)': '/pngs/E.png',
-    'Access Exclusive': '/pngs/E.png',
+    'Access Standard': 'public/pngs/E.png',
+    'Access Royals': 'public/pngs/G.png',
+    'Access Interview (short)': 'public/pngs/I.png',
+    'Access Interview (long)': 'public/pngs/E.png',
+    'Access Exclusive': 'public/pngs/E.png',
     // Add more mappings as needed
 };
 
@@ -28,7 +28,7 @@ export async function POST(req, res) {
     try {
 
         // Select the PNG overlay based on the segment
-        const overlayPng = segmentToPngMap[segment] || './public/pngs/E.png'; 
+        const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
 
         // Create the text overlay
         const svgText = generateTextSVG(text);
