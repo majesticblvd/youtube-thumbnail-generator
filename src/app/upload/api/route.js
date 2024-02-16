@@ -9,11 +9,11 @@ export async function GET(req) {
 // add /public to work on the local server and fix to actually get the images on prod
 
 const segmentToPngMap = {
-    'Access Standard': 'public/pngs/E.png',
-    'Access Royals': 'public/pngs/G.png',
-    'Access Interview (short)': 'public/pngs/I.png',
-    'Access Interview (long)': 'public/pngs/E.png',
-    'Access Exclusive': 'public/pngs/E.png',
+    'Access Standard': '/pngs/E.png',
+    'Access Royals': '/pngs/G.png',
+    'Access Interview (short)': '/pngs/I.png',
+    'Access Interview (long)': '/pngs/E.png',
+    'Access Exclusive': '/pngs/E.png',
     // Add more mappings as needed
 };
 
@@ -33,13 +33,15 @@ export async function POST(req, res) {
         // Select the PNG overlay based on the segment
         const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
         console.log('overlayPng: ', overlayPng);
+        // convert to string
+        const overlayPngString = overlayPng.toString();
 
         // Create the text overlay
         const svgText = generateTextSVG(text);
 
         const processedImage = await sharp(buffer)
             .composite([
-                { input: overlayPng, blend: 'over', top: -40, left: 0},
+                { input: overlayPngString, blend: 'over', top: -40, left: 0},
                 { input: Buffer.from(svgText), blend: 'over', top: 760, left: 240},
             ])
             .toFormat('webp')
