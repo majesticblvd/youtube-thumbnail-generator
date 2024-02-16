@@ -30,8 +30,14 @@ export async function POST(req, res) {
         // Select the PNG overlay based on the segment
         const overlayPng = segmentToPngMap[segment] || './public/pngs/E.png'; 
 
+        // Create the text overlay
+        const svgText = generateTextSVG(text);
+
         const processedImage = await sharp(buffer)
-            .composite([{ input: overlayPng, gravity: 'southeast', text: 'howdy' }])
+            .composite([
+                { input: overlayPng, blend: 'over', top: -40, left: 0},
+                { input: Buffer.from(svgText), blend: 'over', top: 760, left: 240},
+            ])
             .toFormat('webp')
             .toBuffer();
 
@@ -44,6 +50,17 @@ export async function POST(req, res) {
         console.error('Error:', error);
         return Response.json({ error: error.message });
     }
+}
+
+function generateTextSVG(text) {
+    return `
+        <svg width="1000" height="400">
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+            style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
+                ${text}
+            </text>
+        </svg>
+    `;
 }
 
 async function createTextOverlay(text, width, height) {
@@ -60,3 +77,20 @@ async function createTextOverlay(text, width, height) {
 
     return canvas.toBuffer('image/png');
 }
+
+
+
+
+// Other way of adding text (cannot make white though yet)
+// TEXT Overlay
+// const textOverlay = {
+//     text: {
+//         text: svgText, // Text to render
+//         font: "Arial", // Specify font name
+//         width: 1000, // Width to wrap text
+//         dpi: 800,
+//         rgba: true, // Set true if you need RGBA (for colored text or emoji)
+//         spacing: 12, // Adjust line spacing
+//     }
+// };
+// { input: textOverlay, blend: 'over', top: 870, left: 300,  }

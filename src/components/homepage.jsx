@@ -92,7 +92,7 @@ export function Homepage() {
   useEffect(() => {
     if (imageUrl) {
       // Create the thumbnail
-      console.log('imageUrl: ', imageUrl);
+      console.log('imageUrl changed');
     }
   }, [imageUrl]);
 
