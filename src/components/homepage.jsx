@@ -98,7 +98,7 @@ export function Homepage() {
 
 
   return (
-    (<Card className="my-8">
+    (<Card className="my-8 sm:pt-10">
       <form>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-4">
@@ -153,7 +153,7 @@ export function Homepage() {
                     onChange={handleFileChange} // Call the function to handle the file change
                   />
                   <div
-                    className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex items-center justify-center w-full h-[200px]"
+                    className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex items-center justify-center w-full md:h-[200px]"
                     onClick={() => document.getElementById('upload').click()} // Trigger file input click
                   >
                     <span className="text-gray-500 font-medium cursor-pointer">
