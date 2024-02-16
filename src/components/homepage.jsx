@@ -58,6 +58,8 @@ export function Homepage() {
     }
   };
 
+  const pngE = '/pngs/E.png';
+
   async function handleSubmit(e) {
     e.preventDefault();
   
@@ -66,6 +68,7 @@ export function Homepage() {
       text: text,
       file: originalImageUrl,
       segment: selectedSegment,
+      pngE: pngE
     }; // Assuming 'text' is the state variable holding your text input
 
     console.log('file: ', file);
@@ -191,13 +194,12 @@ export function Homepage() {
                 }}
                 width={400}
                 height={200}
-
               />
             ) : (
               <Image
                 alt="Placeholder"
                 className="object-cover w-full h-48"
-                src={'/pngs/E.png'}
+                src={'/placeholder.svg'}
                 style={{
                   aspectRatio: "400/200",
                   objectFit: "cover",

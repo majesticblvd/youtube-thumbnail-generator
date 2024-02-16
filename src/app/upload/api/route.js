@@ -6,20 +6,22 @@ export async function GET(req) {
     return new Response( 'hello world' )
 }
 
-
+// add /public to work on the local server and fix to actually get the images on prod
 
 const segmentToPngMap = {
-    'Access Standard': '/pngs/E.png',
-    'Access Royals': '/pngs/G.png',
-    'Access Interview (short)': '/pngs/I.png',
-    'Access Interview (long)': '/pngs/E.png',
-    'Access Exclusive': '/pngs/E.png',
+    'Access Standard': 'public/pngs/E.png',
+    'Access Royals': 'public/pngs/G.png',
+    'Access Interview (short)': 'public/pngs/I.png',
+    'Access Interview (long)': 'public/pngs/E.png',
+    'Access Exclusive': 'public/pngs/E.png',
     // Add more mappings as needed
 };
 
 
+
+
 export async function POST(req, res) {
-    const { text, file, segment } = await req.json();
+    const { text, file, segment, pngE } = await req.json();
 
     // decode the base64 string
     const base64String = file.split(';base64,').pop();
@@ -30,6 +32,7 @@ export async function POST(req, res) {
 
         // Select the PNG overlay based on the segment
         const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
+        console.log('overlayPng: ', overlayPng);
 
         // Create the text overlay
         const svgText = generateTextSVG(text);
