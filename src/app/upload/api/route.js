@@ -48,8 +48,8 @@ export async function POST(req, res) {
         const processedImage = await sharp(buffer)
             .resize(1920, 1080)
             .composite([
-                { input: overlayPngPath, blend: 'over', top: -40, left: 0},
-                { input: Buffer.from(svgText), blend: 'over', top: 750, left: 240},
+                { input: overlayPngPath, blend: 'over', top: 0, left: 0},
+                { input: Buffer.from(svgText), blend: 'over', top: 790, left: 240},
             ])
             .toFormat('png')
             .toBuffer();

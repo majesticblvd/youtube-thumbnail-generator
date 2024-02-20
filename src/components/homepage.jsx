@@ -225,7 +225,7 @@ export function Homepage() {
                 src={imageUrl}
                 style={{
                   aspectRatio: "400/200",
-                  objectFit: "cover",
+                  objectFit: "contain",
                 }}
                 width={400}
                 height={200}
