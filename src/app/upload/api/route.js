@@ -67,7 +67,7 @@ export async function POST(req, res) {
 function generateTextSVG(text) {
     return `
         <svg width="1000" height="400">
-            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+            <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
             style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
                 ${text}
             </text>

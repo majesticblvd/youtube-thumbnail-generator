@@ -34,6 +34,13 @@ export function Homepage() {
   // Check if text input should be enabled
   const isTextInputEnabled = ['Access Interview (short)', 'Access Interview (long)'].includes(selectedSegment);
 
+  // Clear the text input when the segment changes
+  useEffect(() => {
+    if (!isTextInputEnabled) {
+      setText(''); // Clear the text input
+    }
+  }, [selectedSegment, isTextInputEnabled]); 
+
   // Handle brand selection
   const handleBrandSelect = (brand) => {
     setSelectedBrand(brand); // 
@@ -175,6 +182,7 @@ export function Homepage() {
                   placeholder="Enter text to include in the thumbnail" 
                   onChange={handleTextChange}
                   disabled={!isTextInputEnabled}
+                  value={text}
                   />
               </div>
               
