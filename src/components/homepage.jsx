@@ -30,11 +30,18 @@ export function Homepage() {
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
-    setSelectedSegment(segment); // Update the selected segment state
+    setSelectedSegment(segment); // Update the selected segment state 
+
+    if (segment === 'Access Exclusive') {
+      setText('EXCLUSIVE');
+    } else {
+      // Uncomment this line if you want to clear the overlay text for non-Exclusive options
+      setText('');
+    }
   };
 
   // Check if text input should be enabled
-  const isTextInputEnabled = ['Access Interview (short)', 'Access Interview (long)'].includes(selectedSegment);
+  const isTextInputEnabled = ['Access Interview (short)', 'Access Interview (long)', 'Access Exclusive'].includes(selectedSegment);
 
   // Clear the text input when the segment changes
   useEffect(() => {

@@ -24,8 +24,13 @@ const segmentToPngMap = {
     'Access Housewives Nightcap': '/pngs/housewives.png',
 };
 
-
-
+function encodeHtmlEntities(text) {
+    return text.replace(/&/g, '&amp;')
+               .replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;')
+               .replace(/"/g, '&quot;')
+               .replace(/'/g, '&#039;');
+}
 
 export async function POST(req, res) {
     const { text, file, segment, pngE } = await req.json();
@@ -66,11 +71,12 @@ export async function POST(req, res) {
 }
 
 function generateTextSVG(text) {
+    const encodedText = encodeHtmlEntities(text);
     return `
         <svg width="1500" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
             style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
-                ${text}
+                ${encodedText}
             </text>
         </svg>
     `;
