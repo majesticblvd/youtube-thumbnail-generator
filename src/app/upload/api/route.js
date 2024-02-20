@@ -13,12 +13,15 @@ const publicDirectory = path.join(process.cwd(), 'public');
 console.log('publicDirectory: ', publicDirectory);
 
 const segmentToPngMap = {
-    'Access Standard': '/pngs/E.png',
-    'Access Royals': '/pngs/G.png',
-    'Access Interview (short)': '/pngs/I.png',
-    'Access Interview (long)': '/pngs/E.png',
+    'Access Standard': '/pngs/standard.png',
+    'Access Royals': '/pngs/royals.png',
+    'Access Interview (short)': '/pngs/int-short.png',
+    'Access Interview (long)': '/pngs/int-long.png',
     'Access Exclusive': '/pngs/E.png',
-    // Add more mappings as needed
+    'Access Daily': '/pngs/daily.png',
+    'Access Award Season': '/pngs/award.png',
+    'Access Reality Nightcap': '/pngs/night.png',
+    'Access Housewives Nightcap': '/pngs/housewives.png',
 };
 
 
