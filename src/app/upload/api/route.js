@@ -50,7 +50,7 @@ export async function POST(req, res) {
                 { input: overlayPngPath, blend: 'over', top: -40, left: 0},
                 { input: Buffer.from(svgText), blend: 'over', top: 760, left: 240},
             ])
-            .toFormat('webp')
+            .toFormat('png')
             .toBuffer();
 
         // convert the buffer to base64 to send back to the client

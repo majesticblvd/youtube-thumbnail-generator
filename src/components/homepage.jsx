@@ -25,6 +25,7 @@ export function Homepage() {
   const [originalImageUrl, setOriginalImageUrl] = useState(''); // State to store the original image URL so each render it uses this one
   const [selectedSegment, setSelectedSegment] = useState(''); // State to track selected segment
   const [selectedBrand, setSelectedBrand] = useState('') // State to track selected brand
+  const [isLoading, setIsLoading] = useState(false); // State to track loading state
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -69,6 +70,7 @@ export function Homepage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true); // Start loading
   
     // Prepare the data as a JSON object
     const data = { 
@@ -93,11 +95,32 @@ export function Homepage() {
       if (data.base64Image) {
         setImageUrl(data.base64Image); // Correctly access and update state
       }
+      setIsLoading(false); // Stop loading after the image is generated
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   }
+
+  // Function to download the image
+  const downloadImage = (dataUrl, fileName = 'thumbnail.png') => {
+    // Convert base64 to blob
+    const fetchImage = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const href = window.URL.createObjectURL(blob);
+      // Trigger download
+      const link = document.createElement('a');
+      link.href = href;
+      link.setAttribute('download', fileName); // Set the file name for the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(href); // Clean up
+    };
+  
+    fetchImage(dataUrl);
+  };
 
   // look for changes in the imageUrl state
   useEffect(() => {
@@ -186,12 +209,15 @@ export function Homepage() {
                   />
               </div>
               
-              <Button onClick={handleSubmit} className="w-full my-4">Generate Thumbnail</Button>
+              <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
+                {isLoading ? 'Generating...' : 'Generate Thumbnail'}
+              </Button>
             </CardContent>
           </div>
           <div
             className="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
             {imageUrl ? (
+              <div className="flex flex-col">
               <Image
                 alt="Uploaded Thumbnail"
                 className="object-cover w-full h-48"
@@ -203,6 +229,14 @@ export function Homepage() {
                 width={400}
                 height={200}
               />
+              <Button 
+                onClick={() => downloadImage(imageUrl)} 
+                className="mt-4"
+                variant="secondary"
+              >
+                Download Image
+              </Button>
+              </div>
             ) : (
               <Image
                 alt="Placeholder"
