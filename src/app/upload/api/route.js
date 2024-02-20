@@ -1,4 +1,5 @@
 import sharp from 'sharp';
+import path from 'path';
 
 // export const runtime = 'edge';
  
@@ -7,6 +8,9 @@ export async function GET(req) {
 }
 
 // add /public to work on the local server and fix to actually get the images on prod
+
+const publicDirectory = path.join(process.cwd(), 'public');
+console.log('publicDirectory: ', publicDirectory);
 
 const segmentToPngMap = {
     'Access Standard': '/pngs/E.png',
@@ -31,17 +35,16 @@ export async function POST(req, res) {
     try {
 
         // Select the PNG overlay based on the segment
-        const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
-        console.log('overlayPng: ', overlayPng);
-        // convert to string
-        const overlayPngString = overlayPng.toString();
+        // const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
+        const overlayPngPath = path.join(publicDirectory, segmentToPngMap[segment] || '/pngs/E.png');
+        console.log('overlayPng: ', overlayPngPath);
 
         // Create the text overlay
         const svgText = generateTextSVG(text);
 
         const processedImage = await sharp(buffer)
             .composite([
-                { input: overlayPngString, blend: 'over', top: -40, left: 0},
+                { input: overlayPngPath, blend: 'over', top: -40, left: 0},
                 { input: Buffer.from(svgText), blend: 'over', top: 760, left: 240},
             ])
             .toFormat('webp')
