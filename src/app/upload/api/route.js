@@ -46,9 +46,10 @@ export async function POST(req, res) {
         const svgText = generateTextSVG(text);
 
         const processedImage = await sharp(buffer)
+            .resize(1920, 1080)
             .composite([
                 { input: overlayPngPath, blend: 'over', top: -40, left: 0},
-                { input: Buffer.from(svgText), blend: 'over', top: 760, left: 240},
+                { input: Buffer.from(svgText), blend: 'over', top: 750, left: 240},
             ])
             .toFormat('png')
             .toBuffer();
@@ -66,7 +67,7 @@ export async function POST(req, res) {
 
 function generateTextSVG(text) {
     return `
-        <svg width="1000" height="400">
+        <svg width="1500" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
             style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
                 ${text}

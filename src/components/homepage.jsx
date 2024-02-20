@@ -26,6 +26,7 @@ export function Homepage() {
   const [selectedSegment, setSelectedSegment] = useState(''); // State to track selected segment
   const [selectedBrand, setSelectedBrand] = useState('') // State to track selected brand
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
+  const [secondText, setSecondText] = useState('');
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
