@@ -47,6 +47,9 @@ export function Homepage() {
   useEffect(() => {
     if (!isTextInputEnabled) {
       setText(''); // Clear the text input
+      setSecondText(''); // Clear the second text input
+    } else if (selectedSegment !== 'Access Interview (long)') {
+      setSecondText(''); // Clear the second text input
     }
   }, [selectedSegment, isTextInputEnabled]); 
 
@@ -83,6 +86,7 @@ export function Homepage() {
     // Prepare the data as a JSON object
     const data = { 
       text: text,
+      secondText: secondText,
       file: originalImageUrl,
       segment: selectedSegment,
       pngE: pngE
@@ -216,6 +220,22 @@ export function Homepage() {
                   value={text}
                   />
               </div>
+
+              {selectedSegment === 'Access Interview (long)' && (
+                <div className="grid gap-2 text-sm font-medium mt-4">
+                  <label className="text-sm font-medium " htmlFor="secondText">
+                    Add Second Name
+                  </label>
+                  <Input
+                    className="w-full"
+                    id="secondText"
+                    placeholder="Enter the second name"
+                    onChange={(e) => setSecondText(e.target.value)}
+                    disabled={!isTextInputEnabled}
+                    value={secondText}
+                  />
+                </div>
+              )}
               
               <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
                 {isLoading ? 'Generating...' : 'Generate Thumbnail'}

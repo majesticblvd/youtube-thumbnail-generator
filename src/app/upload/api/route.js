@@ -24,6 +24,7 @@ const segmentToPngMap = {
     'Access Housewives Nightcap': '/pngs/housewives.png',
 };
 
+// Allow the user to use special characters in the text (&, <, >, ", ')
 function encodeHtmlEntities(text) {
     return text.replace(/&/g, '&amp;')
                .replace(/</g, '&lt;')
@@ -33,7 +34,7 @@ function encodeHtmlEntities(text) {
 }
 
 export async function POST(req, res) {
-    const { text, file, segment, pngE } = await req.json();
+    const { text, file, segment, pngE, secondText } = await req.json();
 
     // decode the base64 string
     const base64String = file.split(';base64,').pop();
@@ -47,14 +48,30 @@ export async function POST(req, res) {
         const overlayPngPath = path.join(publicDirectory, segmentToPngMap[segment] || '/pngs/E.png');
         console.log('overlayPng: ', overlayPngPath);
 
+        // Set dynamic positions for the text overlay 
+        let firstYPos = 790;
+        let secondPos = 840;
+        let xPos = 240;
+
+        if (secondText) {
+            firstYPos = 690; // Move up the first text
+            xPos = 300; // Adjust the first text accordingly
+            secondPos = 840; // Adjust the second text accordingly
+        } else {
+            firstYPos = 790; // Move up the first text
+            xPos = 240; // Adjust the first text accordingly
+        }
+
         // Create the text overlay
         const svgText = generateTextSVG(text);
+        const secondSvgText = generateTextSVG(secondText);
 
         const processedImage = await sharp(buffer)
             .resize(1920, 1080)
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
-                { input: Buffer.from(svgText), blend: 'over', top: 790, left: 240},
+                { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos},
+                { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos}, 
             ])
             .toFormat('png')
             .toBuffer();
