@@ -88,11 +88,11 @@ export async function POST(req, res) {
 }
 
 function generateTextSVG(text) {
-    const encodedText = encodeHtmlEntities(text);
+    const encodedText = encodeHtmlEntities(text.toUpperCase());
     return `
         <svg width="1600" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
-            style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
+            style="font-size: 148px; fill: white; font-family: Mark OT Cond; font-style: italic; font-weight: bold;">
                 ${encodedText}
             </text>
         </svg>
