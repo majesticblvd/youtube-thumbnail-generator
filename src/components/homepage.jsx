@@ -25,7 +25,8 @@ export function Homepage() {
   const [selectedSegment, setSelectedSegment] = useState(''); // State to track selected segment
   const [selectedBrand, setSelectedBrand] = useState('') // State to track selected brand
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
-  const [secondText, setSecondText] = useState('');
+  const [secondText, setSecondText] = useState(''); // State to hold the second text input
+  const [fontSize, setFontSize] = useState(48); // Default font size
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -34,7 +35,6 @@ export function Homepage() {
     if (segment === 'Access Exclusive') {
       setText('EXCLUSIVE');
     } else {
-      // Uncomment this line if you want to clear the overlay text for non-Exclusive options
       setText('');
     }
   };
@@ -88,7 +88,8 @@ export function Homepage() {
       secondText: secondText,
       file: originalImageUrl,
       segment: selectedSegment,
-      pngE: pngE
+      pngE: pngE,
+      fontSize: fontSize,
     }; // Assuming 'text' is the state variable holding your text input
 
     console.log('file: ', file);
@@ -219,7 +220,9 @@ export function Homepage() {
                     disabled={!isTextInputEnabled}
                     value={text}
                     />
+                    
                 </div>
+                
               )}  
 
               {selectedSegment === 'Access Interview (long)' && (
@@ -236,6 +239,27 @@ export function Homepage() {
                     value={secondText}
                   />
                 </div>
+              )}
+
+              {/* Font Size */}
+              {isTextInputEnabled && (
+                <div className="grid gap-2">
+                <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                <input
+                  type="range"
+                  id="fontSizeSlider"
+                  name="fontSizeSlider"
+                  min="90" // Minimum font size
+                  max="165" // Maximum font size
+                  value={fontSize}
+                  onChange={(e) => setFontSize(e.target.value)}
+                  className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                />
+                <div className="flex justify-between text-xs px-2">
+                  <span>90</span>
+                  <span>165</span>
+                </div>
+              </div>
               )}
               
               <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>

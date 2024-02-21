@@ -34,7 +34,7 @@ function encodeHtmlEntities(text) {
 }
 
 export async function POST(req, res) {
-    const { text, file, segment, pngE, secondText } = await req.json();
+    const { text, file, segment, pngE, secondText, fontSize } = await req.json();
 
     // decode the base64 string
     const base64String = file.split(';base64,').pop();
@@ -46,19 +46,16 @@ export async function POST(req, res) {
         // Select the PNG overlay based on the segment
         // const overlayPng = segmentToPngMap[segment] || '/pngs/E.png'; 
         const overlayPngPath = path.join(publicDirectory, segmentToPngMap[segment] || '/pngs/E.png');
-        console.log('overlayPng: ', overlayPngPath);
 
         // Set dynamic positions for the text overlay 
         let firstYPos = 790;
         let secondPos = 840;
         let xPos = 240;
-        let fontSize = 168;
 
         if (secondText) {
             firstYPos = 690; // Move up the first text
             xPos = 300; // Adjust the first text accordingly
             secondPos = 840; // Adjust the second text accordingly
-            fontSize = 138;
         } else {
             firstYPos = 790; // Move up the first text
             xPos = 240; // Adjust the first text accordingly
@@ -72,6 +69,7 @@ export async function POST(req, res) {
             .resize(1920, 1080, {
                 fit: 'cover',
                 position: 'center',
+                
             })
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
