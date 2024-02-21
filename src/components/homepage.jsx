@@ -26,7 +26,7 @@ export function Homepage() {
   const [selectedBrand, setSelectedBrand] = useState('') // State to track selected brand
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
   const [secondText, setSecondText] = useState(''); // State to hold the second text input
-  const [fontSize, setFontSize] = useState(48); // Default font size
+  const [fontSize, setFontSize] = useState(138); // Default font size
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
