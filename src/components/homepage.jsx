@@ -120,7 +120,7 @@ export function Homepage() {
     const fetchImage = async (url) => {
       const response = await fetch(url);
       const blob = await response.blob();
-      const href = window.URL.createObjectURL(blob);
+      const href = window.URL.createObjectURL(blob); // Create a URL object from the blob which can be used to download the image
       // Trigger download
       const link = document.createElement('a');
       link.href = href;
@@ -128,7 +128,7 @@ export function Homepage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(href); // Clean up
+      window.URL.revokeObjectURL(href); // Clean up the URL object to free memory       
     };
   
     fetchImage(dataUrl);
@@ -141,6 +141,46 @@ export function Homepage() {
       console.log('imageUrl changed');
     }
   }, [imageUrl]);
+
+  // File Drag n Drop --------------------------------------------------------------
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      processFile(file);
+    }
+  };
+
+  // Function to process the file
+  const processFile = (file) => {
+    setFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      setImageUrl(base64String);
+      setOriginalImageUrl(base64String); // Store the original image URL
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Prevent default behavior for drag over and drag enter events
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  // --------------------------------------------------------------------------
 
 
   return (
@@ -201,9 +241,13 @@ export function Homepage() {
                   <div
                     className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex items-center justify-center w-full md:h-[200px]"
                     onClick={() => document.getElementById('upload').click()} // Trigger file input click
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragEnter={handleDragEnter}
+                    onDragLeave={handleDragLeave}
                   >
                     <span className="text-gray-500 font-medium cursor-pointer">
-                      Select an Image
+                      Select an Image or Drag it Here
                     </span>
                   </div>
                 </div>

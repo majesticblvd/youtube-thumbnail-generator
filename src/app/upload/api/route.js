@@ -1,16 +1,11 @@
 import sharp from 'sharp';
 import path from 'path';
-
-// export const runtime = 'edge';
  
 export async function GET(req) {
     return new Response( 'hello world' )
 }
 
-// add /public to work on the local server and fix to actually get the images on prod
-
 const publicDirectory = path.join(process.cwd(), 'public');
-console.log('publicDirectory: ', publicDirectory);
 
 const segmentToPngMap = {
     'Access Standard': '/pngs/standard.png',
