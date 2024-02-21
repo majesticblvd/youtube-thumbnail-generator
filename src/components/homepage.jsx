@@ -206,19 +206,21 @@ export function Homepage() {
                     </span>
                   </div>
                 </div>
-              <div className="grid gap-2">
-                <label className="text-sm font-medium mt-4" htmlFor="text">
-                  Add Text
-                </label>
-                <Input
-                  className="w-full"
-                  id="text"
-                  placeholder="Enter text to include in the thumbnail" 
-                  onChange={handleTextChange}
-                  disabled={!isTextInputEnabled}
-                  value={text}
-                  />
-              </div>
+              {['Access Interview (long)', 'Access Exclusive', 'Access Interview (short)'].includes(selectedSegment) && (
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium mt-4" htmlFor="text">
+                    Add Text
+                  </label>
+                  <Input
+                    className="w-full"
+                    id="text"
+                    placeholder="Enter text to include in the thumbnail" 
+                    onChange={handleTextChange}
+                    disabled={!isTextInputEnabled}
+                    value={text}
+                    />
+                </div>
+              )}  
 
               {selectedSegment === 'Access Interview (long)' && (
                 <div className="grid gap-2 text-sm font-medium mt-4">

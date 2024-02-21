@@ -76,7 +76,7 @@ export async function POST(req, res) {
                 { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos}, 
             ])
             .toFormat('jpeg')
-            .jpeg({ quality: 80 })
+            .jpeg({ quality: 70 })
             .toBuffer();
 
         // convert the buffer to base64 to send back to the client
