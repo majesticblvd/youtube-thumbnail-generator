@@ -114,7 +114,7 @@ export function Homepage() {
   }
 
   // Function to download the image
-  const downloadImage = (dataUrl, fileName = 'thumbnail.png') => {
+  const downloadImage = (dataUrl, fileName = 'thumbnail.jpeg') => {
     // Convert base64 to blob
     const fetchImage = async (url) => {
       const response = await fetch(url);
