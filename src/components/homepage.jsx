@@ -186,12 +186,12 @@ export function Homepage() {
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 20, transition: { duration: 0.2 }},
+    exit: { opacity: 0, x: 20,},
     transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
   }
 
   return (
-    (<Card className="my-8 sm:pt-10">
+    (<Card layout className="my-8 sm:pt-10">
       <form>
         <AnimatePresence>
         <motion.div layout className="grid gap-4 md:grid-cols-2">
@@ -267,7 +267,8 @@ export function Homepage() {
                   className="grid gap-2"
                   initial='hidden'
                   animate='visible'
-                  transition='transition'
+                  exit='hidden'
+                  transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 5 }}
                   variants={textVariants}
                 >
                   <label className="text-sm font-medium mt-4" htmlFor="text">
@@ -290,7 +291,7 @@ export function Homepage() {
                   className="grid gap-2 text-sm font-medium mt-4"
                   initial='hidden'
                   animate='visible'
-                  transition='transition'
+                  transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 5 }}
                   variants={textVariants}
                 >
                   <label className="text-sm font-medium " htmlFor="secondText">
@@ -309,29 +310,29 @@ export function Homepage() {
 
               {/* Font Size */}
               {isTextInputEnabled && (
-                <motion.div 
-                  layout
-                  className="grid gap-2"
-                  initial='hidden'
-                  animate='visible'
-                  transition='transition'
-                  variants={textVariants}
-                >
-                <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
-                <input
-                  type="range"
-                  id="fontSizeSlider"
-                  name="fontSizeSlider"
-                  min="90" // Minimum font size
-                  max="165" // Maximum font size
-                  value={fontSize}
-                  onChange={(e) => setFontSize(e.target.value)}
-                  className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                />
-                <div className="flex justify-between text-xs px-2">
-                  <span>90</span>
-                  <span>165</span>
-                </div>
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.05 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="90" // Minimum font size
+                    max="165" // Maximum font size
+                    value={fontSize}
+                    onChange={(e) => setFontSize(e.target.value)}
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>90</span>
+                    <span>165</span>
+                  </div>
               </motion.div>
               )}
 
@@ -342,8 +343,10 @@ export function Homepage() {
               </motion.div>
             </CardContent>
           </motion.div>
-          <motion.div layout
-            className="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
+          <motion.div
+            className="border border-gray-200 rounded-lg p-4 flex items-center justify-center"
+            layout
+            >
             {imageUrl ? (
               <div className="flex flex-col">
               <Image

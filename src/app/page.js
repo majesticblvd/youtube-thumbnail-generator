@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex sm:my-10 lg:my-0 flex-col items-center justify-center h-screen">
+      <div className="flex pt-10 overflow-y-scroll sm:my-10 lg:my-0 flex-col items-center justify-center h-screen">
         <Homepage /> 
       </div>
     </>
