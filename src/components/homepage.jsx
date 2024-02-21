@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
 
 const initialState = {
   message: null,
@@ -182,12 +183,19 @@ export function Homepage() {
   };
   // --------------------------------------------------------------------------
 
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 20, transition: { duration: 0.2 }},
+    transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
+  }
 
   return (
     (<Card className="my-8 sm:pt-10">
       <form>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-4">
+        <AnimatePresence>
+        <motion.div layout className="grid gap-4 md:grid-cols-2">
+          <motion.div layout className="space-y-4">
             <CardHeader className="pb-0">
               <CardTitle>Thumbnail Generator</CardTitle>
               <CardDescription>Only the best thumbnails.</CardDescription>
@@ -227,7 +235,7 @@ export function Homepage() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="grid mt-4 gap-2">
+              <motion.div layout className="grid mt-4 gap-2">
                   <label className="text-sm font-medium" htmlFor="upload">
                     Upload Image
                   </label>
@@ -250,9 +258,18 @@ export function Homepage() {
                       Select an Image or Drag it Here
                     </span>
                   </div>
-                </div>
+              </motion.div>
+
+              {/* Text Input Fields */}
               {['Access Interview (long)', 'Access Exclusive', 'Access Interview (short)'].includes(selectedSegment) && (
-                <div className="grid gap-2">
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition='transition'
+                  variants={textVariants}
+                >
                   <label className="text-sm font-medium mt-4" htmlFor="text">
                     Add Text
                   </label>
@@ -264,15 +281,20 @@ export function Homepage() {
                     disabled={!isTextInputEnabled}
                     value={text}
                     />
-                    
-                </div>
-                
+                </motion.div>
               )}  
-
+              
               {selectedSegment === 'Access Interview (long)' && (
-                <div className="grid gap-2 text-sm font-medium mt-4">
+                <motion.div 
+                  layout
+                  className="grid gap-2 text-sm font-medium mt-4"
+                  initial='hidden'
+                  animate='visible'
+                  transition='transition'
+                  variants={textVariants}
+                >
                   <label className="text-sm font-medium " htmlFor="secondText">
-                    Add Second Name
+                    Add Second Text
                   </label>
                   <Input
                     className="w-full"
@@ -282,12 +304,19 @@ export function Homepage() {
                     disabled={!isTextInputEnabled}
                     value={secondText}
                   />
-                </div>
+                </motion.div>
               )}
 
               {/* Font Size */}
               {isTextInputEnabled && (
-                <div className="grid gap-2">
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition='transition'
+                  variants={textVariants}
+                >
                 <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
                 <input
                   type="range"
@@ -303,15 +332,17 @@ export function Homepage() {
                   <span>90</span>
                   <span>165</span>
                 </div>
-              </div>
+              </motion.div>
               )}
-              
-              <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
-                {isLoading ? 'Generating...' : 'Generate Thumbnail'}
-              </Button>
+
+              <motion.div layout>
+                <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
+                  {isLoading ? 'Generating...' : 'Generate Thumbnail'}
+                </Button>
+              </motion.div>
             </CardContent>
-          </div>
-          <div
+          </motion.div>
+          <motion.div layout
             className="border border-gray-200 rounded-lg p-4 flex items-center justify-center">
             {imageUrl ? (
               <div className="flex flex-col">
@@ -347,11 +378,12 @@ export function Homepage() {
                 height={200}
               />
             )}
-          </div>
+          </motion.div>
           <p aria-live="polite" className="sr-only">
             {state?.message}
           </p>
-        </div>
+        </motion.div>
+        </AnimatePresence>
       </form>
     </Card>)
   );
