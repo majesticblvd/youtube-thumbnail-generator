@@ -90,7 +90,7 @@ export async function POST(req, res) {
 function generateTextSVG(text) {
     const encodedText = encodeHtmlEntities(text);
     return `
-        <svg width="1500" height="400">
+        <svg width="1600" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
             style="font-size: 148px; fill: white; font-family: Arial; font-style: italic; font-weight: bold;">
                 ${encodedText}
