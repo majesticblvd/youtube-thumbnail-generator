@@ -52,19 +52,21 @@ export async function POST(req, res) {
         let firstYPos = 790;
         let secondPos = 840;
         let xPos = 240;
+        let fontSize = 168;
 
         if (secondText) {
             firstYPos = 690; // Move up the first text
             xPos = 300; // Adjust the first text accordingly
             secondPos = 840; // Adjust the second text accordingly
+            fontSize = 138;
         } else {
             firstYPos = 790; // Move up the first text
             xPos = 240; // Adjust the first text accordingly
         }
 
         // Create the text overlay
-        const svgText = generateTextSVG(text);
-        const secondSvgText = generateTextSVG(secondText);
+        const svgText = generateTextSVG(text, fontSize);
+        const secondSvgText = generateTextSVG(secondText, fontSize);
 
         const processedImage = await sharp(buffer)
             .resize(1920, 1080)
@@ -87,12 +89,12 @@ export async function POST(req, res) {
     }
 }
 
-function generateTextSVG(text) {
+function generateTextSVG(text, fontSize) {
     const encodedText = encodeHtmlEntities(text.toUpperCase());
     return `
         <svg width="1600" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
-            style="font-size: 148px; fill: white; font-family: Mark OT Cond; font-style: italic; font-weight: bold;">
+            style="font-size: ${fontSize}px; fill: white; font-family: Mark OT Cond; font-style: italic; font-weight: bold;">
                 ${encodedText}
             </text>
         </svg>
