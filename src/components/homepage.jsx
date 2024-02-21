@@ -351,7 +351,7 @@ export function Homepage() {
               <div className="flex flex-col">
               <Image
                 alt="Uploaded Thumbnail"
-                className="object-cover w-full h-48"
+                className="object-cover w-full h-52"
                 src={imageUrl}
                 style={{
                   aspectRatio: "400/200",
