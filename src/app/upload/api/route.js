@@ -69,7 +69,10 @@ export async function POST(req, res) {
         const secondSvgText = generateTextSVG(secondText, fontSize);
 
         const processedImage = await sharp(buffer)
-            .resize(1920, 1080)
+            .resize(1920, 1080, {
+                fit: 'cover',
+                position: 'center',
+            })
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
                 { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos},
@@ -93,7 +96,7 @@ export async function POST(req, res) {
 function generateTextSVG(text, fontSize) {
     const encodedText = encodeHtmlEntities(text.toUpperCase());
     return `
-        <svg width="1600" height="400">
+        <svg width="1500" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
             style="font-size: ${fontSize}px; fill: white; font-family: Mark OT Cond; font-style: italic; font-weight: bold;">
                 ${encodedText}
