@@ -39,3 +39,15 @@ canvas {
   top: 0;
   left: 0;
 }
+
+@font-face {
+  font-family: 'Mark OT Cond Bold Italic';
+  src: url('/fonts/MarkOT-CondBoldItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Mark OT Cond Heavy';
+  src: url('/fonts/MarkOT-CondBoldItalic.otf') format('opentype');
+  font-weight: bold;
+}

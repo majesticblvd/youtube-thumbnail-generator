@@ -50,7 +50,7 @@ export async function POST(req, res) {
         if (secondText) {
             firstYPos = 690; // Move up the first text
             xPos = 300; // Adjust the first text accordingly
-            secondPos = 840; // Adjust the second text accordingly
+            secondPos = 820; // Adjust the second text accordingly
         } else {
             firstYPos = 790; // Move up the first text
             xPos = 240; // Adjust the first text accordingly
@@ -68,7 +68,7 @@ export async function POST(req, res) {
             })
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
-                { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos},
+                { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos}, 
                 { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos}, 
             ])
             .toFormat('jpeg')
@@ -91,30 +91,27 @@ function generateTextSVG(text, fontSize) {
     return `
         <svg width="1500" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
-            style="font-size: ${fontSize}px; fill: white; font-family: Mark OT Cond; font-style: italic; font-weight: bold;">
+            style="font-size: ${fontSize}px; fill: white; font-family: 'Mark OT Bold Italic'; font-style: italic; font-weight: bold; letter-spacing: 0; stroke: white; stroke-width: 1.5px;">
                 ${encodedText}
             </text>
         </svg>
     `;
 }
 
-async function createTextOverlay(text, width, height) {
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext('2d');
+// async function createTextOverlay(text, width, height) {
+//     const canvas = createCanvas(width, height);
+//     const ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, width, height);
+//     ctx.fillStyle = 'white';
+//     ctx.fillRect(0, 0, width, height);
 
-    ctx.font = 'bold 40pt Menlo';
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'center';
-    ctx.fillText(text, width / 2, height / 2);
+//     ctx.font = 'bold 40pt Menlo';
+//     ctx.fillStyle = 'black';
+//     ctx.textAlign = 'center';
+//     ctx.fillText(text, width / 2, height / 2);
 
-    return canvas.toBuffer('image/png');
-}
-
-
-
+//     return canvas.toBuffer('image/png');
+// }
 
 // Other way of adding text (cannot make white though yet)
 // TEXT Overlay
