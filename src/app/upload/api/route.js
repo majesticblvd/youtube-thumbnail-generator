@@ -1,6 +1,7 @@
 import sharp from 'sharp';
 import path from 'path';
- 
+import fs from 'fs';
+
 export async function GET(req) {
     return new Response( 'hello world' )
 }
@@ -29,11 +30,19 @@ function encodeHtmlEntities(text) {
 }
 
 export async function POST(req, res) {
-    const { text, file, segment, pngE, secondText, fontSize } = await req.json();
+    const { text, file, segment, secondText, fontSize, svgOne } = await req.json();
+
+    // Font Path retrieval 
+    const fontPath = path.join(publicDirectory, '/fonts/MarkOT-CondBoldItalic.otf');
+    const fontBase64 = fs.readFileSync(fontPath).toString('base64');
 
     // decode the base64 string
     const base64String = file.split(';base64,').pop();
     const buffer = Buffer.from(base64String, 'base64');
+
+    // Client SVG
+    const svgBase64String = svgOne.split(';base64,').pop();
+    const svgBuffer = Buffer.from(svgBase64String, 'base64');
 
     // use sharp to process the image
     try {
@@ -57,19 +66,32 @@ export async function POST(req, res) {
         }
 
         // Create the text overlay
-        const svgText = generateTextSVG(text, fontSize);
-        const secondSvgText = generateTextSVG(secondText, fontSize);
+        const svgText = generateTextSVGTwo(text, fontSize, fontBase64);
+        const secondSvgText = generateTextSVGTwo(secondText, fontSize, fontBase64);
+
+        const textOverlay = {
+                text: {
+                    text: text, // Text to render
+                    font: "Mark OT Cond Bold Italic", // Specify font name
+                    fontfile: '/public/fonts/MarkOT-CondBoldItalic.otf',
+                    width: 1500, // Width to wrap text
+                    dpi: 800,
+                    rgba: true, // Set true if you need RGBA (for colored text or emoji)
+                    spacing: 12, // Adjust line spacing
+                }
+            };
 
         const processedImage = await sharp(buffer)
             .resize(1920, 1080, {
                 fit: 'cover',
                 position: 'center',
-                
             })
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
-                { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos}, 
-                { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos}, 
+                // { input: svgBuffer, blend: 'over', top: firstYPos, left: xPos},
+                // { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos}, 
+                // { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos},
+                { input: textOverlay, blend: 'over', top: 870, left: 300,  }
             ])
             .toFormat('jpeg')
             .jpeg({ quality: 70 })
@@ -91,7 +113,32 @@ function generateTextSVG(text, fontSize) {
     return `
         <svg width="1500" height="400">
             <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
-            style="font-size: ${fontSize}px; fill: white; font-family: 'Mark OT Bold Italic'; font-style: italic; font-weight: bold; letter-spacing: 0; stroke: white; stroke-width: 1.5px;">
+            style="font-size: ${fontSize}px; fill: white; font-family: 'Mark OT Cond Bold Italic'; font-style: italic; font-weight: bold; letter-spacing: 0; stroke: white; stroke-width: 1.5px;">
+                ${encodedText}
+            </text>
+        </svg>
+    `;
+}
+
+function generateTextSVGTwo(text, fontSize, fontBase64) {
+    const encodedText = encodeHtmlEntities(text.toUpperCase());
+    return `
+        <svg width="1500" height="400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <style type="text/css">
+                <![CDATA[
+                    @font-face {
+                        font-family: 'Mark OT Cond Bold Italic';
+                        src: url(data:font/opentype;base64,${fontBase64});
+                    }
+                    text {
+                        font-family: 'Mark OT Cond Bold Italic';
+                    }
+                ]]>
+                </style>
+            </defs>
+            <text x="3%" y="50%" dominant-baseline="middle" text-anchor="left" 
+            style="font-size: ${fontSize}px; fill: white; font-family: 'Mark OT Cond Bold Italic'; font-style: italic; font-weight: bold; letter-spacing: 0; stroke: white;">
                 ${encodedText}
             </text>
         </svg>

@@ -35,6 +35,7 @@ export function Homepage() {
 
     if (segment === 'Access Exclusive') {
       setText('EXCLUSIVE');
+      setFontSize(150);
     } else {
       setText('');
     }
@@ -77,11 +78,32 @@ export function Homepage() {
     }
   };
 
-  const pngE = '/pngs/E.png';
+  function generateSVGString(text) {
+    // Manually create the SVG markup as a string
+    const svgString = `<svg width="1500" height="500" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        @font-face {
+          font-family: 'Mark OT Cond Bold Italic';
+          src: url('/fonts/MarkOT-CondBoldItalic.otf') format('truetype');
+        }
+        text {
+          font-family: 'Mark OT Cond Bold Italic';
+        }
+      </style>
+      <text x="10" y="50" fill="white" style="font-family: 'Mark OT Cond Bold Italic'; font-size: ${fontSize}; text-transform: uppercase;">${text}</text>
+    </svg>`;
+  
+    return svgString;
+  }
+
 
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true); // Start loading
+
+    const svgString = generateSVGString(text)
+    const svgBase64 = btoa(unescape(encodeURIComponent(svgString))); // Encode SVG string to Base64
+    console.log(svgBase64);
   
     // Prepare the data as a JSON object
     const data = { 
@@ -89,11 +111,11 @@ export function Homepage() {
       secondText: secondText,
       file: originalImageUrl,
       segment: selectedSegment,
-      pngE: pngE,
       fontSize: fontSize,
-    }; // Assuming 'text' is the state variable holding your text input
+      svgOne: `data:image/svg+xml;base64,${svgBase64}`,
+    }; 
 
-    console.log('file: ', file);
+    // console.log('file: ', file);
   
     fetch('/upload/api', {
       method: 'POST',
@@ -189,6 +211,7 @@ export function Homepage() {
     exit: { opacity: 0, x: 20,},
     transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
   }
+
 
   return (
     (<Card layout className="my-8 sm:pt-10">
@@ -324,14 +347,14 @@ export function Homepage() {
                     id="fontSizeSlider"
                     name="fontSizeSlider"
                     min="90" // Minimum font size
-                    max="165" // Maximum font size
+                    max="185" // Maximum font size
                     value={fontSize}
                     onChange={(e) => setFontSize(e.target.value)}
                     className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
                   />
                   <div className="flex justify-between text-xs px-2">
                     <span>90</span>
-                    <span>165</span>
+                    <span>185</span>
                   </div>
               </motion.div>
               )}
@@ -360,6 +383,7 @@ export function Homepage() {
                 width={400}
                 height={200}
               />
+              <CustomFontSVG text={text} />
               <Button 
                 onClick={() => downloadImage(imageUrl)} 
                 className="mt-4"
@@ -392,6 +416,25 @@ export function Homepage() {
   );
 }
 
+
+const CustomFontSVG = ({ text }) => {
+  return (
+    <svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        {`
+          @font-face {
+            font-family: 'Mark OT Cond Bold Italic';
+            src: url('/fonts/MarkOT-CondBoldItalic.otf') format('truetype');
+          }
+          text {
+            font-family: 'Mark OT Cond Bold Italic';
+          }
+        `}
+      </style>
+      <text x="10" y="50" fill="white" style={{ fontFamily: 'Mark OT Cond Bold Italic', textTransform: 'uppercase' }}>{text}</text>
+    </svg>
+  );
+};
 
 function UploadIcon(props) {
   return (
