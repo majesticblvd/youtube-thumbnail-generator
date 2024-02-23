@@ -69,18 +69,6 @@ export async function POST(req, res) {
         const svgText = generateTextSVGTwo(text, fontSize, fontBase64);
         const secondSvgText = generateTextSVGTwo(secondText, fontSize, fontBase64);
 
-        const textOverlay = {
-                text: {
-                    text: text, // Text to render
-                    font: "Mark OT Cond Bold Italic", // Specify font name
-                    fontfile: '/public/fonts/MarkOT-CondBoldItalic.otf',
-                    width: 1500, // Width to wrap text
-                    dpi: 800,
-                    rgba: true, // Set true if you need RGBA (for colored text or emoji)
-                    spacing: 12, // Adjust line spacing
-                }
-            };
-
         const processedImage = await sharp(buffer)
             .resize(1920, 1080, {
                 fit: 'cover',
@@ -88,10 +76,9 @@ export async function POST(req, res) {
             })
             .composite([
                 { input: overlayPngPath, blend: 'over', top: 0, left: 0},
-                // { input: svgBuffer, blend: 'over', top: firstYPos, left: xPos},
-                // { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos}, 
-                // { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos},
-                { input: textOverlay, blend: 'over', top: 870, left: 300,  }
+                { input: svgBuffer, blend: 'over', top: firstYPos, left: xPos},
+                { input: Buffer.from(svgText), blend: 'over', top: firstYPos, left: xPos}, 
+                { input: Buffer.from(secondSvgText), blend: 'over', top: secondPos, left: xPos},
             ])
             .toFormat('jpeg')
             .jpeg({ quality: 70 })

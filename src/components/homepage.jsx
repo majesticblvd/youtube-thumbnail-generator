@@ -371,7 +371,7 @@ export function Homepage() {
             layout
             >
             {imageUrl ? (
-              <div className="flex flex-col">
+              <div className="flex relative flex-col">
               <Image
                 alt="Uploaded Thumbnail"
                 className="object-cover w-full h-52"
@@ -383,7 +383,7 @@ export function Homepage() {
                 width={400}
                 height={200}
               />
-              <CustomFontSVG text={text} />
+              <CustomFontSVG text={text} fontSize={fontSize} />
               <Button 
                 onClick={() => downloadImage(imageUrl)} 
                 className="mt-4"
@@ -417,9 +417,9 @@ export function Homepage() {
 }
 
 
-const CustomFontSVG = ({ text }) => {
+const CustomFontSVG = ({ text, fontSize }) => {
   return (
-    <svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+    <svg width="500" height="70" className="" xmlns="http://www.w3.org/2000/svg">
       <style>
         {`
           @font-face {
@@ -431,7 +431,7 @@ const CustomFontSVG = ({ text }) => {
           }
         `}
       </style>
-      <text x="10" y="50" fill="white" style={{ fontFamily: 'Mark OT Cond Bold Italic', textTransform: 'uppercase' }}>{text}</text>
+      <text x="10" y="50" fill="white" style={{ fontFamily: 'Mark OT Cond Bold Italic', textTransform: 'uppercase', fontSize: fontSize / 4 }}>{text}</text>
     </svg>
   );
 };
