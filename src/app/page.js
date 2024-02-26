@@ -2,15 +2,16 @@
 import Link from "next/link";
 import { Background } from "@/components/background";
 import { Homepage } from "@/components/homepage";
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function Home() {
 
 
   return (
     <>
-      <div className="flex pt-10 overflow-y-scroll sm:my-10 lg:my-0 flex-col items-center justify-center h-screen">
+      <motion.div layout className="flex overflow-y-scroll sm:my-10 lg:my-0 flex-col items-center justify-center h-screen">
         <Homepage /> 
-      </div>
+      </motion.div>
     </>
   );
 }

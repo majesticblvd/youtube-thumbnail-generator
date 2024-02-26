@@ -25,7 +25,9 @@ export function Homepage() {
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
   const [secondText, setSecondText] = useState(''); // State to hold the second text input
   const [fontSize, setFontSize] = useState(config.defaultFontSize); // Default font size
-  const [lineHeight, setLineHeight] = useState(config.defaultLineHeight); // Default Line Height
+  const [xPosition, setXPosition] = useState(350);
+  const [yPosition, setYPosition] = useState(config.defaultTextTargetPositionTopRatio);
+  const [displayValue, setDisplayValue] = useState(0);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -37,6 +39,16 @@ export function Homepage() {
       setFontSize(segment.fontSize);
     } else {
       setFontSize(config.defaultFontSize);
+    }
+    
+    // Set Text X Position
+    if (typeof segment.textXPosition === 'number') {
+      setXPosition(segment.textXPosition)
+    }
+
+    // Set Text Y Position
+    if (typeof segment.defaultTextTargetPositionTopRatio === 'number') {
+      setYPosition(segment.defaultTextTargetPositionTopRatio)
     }
 
     // Set text
@@ -102,6 +114,8 @@ export function Homepage() {
       secondText: secondText,
       file: originalImageUrl,
       fontSize: fontSize,
+      xPosition: xPosition,
+      yPosition: yPosition,
     }; 
 
     try {
@@ -340,6 +354,65 @@ export function Homepage() {
                   <div className="flex justify-between text-xs px-2">
                     <span>90</span>
                     <span>185</span>
+                  </div>
+              </motion.div>
+              )}
+
+              {isTextInputEnabled && (
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Horizontal Text Position - {xPosition}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="260" // Minimum font size
+                    max="400" // Maximum font size
+                    value={xPosition}
+                    onChange={(e) => setXPosition(e.target.value)}
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>left</span>
+                    <span>right</span>
+                  </div>
+              </motion.div>
+              )}
+
+              {isTextInputEnabled && (
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Vertical Text Position - {yPosition}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="0.75" // Minimum font size
+                    max="0.90" // Maximum font size
+                    value={(0.90 + 0.75) - yPosition} // Adjust this calculation to invert the slider's effect
+                    onChange={(e) => {
+                      const sliderValue = e.target.value;
+                      const invertedValue = (0.90 + 0.75) - sliderValue; // Invert the calculation here
+                      setYPosition(invertedValue.toFixed(3)); // Update yPosition based on the inverted calculation
+                    }}
+                    step="0.001"
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>down</span>
+                    <span>up</span>
                   </div>
               </motion.div>
               )}

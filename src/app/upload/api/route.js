@@ -9,7 +9,7 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
 
@@ -63,9 +63,9 @@ export async function POST(req) {
         // Create text
         const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor });
 
-        const textTargetPositionTopRatio = segment.textTargetPositionTopRatio || config.defaultTextTargetPositionTopRatio;  
+        const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
        
-        const textXPos = segment.textXPosition || 350;
+        const textXPos = parseInt(xPosition) || 350;
         const textYPos = parseInt((processedImageSize.height * textTargetPositionTopRatio) - (textBufferHeight / 2));
         
         const composites = [
