@@ -6,6 +6,7 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
+import Image from 'next/image'
 
 export function Dashboard() {
   return (
@@ -71,7 +72,7 @@ export function Dashboard() {
         </div>
         <Button className="w-full">Generate Thumbnail</Button>
         <div className="border border-gray-200 rounded-lg p-4">
-          <img
+          <Image
             alt="Generated Thumbnail"
             className="object-cover w-full h-48"
             height={200}
