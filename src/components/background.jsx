@@ -1,5 +1,4 @@
 import React from 'react';
-import { Canvas } from '@react-three/fiber'; 
 import Spline from '@splinetool/react-spline';
 
 function Background() {
