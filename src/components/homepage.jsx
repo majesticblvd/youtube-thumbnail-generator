@@ -77,6 +77,12 @@ export function Homepage() {
     } else if (!selectedSegment.hasSecondText) {
       setSecondText(''); // Clear the second text input
     }
+
+    // Resest the YPosition Value when the segement is changed 
+    if (selectedSegment.textTargetPositionTopRatio) {
+      setYPosition(selectedSegment.textTargetPositionTopRatio)
+    }
+    
   }, [selectedSegment, isTextInputEnabled]); 
 
   // Handle brand selection
@@ -210,11 +216,11 @@ export function Homepage() {
   }
 
   return (
-    (<Card layout className="my-8 sm:pt-10">
+    (<Card layout className="my-10">
       <form>
         <AnimatePresence>
         <motion.div layout className="grid gap-4 md:grid-cols-2">
-          <motion.div layout className="space-y-4">
+          <motion.div layout className="space-y-4 overflow-scroll">
             <CardHeader className="pb-0">
               <CardTitle>Thumbnail Generator</CardTitle>
               <CardDescription>Only the best thumbnails.</CardDescription>

@@ -17,6 +17,7 @@ const brands = [
         id: 'access-interview-short',
         name: 'Access Interview (short)',
         image: '/pngs/int-short.png',
+        textTargetPositionTopRatio: 0.877,
         hasCustomText: true,
         textXPosition: 310,
       },
