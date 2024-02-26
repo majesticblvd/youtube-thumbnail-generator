@@ -25,6 +25,7 @@ export function Homepage() {
   const [isLoading, setIsLoading] = useState(false); // State to track loading state
   const [secondText, setSecondText] = useState(''); // State to hold the second text input
   const [fontSize, setFontSize] = useState(config.defaultFontSize); // Default font size
+  const [lineHeight, setLineHeight] = useState(config.defaultLineHeight); // Default Line Height
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {

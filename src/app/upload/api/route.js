@@ -29,8 +29,18 @@ export async function POST(req) {
 
         const publicDirectory = path.join(process.cwd(), 'public');
         const fontPath = path.join(publicDirectory, '/fonts/MarkOT-CondBoldItalic.otf');
+        const heavyFontPath = path.join(publicDirectory, '/fonts/MarkOT-Heavy.otf');
 
         registerFont(fontPath, { family: 'MarkOT-CondBoldItalic' });
+        registerFont(heavyFontPath, { family: 'MarkOT-CondHeavy'});
+
+        // Use Heavy Font if segment is interview (long)
+        let fontFam = ''
+        if (segmentId == 'access-interview-long') {
+            fontFam = 'MarkOT-CondHeavy'
+        } else {
+            fontFam = 'MarkOT-CondBoldItalic'
+        }
 
         const textColor = 'white';
         const processedImageSize = { width: 1920, height: 1080 };
@@ -51,7 +61,7 @@ export async function POST(req) {
         const formattedText = `${text}${secondText ? `\n${secondText}` : ''}`.toUpperCase();
 
         // Create text
-        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: 'MarkOT-CondBoldItalic', color: textColor });
+        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor });
 
         const textTargetPositionTopRatio = segment.textTargetPositionTopRatio || config.defaultTextTargetPositionTopRatio;  
        
