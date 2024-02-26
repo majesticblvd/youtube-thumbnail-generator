@@ -32,6 +32,7 @@ const brands = [
         image: '/pngs/E.png',
         fontSize: 150,
         text: 'EXCLUSIVE',
+        targetPositionTopRatio: 0.865,
       },
       {
         id: 'access-daily',

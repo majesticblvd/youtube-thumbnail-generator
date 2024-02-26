@@ -4,9 +4,11 @@ import { createCanvas } from 'canvas';
 export async function generateTextBuffer({ text, fontSize, fontFamily, color }) {
     const lines = text.split('\n');
     const numLines = lines.length;
+    
     const lineHeight = numLines > 1 ? 1.1 : 1;
+    const lineSpacing = fontSize * lineHeight;
 
-    let maxWidth = 0;
+    let lineMaxWidth = 0;
 
     let tempCanvas = createCanvas(100, 100);
     let tempContext = tempCanvas.getContext('2d');
@@ -16,13 +18,13 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color }) 
     lines.forEach(line => {
         const metrics = tempContext.measureText(line);
         
-        maxWidth = Math.max(maxWidth, metrics.width);
+        lineMaxWidth = Math.max(lineMaxWidth, metrics.width);
     });
-    
-    const lineSpacing = fontSize * lineHeight;
-    const height = lineSpacing * lines.length;
 
-    const canvas = createCanvas(maxWidth, height);
+    const height = lineSpacing * lines.length;
+    const extraWidth = 6;
+
+    const canvas = createCanvas(lineMaxWidth + extraWidth, height);
     const context = canvas.getContext('2d');
 
     context.font = `${fontSize}px '${fontFamily}'`;
@@ -30,11 +32,11 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color }) 
     context.textBaseline = 'middle';
   
     lines.forEach((line, index) => {
+        const xPos = extraWidth; // Offset the extra width to the right (otherwise gets cut off at the start)
         const yPos = (index + 0.5) * lineSpacing;
 
-        context.fillText(line, 0, yPos);
+        context.fillText(line, xPos, yPos);
     });
-
   
     const buffer = canvas.toBuffer('image/png');
 

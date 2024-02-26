@@ -28,12 +28,17 @@ export function Homepage() {
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
+    // Set selected segment
     setSelectedSegment(segment); // Update the selected segment state 
 
+    // Set font size
     if (typeof segment.fontSize === 'number') {
       setFontSize(segment.fontSize);
+    } else {
+      setFontSize(config.defaultFontSize);
     }
 
+    // Set text
     if (segment.text) {
       setText(segment.text);
     } else {
@@ -52,10 +57,10 @@ export function Homepage() {
 
   // Clear the text input when the segment changes
   useEffect(() => {
-    if (!isTextInputEnabled) {
+    if (!isTextInputEnabled && !selectedSegment.text) {
       setText(''); // Clear the text input
       setSecondText(''); // Clear the second text input
-    } else if (selectedSegment !== 'Access Interview (long)') {
+    } else if (!selectedSegment.hasSecondText) {
       setSecondText(''); // Clear the second text input
     }
   }, [selectedSegment, isTextInputEnabled]); 
@@ -129,23 +134,8 @@ export function Homepage() {
   }
 
   // Function to download the image
-  const downloadImage = (dataUrl, fileName = 'thumbnail.jpeg') => {
-    // Convert base64 to blob
-    const fetchImage = async (url) => {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const href = window.URL.createObjectURL(blob); // Create a URL object from the blob which can be used to download the image
-      // Trigger download
-      const link = document.createElement('a');
-      link.href = href;
-      link.setAttribute('download', fileName); // Set the file name for the download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(href); // Clean up the URL object to free memory       
-    };
-  
-    fetchImage(dataUrl);
+  const downloadImage = async (dataUrl) => {
+    downloadFile({ dataUrl, fileName: 'thumbnail.jpeg' });
   };
 
   // look for changes in the imageUrl state
@@ -378,7 +368,8 @@ export function Homepage() {
                 height={200}
               />
               {/* <CustomFontSVG text={text} fontSize={fontSize} /> */}
-              <Button 
+              <Button
+                type="button"
                 onClick={() => downloadImage(imageUrl)} 
                 className="mt-4"
                 variant="secondary"

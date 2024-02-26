@@ -4,18 +4,20 @@ import fs from 'fs';
 import { registerFont } from 'canvas';
 import { generateTextBuffer } from '@/lib/image';
 import brands from '@/config/brands';
+import config from '@/config';
+import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
         const { brandId, segmentId, text, file, secondText, fontSize } = await req.json();
         
-        const brand = brands.find((b) => b.id === brandId);
+        const brand = brands.find((brand) => brand.id === brandId);
 
         if (!brand) {
             throw new Error('Brand not found');
         }
 
-        const segment = brand.segments.find((s) => s.id === segmentId);
+        const segment = brand.segments.find((segment) => segment.id === segmentId);
 
         if (!segment) {
             throw new Error('Segment not found');
@@ -51,10 +53,10 @@ export async function POST(req) {
         // Create text
         const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: 'MarkOT-CondBoldItalic', color: textColor });
 
-        const targetPositionRatio = 0.847; // Fixed percentage at top (e.g. 84%)
+        const targetPositionTopRatio = segment.targetPositionTopRatio || config.defaultTargetPositionTopRatio;  
        
         const textXPos = 350;
-        const textYPos = parseInt((processedImageSize.height * targetPositionRatio) - (textBufferHeight / 2));
+        const textYPos = parseInt((processedImageSize.height * targetPositionTopRatio) - (textBufferHeight / 2));
         
         const composites = [
             { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
@@ -68,14 +70,18 @@ export async function POST(req) {
             })
             .composite(composites)
             .toFormat('jpeg')
-            .jpeg({ quality: 70 })
+            .jpeg({ quality: 85 })
             .toBuffer();
+        
+        const processedImageSizeInBytes = processedImage.length;
 
         // convert the buffer to base64 to send back to the client
         const base64Image = `data:image/jpeg;base64,${processedImage.toString('base64')}`;
 
+        console.log(`Generated image (Text 1: ${text} | Text 2: ${secondText || '-'} | Size: ${formatSize({ bytes: processedImageSizeInBytes, decimals: 1 })})`);
+
         // send the base64 image back to the client
-        return Response.json({ base64Image });
+        return Response.json({ base64Image, size: processedImageSizeInBytes });
     } catch (error) {
         console.error('Error:', error);
 
