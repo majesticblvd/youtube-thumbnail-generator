@@ -18,6 +18,7 @@ const brands = [
         name: 'Access Interview (short)',
         image: '/pngs/int-short.png',
         hasCustomText: true,
+        textXPosition: 310,
       },
       {
         id: 'access-interview-long',
@@ -26,6 +27,7 @@ const brands = [
         hasCustomText: true,
         hasCustomSecondText: true,
         textTargetPositionTopRatio: 0.842,
+        textXPosition: 360,
       },
       {
         id: 'access-exclusive',

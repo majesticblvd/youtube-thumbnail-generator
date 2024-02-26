@@ -55,7 +55,7 @@ export async function POST(req) {
 
         const textTargetPositionTopRatio = segment.textTargetPositionTopRatio || config.defaultTextTargetPositionTopRatio;  
        
-        const textXPos = 350;
+        const textXPos = segment.textXPosition || 350;
         const textYPos = parseInt((processedImageSize.height * textTargetPositionTopRatio) - (textBufferHeight / 2));
         
         const composites = [

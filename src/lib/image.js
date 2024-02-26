@@ -5,7 +5,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color }) 
     const lines = text.split('\n');
     const numLines = lines.length;
     
-    const lineHeight = numLines > 1 ? 1.1 : 1;
+    const lineHeight = numLines > 1 ? 0.9 : 1;
     const lineSpacing = fontSize * lineHeight;
 
     let lineMaxWidth = 0;
