@@ -9,6 +9,7 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import brands from '@/config/brands';
 import config from '@/config';
+import { downloadFile } from '@/lib/file';
 
 const initialState = {
   message: null,
