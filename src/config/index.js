@@ -1,6 +1,6 @@
 const config = {
     defaultFontSize: 138,
-    defaultTargetPositionTopRatio: 0.842,
+    defaultTextTargetPositionTopRatio: 0.865,
 };
 
 export default config;

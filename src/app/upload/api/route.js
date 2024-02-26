@@ -53,10 +53,10 @@ export async function POST(req) {
         // Create text
         const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: 'MarkOT-CondBoldItalic', color: textColor });
 
-        const targetPositionTopRatio = segment.targetPositionTopRatio || config.defaultTargetPositionTopRatio;  
+        const textTargetPositionTopRatio = segment.textTargetPositionTopRatio || config.defaultTextTargetPositionTopRatio;  
        
         const textXPos = 350;
-        const textYPos = parseInt((processedImageSize.height * targetPositionTopRatio) - (textBufferHeight / 2));
+        const textYPos = parseInt((processedImageSize.height * textTargetPositionTopRatio) - (textBufferHeight / 2));
         
         const composites = [
             { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},

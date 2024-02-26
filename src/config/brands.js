@@ -25,6 +25,7 @@ const brands = [
         image: '/pngs/int-long.png',
         hasCustomText: true,
         hasCustomSecondText: true,
+        textTargetPositionTopRatio: 0.842,
       },
       {
         id: 'access-exclusive',
@@ -32,7 +33,6 @@ const brands = [
         image: '/pngs/E.png',
         fontSize: 150,
         text: 'EXCLUSIVE',
-        targetPositionTopRatio: 0.865,
       },
       {
         id: 'access-daily',
