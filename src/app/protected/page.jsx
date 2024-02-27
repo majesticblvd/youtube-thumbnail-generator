@@ -4,6 +4,11 @@ import { redirect } from 'next/navigation';
 import { Homepage } from "@/components/homepage";
 
 export default async function Protected() {
+
+  // Test page that requires the user to sign if they have not already
+  // Page NOT in use currently 
+  // Server component implementation of the redirect and authentication 
+
   const session = await getServerSession(authOptions);
 
   if (!session) {

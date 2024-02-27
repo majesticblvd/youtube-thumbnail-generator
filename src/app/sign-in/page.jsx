@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth';
 
+// CUSTOM SIGN IN PAGE (NOT IN USE CURRENTLY)
+
 export default async function SignIn() {
   const session = await getServerSession(authOptions);
   const cookieStore = cookies();
