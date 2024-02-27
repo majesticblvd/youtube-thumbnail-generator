@@ -1,6 +1,5 @@
 'use client'
 import Link from "next/link";
-import { Background } from "@/components/background";
 import { Homepage } from "@/components/homepage";
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -15,6 +14,8 @@ export default function Home() {
     </>
   );
 }
+
+
 
 
 {/* <div className="flex flex-col items-center justify-center h-screen">
