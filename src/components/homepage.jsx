@@ -214,6 +214,9 @@ export function Homepage() {
   };
   // --------------------------------------------------------------------------
 
+  // Reset to Default function 
+
+
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -226,7 +229,7 @@ export function Homepage() {
       <form>
         <AnimatePresence>
         <motion.div layout className="grid gap-4 md:grid-cols-2">
-          <motion.div layout className="space-y-4 overflow-scroll">
+          <motion.div layout className="space-y-4">
             <CardHeader className="pb-0">
               <CardTitle>Thumbnail Generator</CardTitle>
               <CardDescription>Only the best thumbnails.</CardDescription>
@@ -488,41 +491,3 @@ export function Homepage() {
   );
 }
 
-// const CustomFontSVG = ({ text, fontSize }) => {
-//   return (
-//     <svg width="500" height="70" className="" xmlns="http://www.w3.org/2000/svg">
-//       <style>
-//         {`
-//           @font-face {
-//             font-family: 'Mark OT Cond Bold Italic';
-//             src: url('/fonts/MarkOT-CondBoldItalic.otf') format('truetype');
-//           }
-//           text {
-//             font-family: 'Mark OT Cond Bold Italic';
-//           }
-//         `}
-//       </style>
-//       <text x="10" y="50" fill="white" style={{ fontFamily: 'Mark OT Cond Bold Italic', textTransform: 'uppercase', fontSize: fontSize / 4 }}>{text}</text>
-//     </svg>
-//   );
-// };
-
-// function UploadIcon(props) {
-//   return (
-//     (<svg
-//       {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="24"
-//       height="24"
-//       viewBox="0 24"
-//       fill="none"
-//       stroke="currentColor"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round">
-//       <path d="M21 15v4a2 2 0 1-2 2H5a2 1-2-2v-4" />
-//       <polyline points="17 8 12 3 7" />
-//       <line x1="12" x2="12" y1="3" y2="15" />
-//     </svg>)
-//   );
-// }
