@@ -9,7 +9,7 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
 
@@ -61,7 +61,7 @@ export async function POST(req) {
         const formattedText = `${text}${secondText ? `\n${secondText}` : ''}`.toUpperCase();
 
         // Create text
-        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor });
+        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing });
 
         const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
        

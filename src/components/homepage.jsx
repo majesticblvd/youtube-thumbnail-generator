@@ -28,7 +28,7 @@ export function Homepage() {
   const [fontSize, setFontSize] = useState(config.defaultFontSize); // Default font size
   const [xPosition, setXPosition] = useState(350);
   const [yPosition, setYPosition] = useState(config.defaultTextTargetPositionTopRatio);
-  const [displayValue, setDisplayValue] = useState(0);
+  const [letterSpacing, setLetterSpacing] = useState(config.defaultLetterSpacing);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -50,6 +50,11 @@ export function Homepage() {
     // Set Text Y Position
     if (typeof segment.defaultTextTargetPositionTopRatio === 'number') {
       setYPosition(segment.defaultTextTargetPositionTopRatio)
+    }
+
+    // Set Letter Spacing
+    if (typeof segment.letterSpacing === 'number') {
+      setLetterSpacing(segment.letterSpacing)
     }
 
     // Set text
@@ -123,6 +128,7 @@ export function Homepage() {
       fontSize: fontSize,
       xPosition: xPosition,
       yPosition: yPosition,
+      letterSpacing, letterSpacing,
     }; 
 
     try {

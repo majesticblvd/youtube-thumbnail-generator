@@ -21,6 +21,7 @@ const brands = [
         textTargetPositionTopRatio: 0.865,
         hasCustomText: true,
         textXPosition: 307,
+        letterSpacing: 2.1,
       },
       {
         id: 'access-interview-long',
@@ -31,6 +32,7 @@ const brands = [
         hasCustomSecondText: true,
         textTargetPositionTopRatio: 0.838,
         textXPosition: 369,
+        letterSpacing: 0.9,
       },
       {
         id: 'access-exclusive',
@@ -40,6 +42,7 @@ const brands = [
         textTargetPositionTopRatio: 0.858,
         text: 'EXCLUSIVE',
         textXPosition: 300,
+        letterSpacing: 3,
       },
       {
         id: 'access-daily',
