@@ -148,8 +148,8 @@ export function Homepage() {
       setImageUrl(responseData.base64Image); // Correctly access and update state
     } catch (error) {
       console.error('Error:', error);
-
       alert(error.message);
+
     } finally {
       setIsLoading(false);
     }

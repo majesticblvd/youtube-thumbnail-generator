@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, _request) {
-        if (credentials?.password == 'secret') {
+        if (credentials?.password == 'pxl2024!') { // Set the password here
           return { id: '0' };
         } else {
           return null;
