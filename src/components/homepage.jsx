@@ -65,6 +65,15 @@ export function Homepage() {
     }
   };
 
+  // Reset to Default function 
+  const resetToDefault = (selectedSegment) => {
+    if (selectedSegment) {
+      setFontSize(selectedSegment.fontSize);
+      setXPosition(selectedSegment.textXPosition);
+      setYPosition(selectedSegment.textTargetPositionTopRatio);
+    }
+  }
+
   // Check if text input should be enabled
   const isTextInputEnabled = useMemo(() => {
     if (!selectedSegment) {
@@ -214,7 +223,6 @@ export function Homepage() {
   };
   // --------------------------------------------------------------------------
 
-  // Reset to Default function 
 
 
   const textVariants = {
@@ -346,6 +354,27 @@ export function Homepage() {
                 </motion.div>
               )}
 
+              {/* Reset Button */}
+              {isTextInputEnabled && (
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.03 }}
+                  variants={textVariants}
+                >
+                  <Button
+                    type="button"
+                    onClick={() => resetToDefault(selectedSegment)}
+                    className="w-1/4 mt-4"
+                    variant="secondary"
+                  >
+                    Reset
+                  </Button>
+                </motion.div>
+              )}
+
               {/* Font Size */}
               {isTextInputEnabled && (
               <motion.div 
@@ -353,7 +382,7 @@ export function Homepage() {
                 className="grid gap-2"
                 initial='hidden'
                 animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.05 }}
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.06 }}
                 variants={textVariants}
               >
                   <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
