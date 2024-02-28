@@ -18,7 +18,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
         let lineWidth = 0;
         for (let i = 0; i < line.length; i++) {
             const metrics = tempContext.measureText(line[i]);
-            lineWidth += metrics.width + letterSpacing * (i ? 1 : 0);
+            lineWidth += metrics.width + letterSpacing * (i ? 3 : 0); 
         }
         lineMaxWidth = Math.max(lineMaxWidth, lineWidth);
     });
