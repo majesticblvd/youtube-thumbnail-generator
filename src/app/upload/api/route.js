@@ -63,6 +63,15 @@ export async function POST(req) {
         // Create text
         const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing });
 
+        // Get the dimensions of the text buffer
+        const textImage = sharp(textBuffer);
+        const textMetadata = await textImage.metadata();
+
+        // Check if text buffer is larger than the processed image size
+        if (textMetadata.width > processedImageSize.width || textMetadata.height > processedImageSize.height) {
+            throw new Error('Text too long, decrease font size or word count');
+        }
+
         const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
        
         const textXPos = parseInt(xPosition) || 350;

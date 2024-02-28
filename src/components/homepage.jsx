@@ -111,7 +111,12 @@ export function Homepage() {
   // For when the image is selected
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    const maxFileSize = 3.5 * 1024 * 1024; // 5MB in bytes
     if (file) {
+      if (file.size > maxFileSize) {
+        alert("File size should not exceed 3.5MB.");
+        return; // Exit the function if file is too large
+      }
       setFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
