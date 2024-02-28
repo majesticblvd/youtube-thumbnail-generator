@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <>
-      <motion.div layout className="flex overflow-y-auto h-full sm:my-10 lg:my-0 flex-col items-center justify-center ">
+      <motion.div layout className="flex min-h-screen overflow-y-auto h-full sm:my-10 lg:my-0 flex-col items-center justify-center ">
         <Homepage /> 
       </motion.div>
     </>
