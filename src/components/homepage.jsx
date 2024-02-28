@@ -353,14 +353,14 @@ export function Homepage() {
                     id="fontSizeSlider"
                     name="fontSizeSlider"
                     min="90" // Minimum font size
-                    max="185" // Maximum font size
+                    max="195" // Maximum font size
                     value={fontSize}
                     onChange={(e) => setFontSize(e.target.value)}
                     className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
                   />
                   <div className="flex justify-between text-xs px-2">
                     <span>90</span>
-                    <span>185</span>
+                    <span>195</span>
                   </div>
               </motion.div>
               )}
