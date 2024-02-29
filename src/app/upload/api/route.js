@@ -60,8 +60,11 @@ export async function POST(req) {
         // Format text
         const formattedText = `${text}${secondText ? `\n${secondText}` : ''}`.toUpperCase();
 
+        // Convert letter spacing to int
+        const letterSpacingInt = parseInt(letterSpacing); 
+
         // Create text
-        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing });
+        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt });
 
         // Get the dimensions of the text buffer
         const textImage = sharp(textBuffer);

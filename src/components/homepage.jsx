@@ -71,6 +71,7 @@ export function Homepage() {
       setFontSize(selectedSegment.fontSize);
       setXPosition(selectedSegment.textXPosition);
       setYPosition(selectedSegment.textTargetPositionTopRatio);
+      setLetterSpacing(selectedSegment.letterSpacing)
     }
   }
 
@@ -227,8 +228,6 @@ export function Homepage() {
     e.stopPropagation();
   };
   // --------------------------------------------------------------------------
-
-
 
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -407,7 +406,8 @@ export function Homepage() {
                   </div>
               </motion.div>
               )}
-
+              
+              {/* Font X Position */}
               {isTextInputEnabled && (
               <motion.div 
                 layout
@@ -422,8 +422,8 @@ export function Homepage() {
                     type="range"
                     id="fontSizeSlider"
                     name="fontSizeSlider"
-                    min="260" // Minimum font size
-                    max="400" // Maximum font size
+                    min="260" // Minimum X Position 
+                    max="400" // Maximum X Position
                     value={xPosition}
                     onChange={(e) => setXPosition(e.target.value)}
                     className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
@@ -463,6 +463,35 @@ export function Homepage() {
                   <div className="flex justify-between text-xs px-2">
                     <span>down</span>
                     <span>up</span>
+                  </div>
+              </motion.div>
+              )}
+
+              {/* Font Spacing Value */}
+              {isTextInputEnabled && (
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Text Letter Spacing - {letterSpacing}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="0" // Minimum X Position 
+                    max="6" // Maximum X Position
+                    value={letterSpacing}
+                    onChange={(e) => setLetterSpacing(e.target.value)}
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                    step='0.1'
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>0</span>
+                    <span>6</span>
                   </div>
               </motion.div>
               )}
