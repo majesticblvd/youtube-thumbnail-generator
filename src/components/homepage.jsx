@@ -483,15 +483,15 @@ export function Homepage() {
                     id="fontSizeSlider"
                     name="fontSizeSlider"
                     min="0" // Minimum X Position 
-                    max="6" // Maximum X Position
+                    max="8" // Maximum X Position
                     value={letterSpacing}
                     onChange={(e) => setLetterSpacing(e.target.value)}
                     className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                    step='0.1'
+                    step='1'
                   />
                   <div className="flex justify-between text-xs px-2">
                     <span>0</span>
-                    <span>6</span>
+                    <span>8</span>
                   </div>
               </motion.div>
               )}
