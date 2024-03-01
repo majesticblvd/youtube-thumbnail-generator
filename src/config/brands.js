@@ -39,11 +39,11 @@ const brands = [
         name: 'Access Exclusive',
         image: '/pngs/E.png',
         fontSize: 210,
-        textTargetPositionTopRatio: 0.858,
+        textTargetPositionTopRatio: 0.856,
         hasCustomText: true,
         text: 'EXCLUSIVE',
         textXPosition: 300,
-        letterSpacing: 0.0,
+        letterSpacing: 2.0,
       },
       {
         id: 'access-daily',
