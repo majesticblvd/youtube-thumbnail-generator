@@ -29,6 +29,8 @@ export function Homepage() {
   const [xPosition, setXPosition] = useState(350);
   const [yPosition, setYPosition] = useState(config.defaultTextTargetPositionTopRatio);
   const [letterSpacing, setLetterSpacing] = useState(config.defaultLetterSpacing);
+  const [imageWidth, setImageWidth] = useState(400);
+  const [imageHeight, setImageHeight] = useState(200);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -63,6 +65,7 @@ export function Homepage() {
     } else {
       setText('');
     }
+
   };
 
   // Reset to Default function 
@@ -72,6 +75,8 @@ export function Homepage() {
       setXPosition(selectedSegment.textXPosition);
       setYPosition(selectedSegment.textTargetPositionTopRatio);
       setLetterSpacing(selectedSegment.letterSpacing)
+      setImageWidth(400);
+      setImageHeight(200);
     }
   }
 
@@ -107,6 +112,16 @@ export function Homepage() {
 
   const handleTextChange = (e) => {
     setText(e.target.value); // Update text state on change
+  };
+
+   // Function to handle width change
+   const handleWidthChange = (e) => {
+    setImageWidth(e.target.value);
+  };
+
+  // Function to handle height change
+  const handleHeightChange = (e) => {
+    setImageHeight(e.target.value);
   };
 
   // For when the image is selected
@@ -237,10 +252,10 @@ export function Homepage() {
   }
 
   return (
-    (<Card layout className="my-10">
+    (<Card layout className="my-10 min-w-96 max-w-90w">
       <form>
         <AnimatePresence>
-        <motion.div layout className="grid gap-4 md:grid-cols-2">
+        <motion.div layout className="grid  gap-4 md:grid-cols-2">
           <motion.div layout className="space-y-4">
             <CardHeader className="pb-0">
               <CardTitle>Thumbnail Generator</CardTitle>
@@ -496,6 +511,58 @@ export function Homepage() {
               </motion.div>
               )}
 
+              {/* Image Width */}
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Width - {imageWidth}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="200" // Minimum width size
+                    max="600" // Maximum width size
+                    value={imageWidth}
+                    onChange={handleWidthChange}
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>200</span>
+                    <span>600</span>
+                  </div>
+              </motion.div> 
+
+              {/* Image Height */}
+              <motion.div 
+                layout
+                className="grid gap-2"
+                initial='hidden'
+                animate='visible'
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                variants={textVariants}
+              >
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Height - {imageHeight}</label>
+                  <input
+                    type="range"
+                    id="fontSizeSlider"
+                    name="fontSizeSlider"
+                    min="50" // Minimum width size
+                    max="400" // Maximum width size
+                    value={imageHeight}
+                    onChange={handleHeightChange}
+                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs px-2">
+                    <span>50</span>
+                    <span>400</span>
+                  </div>
+              </motion.div>                  
+
               <motion.div layout>
                 <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
                   {isLoading ? 'Generating...' : 'Generate Thumbnail'}
@@ -514,7 +581,9 @@ export function Homepage() {
                 className="object-cover w-full h-52"
                 src={imageUrl}
                 style={{
-                  aspectRatio: "400/200",
+                  // aspectRatio: `${imageWidth}/${imageHeight}`,
+                  width: `${imageWidth}px`,
+                  height:  `${imageHeight}px`,
                   objectFit: "contain",
                 }}
                 width={400}
