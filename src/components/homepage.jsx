@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import brands from '@/config/brands';
 import config from '@/config';
 import { downloadFile } from '@/lib/file';
@@ -31,6 +31,7 @@ export function Homepage() {
   const [letterSpacing, setLetterSpacing] = useState(config.defaultLetterSpacing);
   const [imageWidth, setImageWidth] = useState(400);
   const [imageHeight, setImageHeight] = useState(200);
+  const [devActive, setDevActive] = useState(false);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -75,9 +76,9 @@ export function Homepage() {
       setXPosition(selectedSegment.textXPosition);
       setYPosition(selectedSegment.textTargetPositionTopRatio);
       setLetterSpacing(selectedSegment.letterSpacing)
-      setImageWidth(400);
-      setImageHeight(200);
     }
+    setImageWidth(400);
+    setImageHeight(200);
   }
 
   // Check if text input should be enabled
@@ -202,7 +203,8 @@ export function Homepage() {
       // Create the thumbnail
       console.log('imageUrl changed');
     }
-  }, [imageUrl]);
+    console.log('devActive', devActive);
+  }, [imageUrl, devActive]);
 
   // File Drag n Drop --------------------------------------------------------------
   const handleDrop = (e) => {
@@ -247,14 +249,17 @@ export function Homepage() {
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, x: 20,},
+    exit: { 
+      opacity: 0, 
+      x: -20,
+      transition: { duration: 0.4 } // Faster exit transition
+    },
     transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
   }
 
   return (
-    (<Card layout className="my-10 min-w-96 max-w-90w">
-      <form>
-        <AnimatePresence>
+    (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
+      <motion.form layout>
         <motion.div layout className="grid  gap-4 md:grid-cols-2">
           <motion.div layout className="space-y-4">
             <CardHeader className="pb-0">
@@ -326,15 +331,17 @@ export function Homepage() {
               </motion.div>
 
               {/* Text Input Fields */}
+              <AnimatePresence mode="wait" >
               {selectedSegment.hasCustomText === true && (
                 <motion.div 
                   layout
                   className="grid gap-2"
                   initial='hidden'
                   animate='visible'
-                  exit='hidden'
+                  exit='exit'
                   transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 5 }}
                   variants={textVariants}
+                  key='textFieldOne'
                 >
                   <label className="text-sm font-medium mt-4" htmlFor="text">
                     Add Text
@@ -349,15 +356,19 @@ export function Homepage() {
                     />
                 </motion.div>
               )}  
-              
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait" >
               {selectedSegment.hasCustomSecondText === true && (
                 <motion.div 
                   layout
                   className="grid gap-2 text-sm font-medium mt-4"
                   initial='hidden'
                   animate='visible'
+                  exit='exit'
                   transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 5 }}
                   variants={textVariants}
+                  key='textFieldTwo'
                 >
                   <label className="text-sm font-medium " htmlFor="secondText">
                     Add Second Text
@@ -372,30 +383,40 @@ export function Homepage() {
                   />
                 </motion.div>
               )}
+              </AnimatePresence>
 
-              {/* Reset Button */}
-              {isTextInputEnabled && (
+              {/* RESET AND DEV TOGGLE */}
+              <AnimatePresence mode="wait" >
                 <motion.div 
                   layout
-                  className="grid gap-2"
+                  className="grid grid-cols-2 justify-between items-end gap-10"
                   initial='hidden'
                   animate='visible'
                   transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.03 }}
+                  exit='exit'
                   variants={textVariants}
+                  key='buttons'
                 >
-                  <Button
-                    type="button"
-                    onClick={() => resetToDefault(selectedSegment)}
-                    className="w-1/4 mt-4"
-                    variant="secondary"
-                  >
-                    Reset
-                  </Button>
+                  <Switch 
+                    key='switch'
+                    setDevActive={setDevActive}
+                    devActive={devActive}
+                  />
+                  {devActive && (
+                      <Button
+                      type="button"
+                      onClick={() => resetToDefault(selectedSegment)}
+                      className=" mt-4"
+                      variant="secondary"
+                      key='resetButton'
+                    >
+                      Reset
+                    </Button>
+                  )}
                 </motion.div>
-              )}
 
               {/* Font Size */}
-              {isTextInputEnabled && (
+              {devActive && isTextInputEnabled && (
               <motion.div 
                 layout
                 className="grid gap-2"
@@ -403,6 +424,8 @@ export function Homepage() {
                 animate='visible'
                 transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.06 }}
                 variants={textVariants}
+                exit='exit'
+                key='fontSizeSlider'
               >
                   <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
                   <input
@@ -423,14 +446,16 @@ export function Homepage() {
               )}
               
               {/* Font X Position */}
-              {isTextInputEnabled && (
+              {isTextInputEnabled && devActive && (
               <motion.div 
                 layout
                 className="grid gap-2"
                 initial='hidden'
                 animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.09 }}
                 variants={textVariants}
+                exit='exit'
+                key='xPositionSlider'
               >
                   <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Horizontal Text Position - {xPosition}</label>
                   <input
@@ -450,7 +475,8 @@ export function Homepage() {
               </motion.div>
               )}
 
-              {isTextInputEnabled && (
+              {/* Font Y Position */}
+              {isTextInputEnabled && devActive && (
               <motion.div 
                 layout
                 className="grid gap-2"
@@ -458,6 +484,8 @@ export function Homepage() {
                 animate='visible'
                 transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
                 variants={textVariants}
+                exit='exit'
+                key='yPositionSlider'
               >
                   <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Vertical Text Position - {yPosition}</label>
                   <input
@@ -483,14 +511,16 @@ export function Homepage() {
               )}
 
               {/* Font Spacing Value */}
-              {isTextInputEnabled && (
+              {isTextInputEnabled && devActive && (
               <motion.div 
                 layout
                 className="grid gap-2"
                 initial='hidden'
                 animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
+                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.2 }}
                 variants={textVariants}
+                exit='exit'
+                key='letterSpacingSlider'
               >
                   <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Text Letter Spacing - {letterSpacing}</label>
                   <input
@@ -512,56 +542,66 @@ export function Homepage() {
               )}
 
               {/* Image Width */}
-              <motion.div 
-                layout
-                className="grid gap-2"
-                initial='hidden'
-                animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
-                variants={textVariants}
-              >
-                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Width - {imageWidth}</label>
-                  <input
-                    type="range"
-                    id="fontSizeSlider"
-                    name="fontSizeSlider"
-                    min="200" // Minimum width size
-                    max="600" // Maximum width size
-                    value={imageWidth}
-                    onChange={handleWidthChange}
-                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                  />
-                  <div className="flex justify-between text-xs px-2">
-                    <span>200</span>
-                    <span>600</span>
-                  </div>
-              </motion.div> 
+              {devActive && (
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.3 }}
+                  variants={textVariants}
+                  exit='exit'
+                  key='imageWidthSlider'
+                  >
+                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Width - {imageWidth}</label>
+                    <input
+                      type="range"
+                      id="fontSizeSlider"
+                      name="fontSizeSlider"
+                      min="200" // Minimum width size
+                      max="600" // Maximum width size
+                      value={imageWidth}
+                      onChange={handleWidthChange}
+                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                      />
+                    <div className="flex justify-between text-xs px-2">
+                      <span>200</span>
+                      <span>600</span>
+                    </div>
+                </motion.div> 
+              )}
 
               {/* Image Height */}
-              <motion.div 
-                layout
-                className="grid gap-2"
-                initial='hidden'
-                animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.1 }}
-                variants={textVariants}
-              >
-                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Height - {imageHeight}</label>
-                  <input
-                    type="range"
-                    id="fontSizeSlider"
-                    name="fontSizeSlider"
-                    min="50" // Minimum width size
-                    max="400" // Maximum width size
-                    value={imageHeight}
-                    onChange={handleHeightChange}
-                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                  />
-                  <div className="flex justify-between text-xs px-2">
-                    <span>50</span>
-                    <span>400</span>
-                  </div>
-              </motion.div>                  
+              {devActive && (
+                <motion.div 
+                  layoutId="height"
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.4 }}
+                  variants={textVariants}
+                  exit='exit'
+                  key='imageHeightSlider'
+                >
+                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Height - {imageHeight}</label>
+                    <input
+                      type="range"
+                      id="fontSizeSlider"
+                      name="fontSizeSlider"
+                      min="50" // Minimum width size
+                      max="400" // Maximum width size
+                      value={imageHeight}
+                      onChange={handleHeightChange}
+                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                    />
+                    <div className="flex justify-between text-xs px-2">
+                      <span>50</span>
+                      <span>400</span>
+                    </div>
+                </motion.div>   
+              )}
+              </AnimatePresence>
+               
 
               <motion.div layout>
                 <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
@@ -617,9 +657,42 @@ export function Homepage() {
             {state?.message}
           </p>
         </motion.div>
-        </AnimatePresence>
-      </form>
+      </motion.form>
     </Card>)
   );
 }
 
+const Switch = ({key, setDevActive, devActive}) => {
+  const [isOn, setIsOn] = useState(false);
+  return (
+    <motion.div 
+      layout
+      className={`h-10 relative w-24 mt-4 ${isOn ? 'bg-green-500' : 'bg-slate-500'} rounded-full p-1 flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out`} 
+      data-darkmode={isOn}
+      onClick={() => {
+        setIsOn(!isOn);
+        setDevActive(!devActive);
+      }}
+      style={{ justifyContent: isOn ? 'flex-end' : 'flex-start' }}
+    >
+      <motion.div layout className="h-7 w-7 rounded-full grid items-center justify-items-center bg-white overflow-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            className={` bg-white text-slate-950 ${isOn ? 'on' : 'off'}`}
+            key={isOn ? 'moon' : 'sun'}
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 30, opacity: 0 }} 
+            transition={{ duration: .2 }}
+          >
+            {isOn ? '✓' : 'X'}
+          </motion.span>
+        </AnimatePresence>
+      </motion.div>
+      {/* words to describe switch inside of it */}
+      <motion.div layout className="text-white absolute right-3 text-xs font-medium">
+        {isOn ? '' : 'Adjust'}
+      </motion.div>
+    </motion.div>
+  )
+}

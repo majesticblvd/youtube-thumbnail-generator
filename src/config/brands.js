@@ -40,7 +40,7 @@ const brands = [
         image: '/pngs/E.png',
         fontSize: 210,
         textTargetPositionTopRatio: 0.856,
-        hasCustomText: true,
+        hasCustomText: false,
         text: 'EXCLUSIVE',
         textXPosition: 300,
         letterSpacing: 2.0,

@@ -1,16 +1,19 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { LayoutGroup, motion } from "framer-motion"
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (
+  <LayoutGroup>
   <motion.div
+    layout
     ref={ref}
     className={cn(
       "rounded-lg border my-2 border-gray-200 bg-white text-gray-950 shadow-sm dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50",
       className
     )}
     {...props} />
+    </LayoutGroup>
 ))
 Card.displayName = "Card"
 
@@ -39,7 +42,7 @@ const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
 CardDescription.displayName = "CardDescription"
 
 const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <motion.div layout ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ))
 CardContent.displayName = "CardContent"
 

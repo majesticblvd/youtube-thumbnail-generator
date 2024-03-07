@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva } from "class-variance-authority";
-
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -34,10 +34,14 @@ const buttonVariants = cva(
 )
 
 const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button"
+  let Comp = asChild ? Slot : "button"
+  motion(Comp); // Convert Comp to a motion component
   return (
     (<Comp
+      layout
       className={cn(buttonVariants({ variant, size, className }))}
+      exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
+
       ref={ref}
       {...props} />)
   );
