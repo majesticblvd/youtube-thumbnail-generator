@@ -54,8 +54,8 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
     return (
         
         <>
-            <div className="flex justify-center items-center border-2 rounded-full p-2 border-gray-950 dark:border-gray-100 hover:cursor-pointer hover:border-gray-500 hover:text-grey-500 transition duration-300" onClick={() => {setModalOpen(!modalOpen)}}>
-                <h3 className="text-xl font-semibold leading-none tracking-tight hover:cursor-pointer hover:text-gray-500 transition duration-300">⁇</h3>
+            <div className="flex justify-center items-center border-2 rounded-full *:hover:text-gray-500 w-8 h-8 border-gray-950 dark:border-gray-100 hover:cursor-pointer hover:border-gray-500 hover:text-grey-500 transition duration-300" onClick={() => {setModalOpen(!modalOpen)}}>
+                <h3 className="text-sm font-semibold leading-none tracking-tight hover:cursor-pointer hover:text-gray-500 transition duration-300">?</h3>
             </div>
 
             <AnimatePresence>
@@ -64,12 +64,12 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                     animate={modalOpen ? 'visible' : 'hidden'}
                     exit={{ opacity: 0 }}
                     variants={modalVariants} 
-                    className="fixed z-50 h-[105vh] inset-0 bg-black w-full bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
+                    className="fixed z-50 h-[105vh] inset-0 bg-black w-full bg-opacity-0 backdrop-blur-sm flex justify-center items-center"
                     id="backdrop"
                     onClick={handleCloseModal}
                     style={{ borderRadius: modalOpen ? "0px" : "25px" }} 
                 >
-                    <motion.div layout style={{borderRadius: 20}} className="flex flex-col dark:bg-gray-200 dark:text-gray-950 lg:min-w-40w md:min-w-40w sm:min-w-40w lg:min-h-40 bg-gray-900 text-gray-100 z-50 relative p-6 " initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}>
+                    <motion.div layout style={{borderRadius: 20}} className="flex flex-col dark:bg-gray-200 dark:text-gray-950 lg:max-w-40w md:max-w-60w sm:max-w-60w max-w-60w lg:min-w-30w md:min-w-30w sm:min-w-20w lg:min-h-40 bg-gray-900 text-gray-100 z-50 relative p-6 " initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}>
                         <div className="flex flex-col w-full dark:bg-gray-400 px-4 py-4 rounded-md bg-gray-800">
                             <h2 className="text-xl  font-semibold">Thumbnail Generator</h2>
                             <p>How-to Guide</p>

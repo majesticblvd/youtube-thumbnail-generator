@@ -303,7 +303,7 @@ export function Homepage() {
             <CardHeader className="pb-0">
               <div className="flex flex-col">
                 <CardTitle>Thumbnail Generator</CardTitle>
-                <CardDescription>Only the best thumbnails.</CardDescription>
+                <CardDescription>Only the best thumbnails</CardDescription>
               </div>
               <HelpComponent modalOpen={modalOpen} setModalOpen={setModalOpen} />
             </CardHeader>
