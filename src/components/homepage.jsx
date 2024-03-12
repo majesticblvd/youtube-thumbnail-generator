@@ -10,6 +10,7 @@ import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import brands from '@/config/brands';
 import config from '@/config';
 import { downloadFile } from '@/lib/file';
+import HelpComponent from "./ui/help"
 
 const initialState = {
   message: null,
@@ -33,6 +34,7 @@ export function Homepage() {
   const [imageHeight, setImageHeight] = useState(200);
   const [devActive, setDevActive] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -258,6 +260,7 @@ export function Homepage() {
     transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
   }
 
+  // ----- Fetch YouTube Thumbnail ----------------------------------------------
   async function fetchYoutubeThumbnail(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -277,9 +280,7 @@ export function Homepage() {
 
       const responseData = await response.json();
       console.log('Success:', responseData);
-
       if (response.ok) {
-        console.log('responseData', responseData);
         setImageUrl(responseData.thumbnailUrl); // Use the thumbnail URL from the response
         setOriginalImageUrl(responseData.base64Image); // Store the original image URL
       } else {
@@ -292,6 +293,7 @@ export function Homepage() {
       setIsLoading(false);
     }
   }
+  // --------------------------------------------------------------------------
 
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
@@ -299,8 +301,11 @@ export function Homepage() {
         <motion.div layout className="grid  gap-4 md:grid-cols-2">
           <motion.div layout className="space-y-4">
             <CardHeader className="pb-0">
-              <CardTitle>Thumbnail Generator</CardTitle>
-              <CardDescription>Only the best thumbnails.</CardDescription>
+              <div className="flex flex-col">
+                <CardTitle>Thumbnail Generator</CardTitle>
+                <CardDescription>Only the best thumbnails.</CardDescription>
+              </div>
+              <HelpComponent modalOpen={modalOpen} setModalOpen={setModalOpen} />
             </CardHeader>
             <CardContent>
             <div className="grid gap-2">
@@ -350,7 +355,7 @@ export function Homepage() {
                   onChange={(e) => setYoutubeUrl(e.target.value)}
                   value={youtubeUrl}
                 />
-                <Button onClick={fetchYoutubeThumbnail} className="mt-2" disabled={!youtubeUrl}>
+                <Button onClick={fetchYoutubeThumbnail} className="mt-2" variant="secondary" disabled={!youtubeUrl}>
                   Fetch Thumbnail
                 </Button>
               </div>

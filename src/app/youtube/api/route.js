@@ -14,12 +14,9 @@ export async function POST(req) {
     try {
       const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`);
       const data = await response.json();
-    //   console.log('data is here: ', data.items[0].snippet); // gives metadata of the video
       if (data.items.length > 0) {
-        const thumbnailUrl = data.items[0].snippet.thumbnails.high.url;
-        // console.log('thumbnail url is here: ', thumbnailUrl);
+        const thumbnailUrl = data.items[0].snippet.thumbnails.maxres.url;
         const base64Image = await convertImageToBase64(thumbnailUrl);
-        // console.log('base64Image is here: ', base64Image);
 
         const responseData = {
             thumbnailUrl: thumbnailUrl,

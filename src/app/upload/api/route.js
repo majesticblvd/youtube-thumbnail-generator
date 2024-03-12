@@ -47,8 +47,6 @@ export async function POST(req) {
         const textColor = 'white';
         const processedImageSize = { width: 1920, height: 1080 };
 
-        console.log('file for image', file);
-
         // decode the base64 string
         const base64String = file.split(';base64,').pop();
         const buffer = Buffer.from(base64String, 'base64');
