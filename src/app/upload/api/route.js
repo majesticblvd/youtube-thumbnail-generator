@@ -7,6 +7,8 @@ import brands from '@/config/brands';
 import config from '@/config';
 import { formatSize } from '@/lib/file';
 
+
+
 export async function POST(req) {
     try {
         const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing } = await req.json();
@@ -44,6 +46,8 @@ export async function POST(req) {
 
         const textColor = 'white';
         const processedImageSize = { width: 1920, height: 1080 };
+
+        console.log('file for image', file);
 
         // decode the base64 string
         const base64String = file.split(';base64,').pop();

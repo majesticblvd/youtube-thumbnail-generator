@@ -38,7 +38,6 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, ..
   motion(Comp); // Convert Comp to a motion component
   return (
     (<Comp
-      layout
       className={cn(buttonVariants({ variant, size, className }))}
       exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
 

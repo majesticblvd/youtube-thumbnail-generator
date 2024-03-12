@@ -32,6 +32,7 @@ export function Homepage() {
   const [imageWidth, setImageWidth] = useState(400);
   const [imageHeight, setImageHeight] = useState(200);
   const [devActive, setDevActive] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -222,7 +223,7 @@ export function Homepage() {
     setFile(file);
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64String = reader.result;
+      const base64String = reader.result; // Store the base64 string
       setImageUrl(base64String);
       setOriginalImageUrl(base64String); // Store the original image URL
     };
@@ -255,6 +256,41 @@ export function Homepage() {
       transition: { duration: 0.4 } // Faster exit transition
     },
     transition: { type: 'spring', damping: 30, stiffness: 200, mass: 5 }
+  }
+
+  async function fetchYoutubeThumbnail(e) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const query = {
+      youtubeUrl: youtubeUrl,
+    }
+  
+    try {
+      const response = await fetch('/youtube/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(query),
+      });
+
+      const responseData = await response.json();
+      console.log('Success:', responseData);
+
+      if (response.ok) {
+        console.log('responseData', responseData);
+        setImageUrl(responseData.thumbnailUrl); // Use the thumbnail URL from the response
+        setOriginalImageUrl(responseData.base64Image); // Store the original image URL
+      } else {
+        throw new Error(responseData.error || 'An error occurred');
+      }
+    } catch (error) {
+      console.error('Error fetching thumbnail:', error.message);
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -304,6 +340,19 @@ export function Homepage() {
                   )}
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+              <div className="grid gap-2">
+                <label className="text-sm font-medium mt-4">YouTube URL</label>
+                <Input
+                  className="w-full"
+                  id="youtubeUrl"
+                  placeholder="Enter YouTube video URL"
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                  value={youtubeUrl}
+                />
+                <Button onClick={fetchYoutubeThumbnail} className="mt-2" disabled={!youtubeUrl}>
+                  Fetch Thumbnail
+                </Button>
               </div>
               <motion.div layout className="grid mt-4 gap-2">
                   <label className="text-sm font-medium" htmlFor="upload">
@@ -662,7 +711,7 @@ export function Homepage() {
   );
 }
 
-const Switch = ({key, setDevActive, devActive}) => {
+const Switch = ({setDevActive, devActive}) => {
   const [isOn, setIsOn] = useState(false);
   return (
     <motion.div 
