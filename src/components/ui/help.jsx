@@ -23,8 +23,8 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
             y: -10,
             transition: { // spring
                 type: 'spring',
-                stiffness: 160,
-                damping: 19,
+                stiffness: 260,
+                damping: 20,
                 mass: 0.5,
             }
         },
@@ -36,7 +36,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
             transition: { // spring
                 type: 'spring',
                 stiffness: 160,
-                damping: 20,
+                damping: 10,
                 mass: 0.5,
             }
         }
@@ -81,10 +81,10 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                         <h5 className="text-sm ml-4 mt-2">b. Upload an image file from your computer</h5>
                         <h5 className="text-sm ml-4 mt-2">c. Drag n Drop an image to upload</h5>
                         <h4 className="text-md font-semibold mt-4">Step 4: Add text if permitted</h4>
-                        <h4 className="text-md font-semibold mt-4">Step 5: Click Generate Thumbnail to see the finished product!</h4>
-                        <h4 className="text-md font-semibold mt-4">Step 6: Toggle the Adjust switch to make any changes</h4>
-                        <div className="flex cursor-pointer">
-                            <p className="flex mt-6 py-2 px-4 rounded-md dark:hover:bg-gray-800 hover:bg-gray-200 duration-200 dark:bg-gray-950 bg-gray-100 dark:text-gray-100 text-gray-950" onClick={() => {setModalOpen(!modalOpen)}}>Close</p>
+                        <h4 className="text-md font-semibold mt-4">Step 5: Click <span className="font-bold underline">Generate Thumbnail</span> to see the finished product!</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 6: Toggle the <span className="font-bold underline">Adjust</span> switch to make any changes</h4>
+                        <div className="flex">
+                            <p className="flex cursor-pointer mt-6 py-2 px-4 rounded-md dark:hover:bg-gray-800 hover:bg-gray-200 duration-200 dark:bg-gray-950 bg-gray-100 dark:text-gray-100 text-gray-950" onClick={() => {setModalOpen(!modalOpen)}}>Close</p>
                         </div>
                     </motion.div>
                 </motion.div>
