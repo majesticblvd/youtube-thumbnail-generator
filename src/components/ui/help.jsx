@@ -69,7 +69,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                     onClick={handleCloseModal}
                     style={{ borderRadius: modalOpen ? "0px" : "25px" }} 
                 >
-                    <motion.div layout style={{borderRadius: 20}} className="flex flex-col dark:bg-gray-200 dark:text-gray-950 lg:max-w-40w md:max-w-60w sm:max-w-60w max-w-60w lg:min-w-30w md:min-w-30w sm:min-w-20w lg:min-h-40 bg-gray-900 text-gray-100 z-50 relative p-6 " initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}>
+                    <motion.div layout style={{borderRadius: 20}} className="flex flex-col dark:bg-gray-200 dark:text-gray-950 overflow-scroll lg:max-w-40w md:max-w-60w sm:max-w-60w max-w-80w max-h-60 lg:min-w-30w md:min-w-30w sm:min-w-20w lg:min-h-40 lg:max-h-70 md:max-h-70 sm:max-h-70 bg-gray-900 text-gray-100 z-50 relative p-6 " initial={{ scale: 0.5 }} animate={{ scale: 1 }} exit={{ scale: 0.5 }}>
                         <div className="flex flex-col w-full dark:bg-gray-400 px-4 py-4 rounded-md bg-gray-800">
                             <h2 className="text-xl  font-semibold">Thumbnail Generator</h2>
                             <p>How-to Guide</p>
