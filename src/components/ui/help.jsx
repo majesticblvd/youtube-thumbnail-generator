@@ -78,7 +78,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                         exit={{ scale: 0.5 }}
                         >
                         <div className="flex flex-col w-full dark:bg-gray-400 px-4 py-4 rounded-md bg-gray-800">
-                            <h2 className="text-xl  font-semibold">Thumbnail Generator</h2>
+                            <h2 className="text-xl  font-semibold">Thumbnail Generator DEV CHECK</h2>
                             <p>How-to Guide</p>
                         </div>
                         <h4 className="text-md font-semibold mt-4">Step 1: Select Brand</h4>
