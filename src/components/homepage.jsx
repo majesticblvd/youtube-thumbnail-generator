@@ -73,8 +73,6 @@ export function Homepage() {
     }
   };
 
-  
-
   // Check if text input should be enabled
   const isTextInputEnabled = useMemo(() => {
     if (!selectedSegment) {
