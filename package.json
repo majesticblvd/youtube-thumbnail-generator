@@ -15,6 +15,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^1.0.53",
+    "@vercel/analytics": "^1.2.2",
     "axios": "^1.6.7",
     "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.0",
