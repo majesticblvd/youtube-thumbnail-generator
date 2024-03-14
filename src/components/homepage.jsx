@@ -37,7 +37,7 @@ export function Homepage() {
   const [devActive, setDevActive] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  const [buttonActive, setButtonActive] = useState(false);
+  const [buttonActive, setButtonActive] = useState('normal');
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -434,7 +434,7 @@ export function Homepage() {
               {selectedSegment.hasCustomText === true && (
                 <motion.div 
                   layout
-                  className="grid gap-2"
+                  className="grid gap-2 mt-2"
                   initial='hidden'
                   animate='visible'
                   exit='exit'
@@ -449,24 +449,24 @@ export function Homepage() {
                     <Button 
                       type="button"
                       onClick={() => {
-                        setFontSize(selectedSegment.smallFontSize), 
-                        setButtonActive('small')
-                      }}
-                      className={`mt-2 focus:ring-2 focus:ring-gray-50 ${buttonActive === 'small' ? 'ring-2 ring-gray-50' : '' } `}
+                        setFontSize(selectedSegment.normalFontSize),
+                        setButtonActive('normal')
+                      }} 
+                      className={`mt-2  ${buttonActive === 'normal' ? 'ring-2 dark:ring-gray-50 dark:bg-gray-700 bg-gray-300' : '' }`}
                       variant="outline"
                     >
-                      Small 
+                      Normal 
                     </Button>
                     <Button 
                       type="button"
                       onClick={() => {
-                        setFontSize(selectedSegment.normalFontSize),
-                        setButtonActive('normal')
-                      }} 
-                      className={`mt-2 focus:ring-2 focus:ring-gray-50 ${buttonActive === 'normal' ? 'ring-2 ring-gray-50' : '' }`}
+                        setFontSize(selectedSegment.smallFontSize), 
+                        setButtonActive('small')
+                      }}
+                      className={`mt-2  ${buttonActive === 'small' ? 'ring-2 dark:ring-gray-50 dark:bg-gray-700 bg-gray-300' : '' } `}
                       variant="outline"
                     >
-                      Normal 
+                      Small 
                     </Button>
                   </div>
                 </motion.div>

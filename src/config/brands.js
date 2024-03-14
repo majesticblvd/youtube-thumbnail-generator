@@ -19,7 +19,7 @@ const brands = [
         image: '/pngs/int-short.png',
         fontSize: 180,
         normalFontSize: 180,
-        smallFontSize: 148,
+        smallFontSize: 120,
         textTargetPositionTopRatio: 0.865,
         hasCustomText: true,
         textXPosition: 307,
