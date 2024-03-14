@@ -428,6 +428,43 @@ export function Homepage() {
               )}
               </AnimatePresence>
 
+              <AnimatePresence mode="wait" >
+              {selectedSegment.hasCustomText === true && (
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  exit='exit'
+                  transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 5 }}
+                  variants={textVariants}
+                  key='textFieldOne'
+                >
+                  <div className="flex gap-4 items-center">
+                    <label className="text-sm mr-10 font-medium mt-0" htmlFor="fontStandard">
+                      Font Size
+                    </label>
+                    <Button 
+                      type="button"
+                      onClick={() => setFontSize(selectedSegment.smallFontSize)}
+                      className="mt-2 focus:ring-2 focus:ring-gray-50"
+                      variant="outline"
+                    >
+                      Small 
+                    </Button>
+                    <Button 
+                      type="button"
+                      onClick={() => setFontSize(selectedSegment.normalFontSize)} // current default value
+                      className="mt-2 focus:ring-2 focus:ring-gray-50"
+                      variant="outline"
+                    >
+                      Normal 
+                    </Button>
+                  </div>
+                </motion.div>
+              )}  
+              </AnimatePresence>
+
               {/* RESET AND DEV TOGGLE */}
               <AnimatePresence mode="wait" >
                 <motion.div 
@@ -462,10 +499,6 @@ export function Homepage() {
               {/* Font Size */}
               {devActive && isTextInputEnabled && (
                 <>
-                <motion.div>
-                  <label className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
-                  <input type="radio" id="fontSize" name="fontSize" value={fontSize} onChange={(e) => setFontSize(148)} />
-                </motion.div>
                 <motion.div 
                   layout
                   className="grid gap-2"
