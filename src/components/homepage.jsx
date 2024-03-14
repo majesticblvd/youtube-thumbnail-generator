@@ -461,32 +461,38 @@ export function Homepage() {
 
               {/* Font Size */}
               {devActive && isTextInputEnabled && (
-              <motion.div 
-                layout
-                className="grid gap-2"
-                initial='hidden'
-                animate='visible'
-                transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.06 }}
-                variants={textVariants}
-                exit='exit'
-                key='fontSizeSlider'
-              >
-                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
-                  <input
-                    type="range"
-                    id="fontSizeSlider"
-                    name="fontSizeSlider"
-                    min="90" // Minimum font size
-                    max="195" // Maximum font size
-                    value={fontSize}
-                    onChange={(e) => setFontSize(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                  />
-                  <div className="flex justify-between text-xs px-2">
-                    <span>90</span>
-                    <span>195</span>
-                  </div>
-              </motion.div>
+                <>
+                <motion.div>
+                  <label className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                  <input type="radio" id="fontSize" name="fontSize" value={fontSize} onChange={(e) => setFontSize(148)} />
+                </motion.div>
+                <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.06 }}
+                  variants={textVariants}
+                  exit='exit'
+                  key='fontSizeSlider'
+                >
+                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                    <input
+                      type="range"
+                      id="fontSizeSlider"
+                      name="fontSizeSlider"
+                      min="90" // Minimum font size
+                      max="195" // Maximum font size
+                      value={fontSize}
+                      onChange={(e) => setFontSize(e.target.value)}
+                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                    />
+                    <div className="flex justify-between text-xs px-2">
+                      <span>90</span>
+                      <span>195</span>
+                    </div>
+                </motion.div>
+              </>
               )}
               
               {/* Font X Position */}
