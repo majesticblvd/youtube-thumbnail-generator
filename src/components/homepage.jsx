@@ -37,6 +37,7 @@ export function Homepage() {
   const [devActive, setDevActive] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [buttonActive, setButtonActive] = useState(false);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -428,6 +429,7 @@ export function Homepage() {
               )}
               </AnimatePresence>
 
+              {/* SMALL AND NORMAL FONT SIZE BUTTONS */}
               <AnimatePresence mode="wait" >
               {selectedSegment.hasCustomText === true && (
                 <motion.div 
@@ -446,16 +448,22 @@ export function Homepage() {
                     </label>
                     <Button 
                       type="button"
-                      onClick={() => setFontSize(selectedSegment.smallFontSize)}
-                      className="mt-2 focus:ring-2 focus:ring-gray-50"
+                      onClick={() => {
+                        setFontSize(selectedSegment.smallFontSize), 
+                        setButtonActive('small')
+                      }}
+                      className={`mt-2 focus:ring-2 focus:ring-gray-50 ${buttonActive === 'small' ? 'ring-2 ring-gray-50' : '' } `}
                       variant="outline"
                     >
                       Small 
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => setFontSize(selectedSegment.normalFontSize)} // current default value
-                      className="mt-2 focus:ring-2 focus:ring-gray-50"
+                      onClick={() => {
+                        setFontSize(selectedSegment.normalFontSize),
+                        setButtonActive('normal')
+                      }} 
+                      className={`mt-2 focus:ring-2 focus:ring-gray-50 ${buttonActive === 'normal' ? 'ring-2 ring-gray-50' : '' }`}
                       variant="outline"
                     >
                       Normal 
