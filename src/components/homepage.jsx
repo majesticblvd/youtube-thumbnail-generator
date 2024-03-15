@@ -4,8 +4,8 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
-import { useState, useEffect, useMemo } from "react"
-import Image from "next/image"
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
+import NextImage from "next/image"
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import brands from '@/config/brands';
 import config from '@/config';
@@ -38,6 +38,9 @@ export function Homepage() {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonActive, setButtonActive] = useState('normal');
+
+  // REFs
+  const canvasRef = useRef(null);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -118,6 +121,19 @@ export function Homepage() {
     setImageHeight(e.target.value);
   };
 
+  // Function to handle image loading onto canvas
+  const loadImageOnCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+    };
+  }, [imageUrl]);
+
   // For when the image is selected
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -195,9 +211,10 @@ export function Homepage() {
     if (imageUrl) {
       // Create the thumbnail
       console.log('imageUrl changed');
+      loadImageOnCanvas();
     }
     console.log('devActive', devActive);
-  }, [imageUrl, devActive]);
+  }, [imageUrl, devActive, loadImageOnCanvas]);
 
   // File Drag n Drop --------------------------------------------------------------
   const handleDrop = (e) => {
@@ -288,8 +305,8 @@ export function Homepage() {
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
       <motion.form layout>
-        <motion.div layout className="grid  gap-4 md:grid-cols-2">
-          <motion.div layout className="space-y-4">
+        <motion.div layout className="grid gap-4 md:grid-cols-5"> 
+          <motion.div layout className="space-y-4 md:col-span-2">
             <CardHeader className="pb-0">
               <div className="flex flex-col">
                 <CardTitle>Thumbnail Generator</CardTitle>
@@ -702,36 +719,26 @@ export function Homepage() {
             </CardContent>
           </motion.div>
           <motion.div
-            className="border border-gray-200 rounded-lg p-4 flex items-center justify-center"
+            className="border md:col-span-3 border-gray-200 rounded-lg p-4 flex h-full items-center justify-center"
             layout
             >
             {imageUrl ? (
-              <div className="flex relative flex-col">
-              <Image
-                alt="Uploaded Thumbnail"
-                className="object-cover w-full h-52"
-                src={imageUrl}
-                style={{
-                  // aspectRatio: `${imageWidth}/${imageHeight}`,
-                  width: `${imageWidth}px`,
-                  height:  `${imageHeight}px`,
-                  objectFit: "contain",
-                }}
-                width={400}
-                height={200}
-              />
-              {/* <CustomFontSVG text={text} fontSize={fontSize} /> */}
-              <Button
-                type="button"
-                onClick={() => downloadImage(imageUrl)} 
-                className="mt-4"
-                variant="secondary"
-              >
-                Download Image
-              </Button>
+               <div className="flex relative w-full aspect-video">
+                <canvas 
+                  className=""
+                  ref={canvasRef}
+                ></canvas>
+                <Button
+                  type="button"
+                  onClick={() => downloadImage(imageUrl)} 
+                  className="mt-4"
+                  variant="secondary"
+                >
+                  Download Image
+                </Button>
               </div>
             ) : (
-              <Image
+              <NextImage
                 alt="Placeholder"
                 className="object-cover w-full h-48"
                 src={'/placeholder.svg'}
