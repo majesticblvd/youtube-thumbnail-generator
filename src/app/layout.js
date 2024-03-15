@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react"
+import { GoogleTagManager} from '@next/third-parties/google'
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Analytics />
       <body className={inter.className}>{children}</body>
+      <GoogleTagManager gaId='G-66L5NS52KX' />
     </html>
   );
 }

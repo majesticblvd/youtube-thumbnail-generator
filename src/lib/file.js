@@ -23,4 +23,11 @@ export async function downloadFile({ dataUrl, fileName }) {
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(href); // Clean up the URL object to free memory
+
+    // Track the download event with Google Analytics
+    gtag('event', 'download', {
+        'event_category': 'Image Download',
+        'event_label': fileName,
+        'value': 1
+    });
 }
