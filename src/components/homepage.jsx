@@ -723,15 +723,15 @@ export function Homepage() {
             layout
             >
             {imageUrl ? (
-               <div className="flex relative w-full aspect-video">
+               <div className="flex flex-col relative w-full aspect-video">
                 <canvas 
-                  className=""
+                  className="max-w-full"
                   ref={canvasRef}
                 ></canvas>
                 <Button
                   type="button"
                   onClick={() => downloadImage(imageUrl)} 
-                  className="mt-4"
+                  className="mt-4 relative"
                   variant="secondary"
                 >
                   Download Image
