@@ -32,12 +32,16 @@ export function Homepage() {
   const [xPosition, setXPosition] = useState(350);
   const [yPosition, setYPosition] = useState(config.defaultTextTargetPositionTopRatio);
   const [letterSpacing, setLetterSpacing] = useState(config.defaultLetterSpacing);
-  const [imageWidth, setImageWidth] = useState(400);
-  const [imageHeight, setImageHeight] = useState(200);
   const [devActive, setDevActive] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonActive, setButtonActive] = useState('normal');
+  const [cropStart, setCropStart] = useState({ x: 0, y: 0 });
+  const [cropEnd, setCropEnd] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [isCropped, setIsCropped] = useState(false);
+  const [croppedImageUrl, setCroppedImageUrl] = useState('');
+
 
   // REFs
   const canvasRef = useRef(null);
@@ -111,16 +115,6 @@ export function Homepage() {
     setText(e.target.value); // Update text state on change
   };
 
-   // Function to handle width change
-   const handleWidthChange = (e) => {
-    setImageWidth(e.target.value);
-  };
-
-  // Function to handle height change
-  const handleHeightChange = (e) => {
-    setImageHeight(e.target.value);
-  };
-
   // Function to handle image loading onto canvas
   const loadImageOnCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -131,8 +125,107 @@ export function Homepage() {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
+
+      // Draw the cropping area if defined
+      if (cropEnd.x !== cropStart.x && cropEnd.y !== cropStart.y) {
+        // Draw the cropping area if defined
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.rect(
+          cropStart.x,
+          cropStart.y,
+          cropEnd.x - cropStart.x,
+          cropEnd.y - cropStart.y
+        );
+        ctx.stroke();
+      }
     };
-  }, [imageUrl]);
+  }, [imageUrl, cropStart, cropEnd]);
+
+  const getMousePos = (canvas, evt) => {
+    const rect = canvas.getBoundingClientRect(); // Gets the canvas position relative to the viewport
+    return {
+      x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+      y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleMouseDown = (e) => {
+      const pos = getMousePos(canvas, e);
+      setCropStart(pos);
+      setCropEnd(pos); // Initially, end is the same as start
+      setIsDragging(true);
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      const pos = getMousePos(canvas, e); // Get the current mouse position and update the crop end
+      setCropEnd(pos);
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      // Optionally, redraw the canvas here if needed right after the crop area is selected
+      // displayCroppedImage();
+    };
+
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, loadImageOnCanvas]); // Make sure to include all dependencies in this array
+
+  const displayCroppedImage = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = imageUrl; // The source image URL
+  
+    img.onload = () => {
+      const MIN_WIDTH = 100;
+      const MIN_HEIGHT = 100;
+      const cropWidth = Math.abs(cropEnd.x - cropStart.x);
+      const cropHeight = Math.abs(cropEnd.y - cropStart.y);
+
+      // Check if the crop area is too small
+      if (cropWidth < MIN_WIDTH || cropHeight < MIN_HEIGHT) {
+        alert('Please select a larger crop area');
+        return;
+      }
+      
+      // Adjust canvas size to match the crop area
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      setCropStart({ x: 0, y: 0})
+      setCropEnd({ x: 0, y: 0})
+  
+      // Draw the cropped section
+      // sx, sy, sWidth, sHeight specify the source cropping rectangle
+      // dx, dy, dWidth, dHeight specify the destination position and scaling (match source here)
+      ctx.drawImage(img, cropStart.x, cropStart.y, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+
+      const croppedImageUrl = canvas.toDataURL(); // Get the cropped image as a base64 string
+      setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
+      setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
+      setIsCropped(true); // Set the cropped state to true
+    };
+  }, [cropStart, cropEnd, imageUrl]);
+
 
   // For when the image is selected
   const handleFileChange = (e) => {
@@ -147,6 +240,7 @@ export function Homepage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageUrl(reader.result);
+        setCroppedImageUrl(reader.result); // Store the cropped image URL to avoid the previous image being displayed that was cropped
         setOriginalImageUrl(reader.result); // Store the original image URL
       };
       reader.readAsDataURL(file);
@@ -157,6 +251,8 @@ export function Homepage() {
     e.preventDefault();
 
     setIsLoading(true); // Start loading
+
+    const imageToSend = isCropped ? croppedImageUrl : originalImageUrl;
   
     // Prepare the data as a JSON object
     const data = {
@@ -164,7 +260,7 @@ export function Homepage() {
       segmentId: selectedSegment.id,
       text: text,
       secondText: secondText,
-      file: originalImageUrl,
+      file: imageToSend,
       fontSize: fontSize,
       xPosition: xPosition,
       yPosition: yPosition,
@@ -213,8 +309,7 @@ export function Homepage() {
       console.log('imageUrl changed');
       loadImageOnCanvas();
     }
-    console.log('devActive', devActive);
-  }, [imageUrl, devActive, loadImageOnCanvas]);
+  }, [imageUrl, loadImageOnCanvas]);
 
   // File Drag n Drop --------------------------------------------------------------
   const handleDrop = (e) => {
@@ -289,6 +384,7 @@ export function Homepage() {
       console.log('Success:', responseData);
       if (response.ok) {
         setImageUrl(responseData.thumbnailUrl); // Use the thumbnail URL from the response
+        isCropped && setCroppedImageUrl(responseData.thumbnailUrl); // Update the cropped image URL // CHECK THIS!!!!!! 3.22.24
         setOriginalImageUrl(responseData.base64Image); // Store the original image URL
       } else {
         throw new Error(responseData.error || 'An error occurred');
@@ -511,7 +607,7 @@ export function Homepage() {
                   {devActive && (
                       <Button
                       type="button"
-                      onClick={() => resetToDefault(selectedSegment, { setFontSize, setXPosition, setYPosition, setLetterSpacing, setImageWidth, setImageHeight })}
+                      onClick={() => resetToDefault(selectedSegment, { setFontSize, setXPosition, setYPosition, setLetterSpacing })}
                       className=" mt-4"
                       variant="secondary"
                       key='resetButton'
@@ -648,66 +744,6 @@ export function Homepage() {
                   </div>
               </motion.div>
               )}
-
-              {/* Image Width */}
-              {devActive && (
-                <motion.div 
-                  layout
-                  className="grid gap-2"
-                  initial='hidden'
-                  animate='visible'
-                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.3 }}
-                  variants={textVariants}
-                  exit='exit'
-                  key='imageWidthSlider'
-                  >
-                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Width - {imageWidth}</label>
-                    <input
-                      type="range"
-                      id="fontSizeSlider"
-                      name="fontSizeSlider"
-                      min="200" // Minimum width size
-                      max="600" // Maximum width size
-                      value={imageWidth}
-                      onChange={handleWidthChange}
-                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                      />
-                    <div className="flex justify-between text-xs px-2">
-                      <span>200</span>
-                      <span>600</span>
-                    </div>
-                </motion.div> 
-              )}
-
-              {/* Image Height */}
-              {devActive && (
-                <motion.div 
-                  layoutId="height"
-                  className="grid gap-2"
-                  initial='hidden'
-                  animate='visible'
-                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.4 }}
-                  variants={textVariants}
-                  exit='exit'
-                  key='imageHeightSlider'
-                >
-                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Image Height - {imageHeight}</label>
-                    <input
-                      type="range"
-                      id="fontSizeSlider"
-                      name="fontSizeSlider"
-                      min="50" // Minimum width size
-                      max="400" // Maximum width size
-                      value={imageHeight}
-                      onChange={handleHeightChange}
-                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                    />
-                    <div className="flex justify-between text-xs px-2">
-                      <span>50</span>
-                      <span>400</span>
-                    </div>
-                </motion.div>   
-              )}
               </AnimatePresence>
                
 
@@ -724,6 +760,12 @@ export function Homepage() {
             >
             {imageUrl ? (
                <div className="flex flex-col relative w-full aspect-video">
+                <p onClick={displayCroppedImage} className="absolute top-0 border-2 rounded-lg bg-slate-800 border-slate-800 px-4 py-2 text-sm cursor-pointer right-0 mt-2 mr-2 hover:bg-slate-700 hover:border-slate-700 transition-all duration-200">
+                  Crop
+                </p>
+                <p onClick={() => {setImageUrl(originalImageUrl), setIsCropped(false)}} className="absolute -top-12 right-0 border-2 rounded-lg bg-slate-800 border-slate-800 px-4 py-2 text-sm cursor-pointer hover:bg-slate-700 hover:border-slate-700 transition-all duration-200">
+                  ❌
+                </p>
                 <canvas 
                   className="max-w-full"
                   ref={canvasRef}

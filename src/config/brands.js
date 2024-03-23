@@ -69,6 +69,11 @@ const brands = [
         name: 'Access Housewives Nightcap',
         image: '/pngs/housewives.png',
       },
+      {
+        id: 'access-behind-the-easel',
+        name: 'Access Behind the Easel',
+        image: '/pngs/housewives.png',
+      },
     ],
   },
 ];
