@@ -72,7 +72,7 @@ const brands = [
       {
         id: 'access-behind-the-easel',
         name: 'Access Behind the Easel',
-        image: '/pngs/housewives.png',
+        image: '/pngs/behind_the_easel_full.png',
       },
     ],
   },
