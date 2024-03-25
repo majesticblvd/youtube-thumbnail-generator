@@ -72,7 +72,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                     <motion.div 
                         layout 
                         style={{borderRadius: 20}} 
-                        className="flex flex-col dark:bg-gray-200 dark:text-gray-950 overflow-scroll lg:max-w-40w md:max-w-60w sm:max-w-60w max-w-80w max-h-60 lg:min-w-30w md:min-w-30w sm:min-w-20w lg:min-h-40 lg:max-h-70 md:max-h-70 sm:max-h-70 bg-gray-900 text-gray-100 z-50 relative p-6 " 
+                        className="flex flex-col dark:bg-gray-200 dark:text-gray-950 overflow-scroll lg:max-w-40w md:max-w-70w sm:max-w-80w max-w-80w max-h-70 bg-gray-900 text-gray-100 z-50 relative p-6 " 
                         initial={{ scale: 0.5 }} 
                         animate={{ scale: 1 }} 
                         exit={{ scale: 0.5 }}
@@ -88,8 +88,21 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                         <h5 className="text-sm ml-4 mt-2">b. Upload an image file from your computer</h5>
                         <h5 className="text-sm ml-4 mt-2">c. Drag n Drop an image to upload</h5>
                         <h4 className="text-md font-semibold mt-4">Step 4: Add text if permitted</h4>
-                        <h4 className="text-md font-semibold mt-4">Step 5: Click <span className="font-bold underline">Generate Thumbnail</span> to see the finished product!</h4>
-                        <h4 className="text-md font-semibold mt-4">Step 6: Toggle the <span className="font-bold underline">Adjust</span> switch to make any changes</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 5: Click <span className="font-bold ">Generate Thumbnail</span> to see the finished product!</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 6: Toggle the <span className="font-bold ">Adjust</span> switch to make any changes</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 7: Click the <span className="font-bold ">Reset Thumbnail</span> button at any time to start over from the original image</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 8: Click <span className="font-bold ">Download Thumbnail</span> to save your image</h4>
+                        <div className="flex flex-col p-2 pb-4  rounded-md dark:border-gray-900 border-gray-100 mt-4 outline-dotted">
+                            <h4 className="text-md font-semibold">How to Crop</h4>
+                            <h5 className="text-sm ml-4 mt-2">- Drag to select the area on the image that you would like to crop</h5>
+                            <h5 className="flex text-sm ml-4 mt-2">- After selection is made, press the <span className="sm:mx-2 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path d="M6.13 1L6 16a2 2 0 002 2h15" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M1 6.13L16 6a2 2 0 012 2v15" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg></span>button to crop the image
+                            </h5>
+
+                        </div>
                         <div className="flex">
                             <p className="flex cursor-pointer mt-6 py-2 px-4 rounded-md dark:hover:bg-gray-800 hover:bg-gray-200 duration-200 dark:bg-gray-950 bg-gray-100 dark:text-gray-100 text-gray-950" onClick={() => {setModalOpen(!modalOpen)}}>Close</p>
                         </div>

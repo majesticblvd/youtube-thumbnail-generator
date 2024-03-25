@@ -129,8 +129,9 @@ export function Homepage() {
       // Draw the cropping area if defined
       if (cropEnd.x !== cropStart.x && cropEnd.y !== cropStart.y) {
         // Draw the cropping area if defined
-        ctx.strokeStyle = 'red';
+        ctx.strokeStyle = 'black';
         ctx.lineWidth = 4;
+        ctx.setLineDash([15, 10]);
         ctx.beginPath();
         ctx.rect(
           cropStart.x,
@@ -185,44 +186,41 @@ export function Homepage() {
     };
   }, [isDragging, loadImageOnCanvas]); // Make sure to include all dependencies in this array
 
+
   const displayCroppedImage = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.src = imageUrl; // The source image URL
-  
+
     img.onload = () => {
-      const MIN_WIDTH = 100;
-      const MIN_HEIGHT = 100;
-      const cropWidth = Math.abs(cropEnd.x - cropStart.x);
-      const cropHeight = Math.abs(cropEnd.y - cropStart.y);
+        // Calculate the top-left corner and dimensions of the cropping rectangle
+        const minX = Math.min(cropStart.x, cropEnd.x);
+        const minY = Math.min(cropStart.y, cropEnd.y);
+        const width = Math.abs(cropEnd.x - cropStart.x);
+        const height = Math.abs(cropEnd.y - cropStart.y);
 
-      // Check if the crop area is too small
-      if (cropWidth < MIN_WIDTH || cropHeight < MIN_HEIGHT) {
-        alert('Please select a larger crop area');
-        return;
-      }
-      
-      // Adjust canvas size to match the crop area
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
+        if (width < 100 || height < 100) {
+            alert('Please select a larger crop area');
+            return;
+        }
 
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      setCropStart({ x: 0, y: 0})
-      setCropEnd({ x: 0, y: 0})
-  
-      // Draw the cropped section
-      // sx, sy, sWidth, sHeight specify the source cropping rectangle
-      // dx, dy, dWidth, dHeight specify the destination position and scaling (match source here)
-      ctx.drawImage(img, cropStart.x, cropStart.y, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        // Adjust canvas size to match the crop area
+        canvas.width = width;
+        canvas.height = height;
 
+        // Clear the canvas and draw the cropped section
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        setCropStart({ x: 0, y: 0})
+        setCropEnd({ x: 0, y: 0})
 
-      const croppedImageUrl = canvas.toDataURL(); // Get the cropped image as a base64 string
-      setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
-      setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
-      setIsCropped(true); // Set the cropped state to true
+        ctx.drawImage(img, minX, minY, width, height, 0, 0, width, height);
+
+        const croppedImageUrl = canvas.toDataURL();
+        setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
+        setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
+        setIsCropped(true); // Set the cropped state to true
     };
   }, [cropStart, cropEnd, imageUrl]);
 
@@ -383,8 +381,8 @@ export function Homepage() {
       const responseData = await response.json();
       console.log('Success:', responseData);
       if (response.ok) {
-        setImageUrl(responseData.thumbnailUrl); // Use the thumbnail URL from the response
-        isCropped && setCroppedImageUrl(responseData.thumbnailUrl); // Update the cropped image URL // CHECK THIS!!!!!! 3.22.24
+        setImageUrl(responseData.base64Image); // Use the thumbnail URL from the response
+        isCropped && setCroppedImageUrl(responseData.base64Image); // Update the cropped image URL // CHECK THIS!!!!!! 3.22.24
         setOriginalImageUrl(responseData.base64Image); // Store the original image URL
       } else {
         throw new Error(responseData.error || 'An error occurred');
@@ -587,35 +585,38 @@ export function Homepage() {
               </AnimatePresence>
 
               {/* RESET AND DEV TOGGLE */}
-              <AnimatePresence mode="wait" >
-                <motion.div 
-                  layout
-                  className="grid grid-cols-2 justify-between items-end gap-10"
-                  initial='hidden'
-                  animate='visible'
-                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.03 }}
-                  exit='exit'
-                  variants={textVariants}
-                  key='buttons'
-                >
-                  <Switch 
-                    key='switch'
-                    setDevActive={setDevActive}
-                    devActive={devActive}
 
-                  />
-                  {devActive && (
+                <AnimatePresence mode="wait" >
+                {selectedSegment.hasCustomText === true && (
+                  <motion.div 
+                    layout
+                    className="grid grid-cols-2 justify-between items-end gap-10"
+                    initial='hidden'
+                    animate='visible'
+                    transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.03 }}
+                    exit='exit'
+                    variants={textVariants}
+                    key='buttons'
+                    >
+                    <Switch 
+                      key='switch'
+                      setDevActive={setDevActive}
+                      devActive={devActive}
+                      
+                      />
+                    {devActive && (
                       <Button
                       type="button"
                       onClick={() => resetToDefault(selectedSegment, { setFontSize, setXPosition, setYPosition, setLetterSpacing })}
                       className=" mt-4"
                       variant="secondary"
                       key='resetButton'
-                    >
-                      Reset
-                    </Button>
-                  )}
-                </motion.div>
+                      >
+                        Reset
+                      </Button>
+                    )}
+                  </motion.div>
+                )}
 
               {/* Font Size */}
               {devActive && isTextInputEnabled && (
@@ -751,21 +752,30 @@ export function Homepage() {
                 <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
                   {isLoading ? 'Generating...' : 'Generate Thumbnail'}
                 </Button>
+                {imageUrl && (
+                  <p onClick={() => {setImageUrl(originalImageUrl), setIsCropped(false)}} className="rounded-md px-4 py-2 text-sm text-center h-10 cursor-pointer transition-all duration-200 bg-red-500 text-gray-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-gray-50 dark:hover:bg-red-900/90">
+                    Reset Thumbnail
+                  </p>
+                  )}
               </motion.div>
             </CardContent>
           </motion.div>
           <motion.div
-            className="border md:col-span-3 border-gray-200 rounded-lg p-4 flex h-full items-center justify-center"
+            className="border md:col-span-3 dark:border-gray-200 border-gray-800 rounded-lg p-4 flex h-full items-center justify-center"
             layout
             >
             {imageUrl ? (
-               <div className="flex flex-col relative w-full aspect-video">
-                <p onClick={displayCroppedImage} className="absolute top-0 border-2 rounded-lg bg-slate-800 border-slate-800 px-4 py-2 text-sm cursor-pointer right-0 mt-2 mr-2 hover:bg-slate-700 hover:border-slate-700 transition-all duration-200">
-                  Crop
+               <div className="flex flex-col relative w-full aspect-video hover:cursor-crosshair">
+                {/* Crop Icon */}
+                <p onClick={displayCroppedImage} className="absolute group flex top-0 border-2 rounded-lg backdrop-blur-lg border-slate-800 px-2 py-2 text-sm text-slate-900 cursor-pointer right-0 mt-2 mr-2 hover:shadow-thicc bg-transparent transition-all duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M6.13 1L6 16a2 2 0 002 2h15" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 6.13L16 6a2 2 0 012 2v15" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                <p className="pointer-events-none absolute sm:-top-14 -top-12 z-10 backdrop-blur-sm dark:bg-slate-700 p-2 rounded-md delay-700 left-0 w-max opacity-0 dark:text-gray-100 text-gray-900 bg-slate-800 text-slate-100 transition-opacity group-hover:opacity-100">Crop</p>
                 </p>
-                <p onClick={() => {setImageUrl(originalImageUrl), setIsCropped(false)}} className="absolute -top-12 right-0 border-2 rounded-lg bg-slate-800 border-slate-800 px-4 py-2 text-sm cursor-pointer hover:bg-slate-700 hover:border-slate-700 transition-all duration-200">
-                  ❌
-                </p>
+                {/* uncomment for tool-tip for cropping */}
+                
                 <canvas 
                   className="max-w-full"
                   ref={canvasRef}

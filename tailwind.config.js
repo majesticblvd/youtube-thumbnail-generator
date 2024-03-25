@@ -29,7 +29,10 @@ module.exports = {
         '40w': '40vw',
         '30w': '30vw',
         '20w': '20vw',
-      }
+      },
+      boxShadow: {
+        'thicc': '-4px 4px 0px 0px rgba(0, 0, 0, 0.3)',
+      },
     },
     
   },
