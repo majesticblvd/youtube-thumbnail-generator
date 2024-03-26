@@ -187,11 +187,11 @@ export function Homepage() {
   }, [isDragging, loadImageOnCanvas]); // Make sure to include all dependencies in this array
 
   // Function to calculate file size from base64 string
-function calculateFileSizeFromDataURL(dataURL) {
-  const head = 'data:image/png;base64,'.length; // Adjust based on actual MIME type if necessary
-  const fileSizeBytes = (dataURL.length - head) * 3 / 4; // Base64 encoding inflates size by 33%
-  return fileSizeBytes;
-}
+  function calculateFileSizeFromDataURL(dataURL) {
+    const head = 'data:image/png;base64,'.length; // Adjust based on actual MIME type if necessary
+    const fileSizeBytes = (dataURL.length - head) * 3 / 4; // Base64 encoding inflates size by 33%
+    return fileSizeBytes;
+  }
 
 
   const displayCroppedImage = useCallback(() => {
@@ -227,16 +227,16 @@ function calculateFileSizeFromDataURL(dataURL) {
         const croppedImageUrl = canvas.toDataURL();
         const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
 
-        const maxFileSize = 3.2 * 1024 * 1024; // Example: 3.2 MB in bytes
+        const maxFileSize = 4.0 * 1024 * 1024; // Example: 3.2 MB in bytes
         console.log('Cropped Image Size:', croppedImageSize);
         if (croppedImageSize > maxFileSize) {
           alert('Reduce Crop Area: Cropped image size exceeds 3.2MB limit.');
           // Handle the situation, e.g., by not updating the image URL or asking the user to crop a smaller area
-      } else {
-        setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
-        setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
-        setIsCropped(true); // Set the cropped state to true
-      }
+        } else {
+          setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
+          setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
+          setIsCropped(true); // Set the cropped state to true
+        }
     };
   }, [cropStart, cropEnd, imageUrl]);
 
