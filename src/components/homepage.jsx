@@ -186,6 +186,13 @@ export function Homepage() {
     };
   }, [isDragging, loadImageOnCanvas]); // Make sure to include all dependencies in this array
 
+  // Function to calculate file size from base64 string
+function calculateFileSizeFromDataURL(dataURL) {
+  const head = 'data:image/png;base64,'.length; // Adjust based on actual MIME type if necessary
+  const fileSizeBytes = (dataURL.length - head) * 3 / 4; // Base64 encoding inflates size by 33%
+  return fileSizeBytes;
+}
+
 
   const displayCroppedImage = useCallback(() => {
     const canvas = canvasRef.current;
@@ -218,9 +225,18 @@ export function Homepage() {
         ctx.drawImage(img, minX, minY, width, height, 0, 0, width, height);
 
         const croppedImageUrl = canvas.toDataURL();
+        const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
+
+        const maxFileSize = 3.2 * 1024 * 1024; // Example: 3.2 MB in bytes
+        console.log('Cropped Image Size:', croppedImageSize);
+        if (croppedImageSize > maxFileSize) {
+          alert('Reduce Crop Area: Cropped image size exceeds 3.2MB limit.');
+          // Handle the situation, e.g., by not updating the image URL or asking the user to crop a smaller area
+      } else {
         setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
         setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
         setIsCropped(true); // Set the cropped state to true
+      }
     };
   }, [cropStart, cropEnd, imageUrl]);
 
@@ -228,6 +244,7 @@ export function Homepage() {
   // For when the image is selected
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    console.log('File:', file);
     const maxFileSize = 3.2 * 1024 * 1024; // 5MB in bytes
     if (file) {
       if (file.size >= maxFileSize) {
