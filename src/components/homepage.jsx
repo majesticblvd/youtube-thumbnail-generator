@@ -784,12 +784,12 @@ export function Homepage() {
             {imageUrl ? (
                <div className="flex flex-col relative w-full aspect-video hover:cursor-crosshair">
                 {/* Crop Icon */}
-                <p onClick={displayCroppedImage} className="absolute group flex top-0 border-2 rounded-lg backdrop-blur-lg border-slate-800 px-2 py-2 text-sm text-slate-900 cursor-pointer right-0 mt-2 mr-2 hover:shadow-thicc bg-transparent transition-all duration-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <p onClick={displayCroppedImage} className="absolute group flex top-0 border-2 rounded-lg backdrop-blur-lg border-slate-800 px-2 py-2 text-sm text-slate-900 cursor-pointer right-0 mt-2 mr-2 hover:shadow-thicc bg-slate-50 transition-all duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M6.13 1L6 16a2 2 0 002 2h15" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M1 6.13L16 6a2 2 0 012 2v15" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                <p className="pointer-events-none absolute sm:-top-14 -top-12 z-10 backdrop-blur-sm dark:bg-slate-700 p-2 rounded-md delay-700 left-0 w-max opacity-0 dark:text-gray-100 text-gray-900 bg-slate-800 text-slate-100 transition-opacity group-hover:opacity-100">Crop</p>
+                <p className="pointer-events-none absolute sm:-top-14 -top-12 z-10 backdrop-blur-sm dark:bg-slate-700 p-2 rounded-md delay-700 left-0 w-max opacity-0 dark:text-gray-100 text-gray-900 bg-slate-800 transition-opacity group-hover:opacity-100">Crop</p>
                 </p>
                 {/* uncomment for tool-tip for cropping */}
                 
