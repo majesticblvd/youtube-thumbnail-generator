@@ -227,7 +227,7 @@ export function Homepage() {
         const croppedImageUrl = canvas.toDataURL();
         const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
 
-        const maxFileSize = 4.5 * 1024 * 1024; // Example: 3.2 MB in bytes
+        const maxFileSize = 3.6 * 1024 * 1024; // Example: 3.2 MB in bytes
         console.log('Cropped Image Size:', croppedImageSize);
         if (croppedImageSize > maxFileSize) {
           alert('Reduce Crop Area: Cropped image size exceeds 3.2MB limit.');
