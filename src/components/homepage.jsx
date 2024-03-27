@@ -225,7 +225,7 @@ export function Homepage() {
 
         ctx.drawImage(img, minX, minY, width, height, 0, 0, width, height);
 
-        const croppedImageUrl = canvas.toDataURL('image/jpeg', 0.8);
+        const croppedImageUrl = canvas.toDataURL('image/jpeg', 0.8); // this will compress the image to 80% quality jpeg
         const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
 
         const maxFileSize = 7.6 * 1024 * 1024; // Example: 3.2 MB in bytes
@@ -237,39 +237,9 @@ export function Homepage() {
           setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
           setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
           setIsCropped(true); // Set the cropped state to true
-          // compressImage(croppedImageUrl);
         }
     };
-  }, [cropStart, cropEnd, imageUrl]);
-
-  function compressImage(imageSrc) {
-    return new Promise((resolve, reject) => {
-      fetch(imageSrc)
-        .then(res => res.blob())
-        .then(blob => {
-          new Compressor(blob, {
-            quality: 0.6, // Compression quality
-            success(compressedBlob) {
-              const reader = new FileReader();
-              reader.readAsDataURL(compressedBlob); // Convert compressed blob to Data URL
-              reader.onloadend = () => {
-                const base64DataUrl = reader.result;
-                resolve(base64DataUrl); // Resolve the promise with the Base64 Data URL
-                console.log('Compressed Image Size:', calculateFileSizeFromDataURL(base64DataUrl));
-              };
-              reader.onerror = error => {
-                reject(error); // Reject the promise in case of an error
-              };
-            },
-            error(err) {
-              reject(err); // Handle potential errors
-            },
-          });
-        });
-    });
-  }
-  
-  
+  }, [cropStart, cropEnd, imageUrl]);  
 
   // For when the image is selected
   const handleFileChange = (e) => {
