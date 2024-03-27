@@ -225,7 +225,7 @@ export function Homepage() {
 
         ctx.drawImage(img, minX, minY, width, height, 0, 0, width, height);
 
-        const croppedImageUrl = canvas.toDataURL();
+        const croppedImageUrl = canvas.toDataURL('image/jpeg', 0.8);
         const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
 
         const maxFileSize = 7.6 * 1024 * 1024; // Example: 3.2 MB in bytes
@@ -237,7 +237,7 @@ export function Homepage() {
           setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
           setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
           setIsCropped(true); // Set the cropped state to true
-          compressImage(croppedImageUrl);
+          // compressImage(croppedImageUrl);
         }
     };
   }, [cropStart, cropEnd, imageUrl]);
