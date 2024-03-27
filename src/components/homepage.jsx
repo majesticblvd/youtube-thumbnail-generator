@@ -13,6 +13,7 @@ import { downloadFile } from '@/lib/file';
 import HelpComponent from "./ui/help"
 import Switch from "./ui/switch"
 import { resetToDefault } from "@/lib/helper-func"
+import Compressor from 'compressorjs';
 
 const initialState = {
   message: null,
@@ -227,7 +228,7 @@ export function Homepage() {
         const croppedImageUrl = canvas.toDataURL();
         const croppedImageSize = calculateFileSizeFromDataURL(croppedImageUrl);
 
-        const maxFileSize = 3.6 * 1024 * 1024; // Example: 3.2 MB in bytes
+        const maxFileSize = 7.6 * 1024 * 1024; // Example: 3.2 MB in bytes
         console.log('Cropped Image Size:', croppedImageSize);
         if (croppedImageSize > maxFileSize) {
           alert('Reduce Crop Area: Cropped image size exceeds 3.2MB limit.');
@@ -236,10 +237,39 @@ export function Homepage() {
           setCroppedImageUrl(croppedImageUrl); // Update state with the cropped image URL
           setImageUrl(croppedImageUrl); // Update imageUrl with the cropped image
           setIsCropped(true); // Set the cropped state to true
+          compressImage(croppedImageUrl);
         }
     };
   }, [cropStart, cropEnd, imageUrl]);
 
+  function compressImage(imageSrc) {
+    return new Promise((resolve, reject) => {
+      fetch(imageSrc)
+        .then(res => res.blob())
+        .then(blob => {
+          new Compressor(blob, {
+            quality: 0.6, // Compression quality
+            success(compressedBlob) {
+              const reader = new FileReader();
+              reader.readAsDataURL(compressedBlob); // Convert compressed blob to Data URL
+              reader.onloadend = () => {
+                const base64DataUrl = reader.result;
+                resolve(base64DataUrl); // Resolve the promise with the Base64 Data URL
+                console.log('Compressed Image Size:', calculateFileSizeFromDataURL(base64DataUrl));
+              };
+              reader.onerror = error => {
+                reject(error); // Reject the promise in case of an error
+              };
+            },
+            error(err) {
+              reject(err); // Handle potential errors
+            },
+          });
+        });
+    });
+  }
+  
+  
 
   // For when the image is selected
   const handleFileChange = (e) => {
