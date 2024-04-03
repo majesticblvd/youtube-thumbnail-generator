@@ -74,6 +74,16 @@ const brands = [
         name: 'Access Behind the Easel',
         image: '/pngs/behind_the_easel_full.png',
       },
+      {
+        id: 'access-espanol',
+        name: 'Access Español',
+        image: '/pngs/Espanol_Star.png',
+      },
+      {
+        id: 'access-espanol-label',
+        name: 'Access Español Label',
+        image: '/pngs/Espanol_Star_Label.png',
+      },
     ],
   },
 ];
