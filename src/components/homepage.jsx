@@ -516,7 +516,7 @@ export function Homepage() {
 
               {/* Gradient on off switch */}
               <motion.div layout className="grid gap-2">
-                <label className="text-sm font-medium mt-4">Gradient Active</label>
+                <label className="text-sm font-medium mt-4">Bottom Gradient</label>
                 <GradientSwitch setIsGradientSelected={setIsGradientSelected} isGradientSelected={isGradientSelected} />
               </motion.div>
 
