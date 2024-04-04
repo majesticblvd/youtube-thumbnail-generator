@@ -43,7 +43,7 @@ export function Homepage() {
   const [isDragging, setIsDragging] = useState(false);
   const [isCropped, setIsCropped] = useState(false);
   const [croppedImageUrl, setCroppedImageUrl] = useState('');
-  const [isGradientSelected, setIsGradientSelected] = useState(true);
+  const [isGradientSelected, setIsGradientSelected] = useState(false);
 
 
   // REFs
