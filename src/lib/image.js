@@ -1,4 +1,5 @@
 import { createCanvas } from 'canvas';
+import sharp from 'sharp';
 // import fs from 'fs';
 
 export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing }) {
@@ -57,3 +58,4 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
 
     return { buffer, height };
 }
+

@@ -11,9 +11,11 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
+
+        console.log('gradient state', isGradientSelected);
 
         if (!brand) {
             throw new Error('Brand not found');
@@ -55,6 +57,10 @@ export async function POST(req) {
         const overlayPngPath = segment.image || '/pngs/E.png';
         const overlayPngFullPath = path.join(publicDirectory, overlayPngPath);
 
+        // Gradient Png Path
+        const gradientPngPath = '/pngs/gradient-norm.png'
+        const gradientPngFullPath = path.join(publicDirectory, gradientPngPath);
+
         if (!fs.existsSync(overlayPngFullPath)) {
             throw new Error('Overlay PNG not found');
         }
@@ -67,7 +73,7 @@ export async function POST(req) {
 
         // Create text
         const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt });
-
+        
         // Get the dimensions of the text buffer
         const textImage = sharp(textBuffer);
         const textMetadata = await textImage.metadata();
@@ -86,6 +92,10 @@ export async function POST(req) {
             { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
             { input: textBuffer, blend: 'over', top: textYPos, left: textXPos},
         ];
+
+        if (isGradientSelected) {
+            composites.push({ input: gradientPngFullPath, blend: 'over', top: 0, left: 0});
+        }
 
         const processedImage = await sharp(buffer)
             .resize(processedImageSize.width, processedImageSize.height, {

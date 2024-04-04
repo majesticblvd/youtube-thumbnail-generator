@@ -14,6 +14,7 @@ import HelpComponent from "./ui/help"
 import Switch from "./ui/switch"
 import { resetToDefault } from "@/lib/helper-func"
 import Compressor from 'compressorjs';
+import GradientSwitch from "./ui/GradientToggle"
 
 const initialState = {
   message: null,
@@ -42,6 +43,7 @@ export function Homepage() {
   const [isDragging, setIsDragging] = useState(false);
   const [isCropped, setIsCropped] = useState(false);
   const [croppedImageUrl, setCroppedImageUrl] = useState('');
+  const [isGradientSelected, setIsGradientSelected] = useState(true);
 
 
   // REFs
@@ -280,6 +282,7 @@ export function Homepage() {
       xPosition: xPosition,
       yPosition: yPosition,
       letterSpacing, letterSpacing,
+      isGradientSelected: isGradientSelected,
     }; 
 
     try {
@@ -413,6 +416,15 @@ export function Homepage() {
   }
   // --------------------------------------------------------------------------
 
+  // toggle gradient
+  const toggleGradient = () => {
+    setIsGradientSelected(!isGradientSelected);
+  }
+  useEffect(() => {
+    console.log('gradient status:', isGradientSelected);
+  }
+  , [isGradientSelected]);
+
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
       <motion.form layout>
@@ -500,6 +512,12 @@ export function Homepage() {
                       Select an Image or Drag it Here
                     </span>
                   </div>
+              </motion.div>
+
+              {/* Gradient on off switch */}
+              <motion.div layout className="grid gap-2">
+                <label className="text-sm font-medium mt-4">Gradient Active</label>
+                <GradientSwitch setIsGradientSelected={setIsGradientSelected} isGradientSelected={isGradientSelected} />
               </motion.div>
 
               {/* Text Input Fields */}
