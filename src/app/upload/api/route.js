@@ -94,7 +94,7 @@ export async function POST(req) {
         ];
 
         if (isGradientSelected) {
-            composites.push({ input: gradientPngFullPath, blend: 'over', top: 0, left: 0});
+            composites.unshift({ input: gradientPngFullPath, blend: 'over', top: 0, left: 0});
         }
 
         const processedImage = await sharp(buffer)
