@@ -6,7 +6,7 @@ const brands = [
       {
         id: 'access-standard',
         name: 'Access Standard',
-        image: '/pngs/standard.png',
+        image: '/pngs/standard-star.png',
       },
       {
         id: 'access-royals',
