@@ -44,6 +44,7 @@ export function Homepage() {
   const [isCropped, setIsCropped] = useState(false);
   const [croppedImageUrl, setCroppedImageUrl] = useState('');
   const [isGradientSelected, setIsGradientSelected] = useState(false);
+  const [minYPosition, setMinYPosition] = useState(null);
 
 
   // REFs
@@ -70,6 +71,7 @@ export function Homepage() {
     if (typeof segment.defaultTextTargetPositionTopRatio === 'number') {
       setYPosition(segment.defaultTextTargetPositionTopRatio)
     }
+
 
     // Set Letter Spacing
     if (typeof segment.letterSpacing === 'number') {
@@ -111,7 +113,11 @@ export function Homepage() {
 
   // Handle brand selection
   const handleBrandSelect = (brand) => {
-    setSelectedBrand(brand); // 
+    setSelectedBrand(brand); // Update the selected brand state
+
+    if (brand.minYPosition !== null) { // Check if the brand has a minYPosition value
+      setMinYPosition(brand.minYPosition) // Set the minYPosition value
+    }
   }
 
   const handleTextChange = (e) => {
@@ -732,12 +738,12 @@ export function Homepage() {
                     type="range"
                     id="fontSizeSlider"
                     name="fontSizeSlider"
-                    min="0.75" // Minimum font size
+                    min={minYPosition} // Minimum font size
                     max="0.90" // Maximum font size
-                    value={(0.90 + 0.75) - yPosition} // Adjust this calculation to invert the slider's effect
+                    value={(0.90 + minYPosition) - yPosition} // Adjust this calculation to invert the slider's effect
                     onChange={(e) => {
                       const sliderValue = e.target.value;
-                      const invertedValue = (0.90 + 0.75) - sliderValue; // Invert the calculation here
+                      const invertedValue = (0.90 + minYPosition) - sliderValue; // Invert the calculation here
                       setYPosition(invertedValue.toFixed(3)); // Update yPosition based on the inverted calculation
                     }}
                     step="0.001"

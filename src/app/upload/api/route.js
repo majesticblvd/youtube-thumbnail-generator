@@ -34,14 +34,18 @@ export async function POST(req) {
         const publicDirectory = path.join(process.cwd(), 'public');
         const fontPath = path.join(publicDirectory, '/fonts/MarkOT-CondBoldItalic.otf');
         const heavyFontPath = path.join(publicDirectory, '/fonts/MarkOT-Heavy.otf');
+        const wilkosHeavyFontPath = path.join(publicDirectory, '/fonts/TradeGothicHeavy.ttf');
 
         registerFont(fontPath, { family: 'MarkOT-CondBoldItalic' });
         registerFont(heavyFontPath, { family: 'MarkOT-CondHeavy'});
+        registerFont(wilkosHeavyFontPath, { family: 'TradeGothicHeavy'});
 
         // Use Heavy Font if segment is interview (long)
         let fontFam = ''
         if (segmentId == 'access-interview-long') {
             fontFam = 'MarkOT-CondHeavy'
+        }  else if (segmentId == 'wayback-a') {
+            fontFam = 'TradeGothicHeavy'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }

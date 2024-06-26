@@ -53,3 +53,8 @@ body {
   src: url('/fonts/MarkOT-CondBoldItalic.otf') format('opentype');
   font-weight: bold;
 }
+@font-face {
+  font-family: 'Trade Gothic Heavy';
+  src: url('/fonts/TradeGothicHeavy.ttf') format('truetype');
+  font-weight: bold;
+}

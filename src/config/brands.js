@@ -2,6 +2,7 @@ const brands = [
   {
     id: 'access-hollywood',
     name: 'Access Hollywood',
+    minYPosition: 0.75,
     segments: [
       {
         id: 'access-standard',
@@ -86,6 +87,37 @@ const brands = [
       },
     ],
   },
+  {
+    id: 'Steve Wilkos',
+    name: 'Steve Wilkos',
+    minYPosition: 0.075,
+    segments: [
+      {
+        id: 'wayback-a',
+        name: 'Wayback A',
+        image: '/pngs/SW_Side_Element_A.png',
+        hasCustomText: true,
+        fontSize: 210,
+        textTargetPositionTopRatio: 0.056,
+      },
+      {
+        id: 'wayback-b',
+        name: 'Wayback B',
+        image: '/pngs/SW_Side_Element_D.png',
+      },
+      {
+        id: 'new-a',
+        name: 'New A',
+        image: '/pngs/SW_Side_Element_B.png',
+      },
+      {
+        id: 'new-b',
+        name: 'New B',
+        image: '/pngs/SW_Side_Element_B1.png',
+      }
+
+    ]
+  }
 ];
 
 export default brands;
