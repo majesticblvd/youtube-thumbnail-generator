@@ -70,7 +70,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
 
     wrappedLines.forEach((line, index) => {
         const yPos = index * (lineHeight - negLineGap); // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
-        console.log('yPos', yPos)
+        // console.log('yPos', yPos)
         // can increase the yPos to make the gap between the lines larger. But i will actually just need to move the whole canvas element itself lower.
         context.fillText(line, 1, yPos); // Add some padding from the left
     });

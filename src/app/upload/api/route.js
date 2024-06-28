@@ -75,34 +75,41 @@ export async function POST(req) {
             throw new Error('Overlay PNG not found');
         }
 
-        // Format text
-        const formattedText = `${text}${secondText ? `\n${secondText}` : ''}`.toUpperCase();
-
-        // Convert letter spacing to int
-        const letterSpacingInt = parseInt(letterSpacing); 
-
-        // Create text
-        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment });
-        
-        // Get the dimensions of the text buffer
-        const textImage = sharp(textBuffer);
-        const textMetadata = await textImage.metadata();
-        console.log('textMetadata', textMetadata);
-
-        // Check if text buffer is larger than the processed image size
-        if (textMetadata.width > processedImageSize.width || textMetadata.height > processedImageSize.height) {
-            throw new Error('Text too long, decrease font size or word count');
+        let composites = [];
+        if (text) {
+            // Format text
+            const formattedText = `${text}${secondText ? `\n${secondText}` : ''}`.toUpperCase();
+            
+            // Convert letter spacing to int
+            const letterSpacingInt = parseInt(letterSpacing); 
+            
+            // Create text
+            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment });
+            
+            // Get the dimensions of the text buffer
+            const textImage = sharp(textBuffer);
+            const textMetadata = await textImage.metadata();
+            console.log('textMetadata', textMetadata);
+            
+            // Check if text buffer is larger than the processed image size
+            if (textMetadata.width > processedImageSize.width || textMetadata.height > processedImageSize.height) {
+                throw new Error('Text too long, decrease font size or word count');
+            }
+            
+            const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
+            
+            const textXPos = parseInt(xPosition) || 350;
+            const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
+            
+            composites = [
+                { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
+                { input: textBuffer, blend: 'over', top: textYPos, left: textXPos},
+            ];
+        } else {
+            composites = [
+                { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
+            ];
         }
-
-        const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
-       
-        const textXPos = parseInt(xPosition) || 350;
-        const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
-        
-        const composites = [
-            { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
-            { input: textBuffer, blend: 'over', top: textYPos, left: textXPos},
-        ];
 
         if (isGradientSelected) {
             composites.unshift({ input: gradientPngFullPath, blend: 'over', top: 0, left: 0});

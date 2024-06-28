@@ -151,8 +151,21 @@ export function Homepage() {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height); // this will give me the image data of the canvas
+      /**
+       * testing fancy stuff
+       */
+      // const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height); // this will give me the image data of the canvas
       // console.log('scannedImage:', scannedImage);
+      // const scannedData = scannedImage.data; // this will give me the pixel data of the image
+      // for (let i = 0; i < scannedData.length; i += 4) {
+      //   const total = scannedData[i] + scannedData[i + 1] + scannedData[i + 2]; // Get the total color value
+      //   const averageColorValue = total / 3; // Get the average color value
+      //   scannedData[i] = averageColorValue; // Set the red channel
+      //   scannedData[i + 1] = averageColorValue; // Set the green channel
+      //   scannedData[i + 2] = averageColorValue; // Set the blue channel
+      // }
+      // scannedImage.data = scannedData; // Set the new pixel data
+      // ctx.putImageData(scannedImage, 0, 0); // Put the new image data back on the canvas
 
       // Draw the cropping area if defined
       if (cropEnd.x !== cropStart.x && cropEnd.y !== cropStart.y) {
