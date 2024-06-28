@@ -2,7 +2,10 @@ const brands = [
   {
     id: 'access-hollywood',
     name: 'Access Hollywood',
-    minYPosition: 0.75,
+    minYPosition: 0.60,
+    maxYPosition: 0.80,
+    minXPosition: 260,
+    maxXPosition: 400,
     segments: [
       {
         id: 'access-standard',
@@ -21,7 +24,7 @@ const brands = [
         fontSize: 180,
         normalFontSize: 180,
         smallFontSize: 120,
-        textTargetPositionTopRatio: 0.865,
+        textTargetPositionTopRatio: 0.758,
         hasCustomText: true,
         textXPosition: 307,
         letterSpacing: 0.0,
@@ -35,20 +38,22 @@ const brands = [
         normalFontSize: 120,
         smallFontSize: 100,
         hasCustomSecondText: true,
-        textTargetPositionTopRatio: 0.838,
+        textTargetPositionTopRatio: 0.712,
         textXPosition: 369,
         letterSpacing: 0.0,
+        negLineGap: 35, // this is the gap between the lines. increase to move the lines closer together
       },
       {
         id: 'access-exclusive',
         name: 'Access Exclusive',
         image: '/pngs/E.png',
         fontSize: 210,
-        textTargetPositionTopRatio: 0.856,
+        textTargetPositionTopRatio: 0.736,
         hasCustomText: false,
         text: 'EXCLUSIVE',
         textXPosition: 300,
-        letterSpacing: 2.0,
+        letterSpacing: 2.1,
+        negLineGap: 35, // this is the gap between the lines. increase to move the lines closer together
       },
       {
         id: 'access-daily',
@@ -90,30 +95,50 @@ const brands = [
   {
     id: 'Steve Wilkos',
     name: 'Steve Wilkos',
-    minYPosition: 0.075,
+    minYPosition: -0.02,
+    maxYPosition: 0.50,
+    minXPosition: 0,
+    maxXPosition: 110,
     segments: [
       {
         id: 'wayback-a',
         name: 'Wayback A',
         image: '/pngs/SW_Side_Element_A.png',
         hasCustomText: true,
-        fontSize: 210,
-        textTargetPositionTopRatio: 0.056,
+        fontSize: 145,
+        textTargetPositionTopRatio: 0.01,
+        textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
       },
       {
         id: 'wayback-b',
         name: 'Wayback B',
         image: '/pngs/SW_Side_Element_D.png',
+        hasCustomText: true,
+        fontSize: 170,
+        textTargetPositionTopRatio: 0.325,
+        textXPosition: 85,
+        canvasWidth: 870, // max width of the canvas before making the text wrap
+        negLineGap: 65, // this is the gap between the lines. increase to move the lines closer together
       },
       {
         id: 'new-a',
         name: 'New A',
         image: '/pngs/SW_Side_Element_B.png',
+        hasCustomText: true,
+        fontSize: 145,
+        textTargetPositionTopRatio: 0.085,
+        textXPosition: 25,
       },
       {
         id: 'new-b',
         name: 'New B',
         image: '/pngs/SW_Side_Element_B1.png',
+        hasCustomText: true,
+        fontSize: 145,
+        textTargetPositionTopRatio: 0.085,
+        textXPosition: 25,
       }
 
     ]

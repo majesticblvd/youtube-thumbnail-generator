@@ -2,33 +2,54 @@ import { createCanvas } from 'canvas';
 import sharp from 'sharp';
 // import fs from 'fs';
 
-export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing }) {
-    const lines = text.split('\n');
-    const numLines = lines.length;
-    
-    const lineHeight = numLines > 1 ? 0.9 : 1;
-    const lineSpacing = fontSize * lineHeight;
+export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing, segment }) {
+    const lineHeight = (fontSize * 1.2);
+    console.log('lineHeight', lineHeight)
+    let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
 
-    let lineMaxWidth = 0;
-
-    let tempCanvas = createCanvas(100, 100);
-    let tempContext = tempCanvas.getContext('2d');
+    const tempCanvas = createCanvas(100, 100); 
+    const tempContext = tempCanvas.getContext('2d');
     tempContext.font = `${fontSize}px '${fontFamily}'`;
 
-    lines.forEach(line => {
-        let lineWidth = 0;
-        for (let i = 0; i < line.length; i++) {
-            const metrics = tempContext.measureText(line[i]);
-            lineWidth += metrics.width + letterSpacing * (i ? 3 : 0); 
-        }
-        lineMaxWidth = Math.max(lineMaxWidth, lineWidth) + 307;
-        console.log('maxLineWidth', lineMaxWidth);
-    });
+    // Function to wrap text
+    function wrapText(context, text, maxWidth) {
+        let words = text.split(' '); // Split the text into words
+        let lines = []; // Array to hold the lines
+        let line = ''; // Variable to hold the current line
 
-    const height = lineSpacing * lines.length;
-    const extraWidth = 6;
+        words.forEach(word => {
+            let testLine = line + word + ' '; // builds the lines one word at a time increasing the width with each word
+            let metrics = context.measureText(testLine);
+            let testWidth = metrics.width;
 
-    const canvas = createCanvas(lineMaxWidth + extraWidth, height);
+            if (testWidth > maxWidth && line !== '') {
+                lines.push(line.trim());
+                line = word + ' ';
+            } else {
+                line = testLine;
+            }
+        });
+
+        lines.push(line.trim());
+        return lines;
+    }
+
+    let wrappedLines = text.split('\n').reduce((acc, line) => {
+        return [...acc, ...wrapText(tempContext, line, canvasWidth)];
+    }, []);
+
+    let lineMaxWidth = wrappedLines.reduce((maxWidth, line) => {
+        let lineWidth = tempContext.measureText(line).width;
+        return Math.max(maxWidth, lineWidth);
+    }, 0);
+
+    // Adjust the canvas width if not specified
+    if (!canvasWidth) {
+        canvasWidth = lineMaxWidth; // Add some padding from the left
+    }
+
+    const height = lineHeight * wrappedLines.length; // Calculate the height of the canvas
+    const canvas = createCanvas(canvasWidth, height); 
     const context = canvas.getContext('2d');
 
     // Set up drop shadow
@@ -39,23 +60,24 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
 
     context.font = `${fontSize}px '${fontFamily}'`;
     context.fillStyle = color;
-    context.textBaseline = 'middle';
-  
-    lines.forEach((line, index) => {
-        const yPos = (index + 0.5) * lineSpacing;
-        let xPos = extraWidth;
+    context.textBaseline = 'top';
 
-        // Draw each letter individually with increased spacing
-        for (let i = 0; i < line.length; i++) {
-            context.fillText(line[i], xPos, yPos);
-            xPos += context.measureText(line[i]).width + letterSpacing;
-        }
+    // Temporary background color for testing
+    // context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+    // context.fillRect(0, 0, canvas.width, canvas.height);
+
+    const negLineGap = segment.negLineGap || 35; // this is the gap between the lines. increase to move the lines closer together
+
+    wrappedLines.forEach((line, index) => {
+        const yPos = index * (lineHeight - negLineGap); // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
+        console.log('yPos', yPos)
+        // can increase the yPos to make the gap between the lines larger. But i will actually just need to move the whole canvas element itself lower.
+        context.fillText(line, 1, yPos); // Add some padding from the left
     });
-  
+
     const buffer = canvas.toBuffer('image/png');
 
     // fs.writeFileSync('test.png', buffer);
 
     return { buffer, height };
 }
-

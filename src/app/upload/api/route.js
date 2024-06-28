@@ -46,6 +46,8 @@ export async function POST(req) {
             fontFam = 'MarkOT-CondHeavy'
         }  else if (segmentId == 'wayback-a') {
             fontFam = 'TradeGothicHeavy'
+        } else if (segmentId == 'wayback-b') {
+            fontFam = 'TradeGothicHeavy'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }
@@ -76,11 +78,12 @@ export async function POST(req) {
         const letterSpacingInt = parseInt(letterSpacing); 
 
         // Create text
-        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt });
+        const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment });
         
         // Get the dimensions of the text buffer
         const textImage = sharp(textBuffer);
         const textMetadata = await textImage.metadata();
+        console.log('textMetadata', textMetadata);
 
         // Check if text buffer is larger than the processed image size
         if (textMetadata.width > processedImageSize.width || textMetadata.height > processedImageSize.height) {
@@ -90,7 +93,7 @@ export async function POST(req) {
         const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
        
         const textXPos = parseInt(xPosition) || 350;
-        const textYPos = parseInt((processedImageSize.height * textTargetPositionTopRatio) - (textBufferHeight / 2));
+        const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
         
         const composites = [
             { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},

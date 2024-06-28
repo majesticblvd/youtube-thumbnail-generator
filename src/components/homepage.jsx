@@ -12,7 +12,7 @@ import config from '@/config';
 import { downloadFile } from '@/lib/file';
 import HelpComponent from "./ui/help"
 import Switch from "./ui/switch"
-import { resetToDefault } from "@/lib/helper-func"
+import { resetToDefault, resetStates } from "@/lib/helper-func"
 import Compressor from 'compressorjs';
 import GradientSwitch from "./ui/GradientToggle"
 
@@ -45,6 +45,9 @@ export function Homepage() {
   const [croppedImageUrl, setCroppedImageUrl] = useState('');
   const [isGradientSelected, setIsGradientSelected] = useState(false);
   const [minYPosition, setMinYPosition] = useState(null);
+  const [maxYPosition, setMaxYPosition] = useState(null);
+  const [minXPosition, setMinXPosition] = useState(null);
+  const [maxXPosition, setMaxXPosition] = useState(null);
 
 
   // REFs
@@ -118,6 +121,20 @@ export function Homepage() {
     if (brand.minYPosition !== null) { // Check if the brand has a minYPosition value
       setMinYPosition(brand.minYPosition) // Set the minYPosition value
     }
+
+    if (brand.maxYPosition !== null) { // Check if the brand has a maxYPosition value
+      setMaxYPosition(brand.maxYPosition) // Set the maxYPosition value
+    }
+
+    if (brand.minXPosition !== null) { // Check if the brand has a minXPosition value
+      setMinXPosition(brand.minXPosition) // Set the minXPosition value
+    }
+
+    if (brand.maxXPosition !== null) { // Check if the brand has a maxXPosition value
+      setMaxXPosition(brand.maxXPosition) // Set the maxXPosition value
+    }
+
+    setSelectedSegment(''); // Reset the selected segment
   }
 
   const handleTextChange = (e) => {
@@ -126,14 +143,16 @@ export function Homepage() {
 
   // Function to handle image loading onto canvas
   const loadImageOnCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
+    const canvas = canvasRef.current; // Get the canvas element
+    const ctx = canvas.getContext('2d'); // Get the canvas context
+    const img = new Image(); // Create a new image object
+    img.src = imageUrl; // Set the image source to the image URL
+    img.onload = () => { // When the image is loaded we will draw it on the canvas with the cropping area if defined
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
+      const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height); // this will give me the image data of the canvas
+      // console.log('scannedImage:', scannedImage);
 
       // Draw the cropping area if defined
       if (cropEnd.x !== cropStart.x && cropEnd.y !== cropStart.y) {
@@ -708,8 +727,8 @@ export function Homepage() {
                     type="range"
                     id="fontSizeSlider"
                     name="fontSizeSlider"
-                    min="260" // Minimum X Position 
-                    max="400" // Maximum X Position
+                    min={minXPosition} // Minimum X Position 
+                    max={maxXPosition} // Maximum X Position
                     value={xPosition}
                     onChange={(e) => setXPosition(e.target.value)}
                     className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
@@ -739,11 +758,11 @@ export function Homepage() {
                     id="fontSizeSlider"
                     name="fontSizeSlider"
                     min={minYPosition} // Minimum font size
-                    max="0.90" // Maximum font size
-                    value={(0.90 + minYPosition) - yPosition} // Adjust this calculation to invert the slider's effect
+                    max={maxYPosition} // Maximum font size
+                    value={(maxYPosition + minYPosition) - yPosition} // Adjust this calculation to invert the slider's effect
                     onChange={(e) => {
                       const sliderValue = e.target.value;
-                      const invertedValue = (0.90 + minYPosition) - sliderValue; // Invert the calculation here
+                      const invertedValue = (maxYPosition + minYPosition) - sliderValue; // Invert the calculation here
                       setYPosition(invertedValue.toFixed(3)); // Update yPosition based on the inverted calculation
                     }}
                     step="0.001"
