@@ -48,6 +48,10 @@ export async function POST(req) {
             fontFam = 'TradeGothicHeavy'
         } else if (segmentId == 'wayback-b') {
             fontFam = 'TradeGothicHeavy'
+        } else if (segmentId == 'new-a') {
+            fontFam = 'TradeGothicHeavy'
+        } else if (segmentId == 'new-b') {
+            fontFam = 'TradeGothicHeavy'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }

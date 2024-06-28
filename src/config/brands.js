@@ -128,8 +128,10 @@ const brands = [
         image: '/pngs/SW_Side_Element_B.png',
         hasCustomText: true,
         fontSize: 145,
-        textTargetPositionTopRatio: 0.085,
+        textTargetPositionTopRatio: 0.01,
         textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
       },
       {
         id: 'new-b',
@@ -137,8 +139,10 @@ const brands = [
         image: '/pngs/SW_Side_Element_B1.png',
         hasCustomText: true,
         fontSize: 145,
-        textTargetPositionTopRatio: 0.085,
+        textTargetPositionTopRatio: 0.01,
         textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
       }
 
     ]
