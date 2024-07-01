@@ -60,14 +60,19 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
 
     context.font = `${fontSize}px '${fontFamily}'`;
     context.fillStyle = color;
-    context.textBaseline = 'top';
+    console.log('segment details', segment);
+    if (segment.id === 'wayback-b') {
+        context.textBaseline = 'top';
+    } else {        
+        context.textBaseline = 'top';
+    }
 
     // Temporary background color for testing
     // context.fillStyle = 'rgba(255, 0, 0, 0.5)';
     // context.fillRect(0, 0, canvas.width, canvas.height);
 
     const negLineGap = segment.negLineGap || 35; // this is the gap between the lines. increase to move the lines closer together
-
+    console.log('canvas', canvas.height)
     wrappedLines.forEach((line, index) => {
         const yPos = index * (lineHeight - negLineGap); // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
         // console.log('yPos', yPos)
