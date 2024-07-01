@@ -84,7 +84,9 @@ export function Homepage() {
     }
 
     // Set text
-    if (segment.text) {
+    if (text) {
+      setText(text);
+    } else if (segment.text) {
       setText(segment.text);
     } else {
       setText('');
