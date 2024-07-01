@@ -106,6 +106,8 @@ const brands = [
         image: '/pngs/SW_Side_Element_A.png',
         hasCustomText: true,
         fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
         textTargetPositionTopRatio: 0.01,
         textXPosition: 25,
         canvasWidth: 800, // max width of the canvas before making the text wrap
@@ -119,6 +121,8 @@ const brands = [
         image: '/pngs/SW_Side_Element_D.png',
         hasCustomText: true,
         fontSize: 170,
+        normalFontSize: 145,
+        smallFontSize: 130,
         textTargetPositionTopRatio: 0.325,
         textXPosition: 85,
         canvasWidth: 870, // max width of the canvas before making the text wrap
@@ -132,6 +136,8 @@ const brands = [
         image: '/pngs/SW_Side_Element_B.png',
         hasCustomText: true,
         fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
         textTargetPositionTopRatio: 0.01,
         textXPosition: 25,
         canvasWidth: 800, // max width of the canvas before making the text wrap
@@ -145,6 +151,8 @@ const brands = [
         image: '/pngs/SW_Side_Element_B1.png',
         hasCustomText: true,
         fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
         textTargetPositionTopRatio: 0.01,
         textXPosition: 25,
         canvasWidth: 800, // max width of the canvas before making the text wrap
