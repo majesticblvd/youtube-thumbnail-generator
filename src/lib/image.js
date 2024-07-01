@@ -2,7 +2,7 @@ import { createCanvas } from 'canvas';
 import sharp from 'sharp';
 // import fs from 'fs';
 
-export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing, segment }) {
+export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing, segment, isIconEnabled }) {
     const lineHeight = (fontSize * 1.2);
     console.log('lineHeight', lineHeight)
     let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
@@ -39,7 +39,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     }, []);
 
     let lineMaxWidth = wrappedLines.reduce((maxWidth, line) => {
-        let lineWidth = tempContext.measureText(line).width;
+        let lineWidth = tempContext.measureText(line).width + 15;
         return Math.max(maxWidth, lineWidth);
     }, 0);
 
@@ -48,7 +48,17 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
         canvasWidth = lineMaxWidth; // Add some padding from the left
     }
 
-    const height = lineHeight * wrappedLines.length; // Calculate the height of the canvas
+    // Sets the top padding to fit the icon above the text
+    let padding = 0;
+    if (isIconEnabled) {
+        if (segment.id === 'wayback-b') {
+            padding = 0;
+        } else {
+            padding = 185;
+        }
+    }
+
+    const height = (lineHeight * wrappedLines.length) + padding; // Calculate the height of the canvas
     const canvas = createCanvas(canvasWidth, height); 
     const context = canvas.getContext('2d');
 
@@ -74,10 +84,10 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     const negLineGap = segment.negLineGap || 35; // this is the gap between the lines. increase to move the lines closer together
     console.log('canvas', canvas.height)
     wrappedLines.forEach((line, index) => {
-        const yPos = index * (lineHeight - negLineGap); // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
+        const yPos = index * (lineHeight - negLineGap) + padding; // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
         // console.log('yPos', yPos)
         // can increase the yPos to make the gap between the lines larger. But i will actually just need to move the whole canvas element itself lower.
-        context.fillText(line, 1, yPos); // Add some padding from the left
+        context.fillText(line, 0, yPos); // Add some padding from the left
     });
 
     const buffer = canvas.toBuffer('image/png');

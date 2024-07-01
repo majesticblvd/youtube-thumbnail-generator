@@ -11,7 +11,7 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected, isIconEnabled } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
 
@@ -84,7 +84,7 @@ export async function POST(req) {
             const letterSpacingInt = parseInt(letterSpacing); 
             
             // Create text
-            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment });
+            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled });
             
             // Get the dimensions of the text buffer
             const textImage = sharp(textBuffer);
@@ -113,6 +113,12 @@ export async function POST(req) {
 
         if (isGradientSelected) {
             composites.unshift({ input: gradientPngFullPath, blend: 'over', top: 0, left: 0});
+        }
+
+        if (isIconEnabled) {
+            const iconPngPath = segment.icon || '/pngs/SW_Side_Element_Live.png';
+            const iconPngFullPath = path.join(publicDirectory, iconPngPath);
+            composites.push({ input: iconPngFullPath, blend: 'over', top: 30, left: 30});
         }
 
         const processedImage = await sharp(buffer)

@@ -15,6 +15,7 @@ import Switch from "./ui/switch"
 import { resetToDefault, resetStates } from "@/lib/helper-func"
 import Compressor from 'compressorjs';
 import GradientSwitch from "./ui/GradientToggle"
+import IconToggle from "./ui/IconToggle"
 
 const initialState = {
   message: null,
@@ -48,6 +49,7 @@ export function Homepage() {
   const [maxYPosition, setMaxYPosition] = useState(null);
   const [minXPosition, setMinXPosition] = useState(null);
   const [maxXPosition, setMaxXPosition] = useState(null);
+  const [isIconEnabled, setIsIconEnabled] = useState(false);
 
 
   // REFs
@@ -135,6 +137,7 @@ export function Homepage() {
     }
 
     setSelectedSegment(''); // Reset the selected segment
+    setIsIconEnabled(false); // Reset the icon toggle
   }
 
   const handleTextChange = (e) => {
@@ -321,6 +324,7 @@ export function Homepage() {
       yPosition: yPosition,
       letterSpacing, letterSpacing,
       isGradientSelected: isGradientSelected,
+      isIconEnabled: isIconEnabled
     }; 
 
     try {
@@ -352,6 +356,21 @@ export function Homepage() {
       setIsLoading(false);
     }
   }
+
+  // Listen for cmd + enter to submit the form
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.metaKey && e.key === 'Enter') {
+        handleSubmit(e);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleSubmit]);
 
   // Function to download the image
   const downloadImage = async (dataUrl) => {
@@ -460,8 +479,9 @@ export function Homepage() {
   }
   useEffect(() => {
     console.log('gradient status:', isGradientSelected);
+    console.log('icon status:', isIconEnabled)
   }
-  , [isGradientSelected]);
+  , [isGradientSelected, isIconEnabled]);
 
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
@@ -553,9 +573,19 @@ export function Homepage() {
               </motion.div>
 
               {/* Gradient on off switch */}
-              <motion.div layout className="grid gap-2">
-                <label className="text-sm font-medium mt-4">Bottom Gradient</label>
-                <GradientSwitch setIsGradientSelected={setIsGradientSelected} isGradientSelected={isGradientSelected} />
+              <motion.div className="flex justify-between items-center">
+                <motion.div layout className="grid gap-2">
+                  <label className="text-sm font-medium mt-4">Bottom Gradient</label>
+                  <GradientSwitch setIsGradientSelected={setIsGradientSelected} isGradientSelected={isGradientSelected} />
+                </motion.div>
+
+                {/* Icon Toggle Switch */}
+                {selectedSegment.hasIcon && (
+                  <motion.div layout className="grid gap-2">
+                  <label className="text-sm font-medium mt-4">Live Icon</label>
+                  <IconToggle isIconEnabled={isIconEnabled} setIsIconEnabled={setIsIconEnabled} />
+                </motion.div>
+                )}
               </motion.div>
 
               {/* Text Input Fields */}
@@ -822,7 +852,7 @@ export function Homepage() {
                
 
               <motion.div layout>
-                <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading}>
+                <Button onClick={handleSubmit} className="w-full my-4" disabled={isLoading} >
                   {isLoading ? 'Generating...' : 'Generate Thumbnail'}
                 </Button>
                 {imageUrl && (
