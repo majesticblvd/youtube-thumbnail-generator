@@ -121,8 +121,8 @@ const brands = [
         image: '/pngs/SW_Side_Element_D.png',
         hasCustomText: true,
         fontSize: 170,
-        normalFontSize: 145,
-        smallFontSize: 130,
+        normalFontSize: 170,
+        smallFontSize: 160,
         textTargetPositionTopRatio: 0.325,
         textXPosition: 85,
         canvasWidth: 870, // max width of the canvas before making the text wrap
