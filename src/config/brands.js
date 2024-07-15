@@ -10,17 +10,22 @@ const brands = [
       {
         id: 'access-standard',
         name: 'Access Standard',
-        image: '/pngs/standard-star.png',
+        image: '/pngs/access/standard-star.png',
+      },
+      {
+        id: 'access-standard-b',
+        name: 'Access Standard B',
+        image: '/pngs/access/standard-b.png',
       },
       {
         id: 'access-royals',
         name: 'Access Royals',
-        image: '/pngs/royals.png',
+        image: '/pngs/access/royals.png',
       },
       {
         id: 'access-interview-short',
         name: 'Access Interview (short)',
-        image: '/pngs/int-short.png',
+        image: '/pngs/access/int-short.png',
         fontSize: 180,
         normalFontSize: 180,
         smallFontSize: 120,
@@ -32,7 +37,7 @@ const brands = [
       {
         id: 'access-interview-long',
         name: 'Access Interview (long)',
-        image: '/pngs/int-long.png',
+        image: '/pngs/access/int-long.png',
         hasCustomText: true,
         fontSize: 120,
         normalFontSize: 120,
@@ -46,7 +51,7 @@ const brands = [
       {
         id: 'access-exclusive',
         name: 'Access Exclusive',
-        image: '/pngs/E.png',
+        image: '/pngs/access/E.png',
         fontSize: 210,
         textTargetPositionTopRatio: 0.736,
         hasCustomText: false,
@@ -56,39 +61,44 @@ const brands = [
         negLineGap: 35, // this is the gap between the lines. increase to move the lines closer together
       },
       {
+        id: 'access-exclusive-b',
+        name: 'Access Exclusive B',
+        image: '/pngs/access/exclusive-b.png',
+      },
+      {
         id: 'access-daily',
         name: 'Access Daily',
-        image: '/pngs/daily.png',
+        image: '/pngs/access/daily.png',
       },
       {
         id: 'access-award-season',
         name: 'Access Award Season',
-        image: '/pngs/awards-new.png',
+        image: '/pngs/access/awards-new.png',
       },
       {
         id: 'access-reality-nightcap',
         name: 'Access Reality Nightcap',
-        image: '/pngs/H.png',
+        image: '/pngs/access/H.png',
       },
       {
         id: 'access-housewives-nightcap',
         name: 'Access Housewives Nightcap',
-        image: '/pngs/housewives.png',
+        image: '/pngs/access/housewives.png',
       },
       {
         id: 'access-behind-the-easel',
         name: 'Access Behind the Easel',
-        image: '/pngs/behind_the_easel_full.png',
+        image: '/pngs/access/behind_the_easel_full.png',
       },
       {
         id: 'access-espanol',
         name: 'Access Español',
-        image: '/pngs/Espanol_Star.png',
+        image: '/pngs/access/Espanol_Star.png',
       },
       {
         id: 'access-espanol-label',
         name: 'Access Español Label',
-        image: '/pngs/Espanol_Star_Label.png',
+        image: '/pngs/access/Espanol_Star_Label.png',
       },
     ],
   },
@@ -103,7 +113,7 @@ const brands = [
       {
         id: 'wayback-a',
         name: 'Wayback A',
-        image: '/pngs/SW_Side_Element_A.png',
+        image: '/pngs/wilkos/SW_Side_Element_A.png',
         hasCustomText: true,
         fontSize: 145,
         normalFontSize: 145,
@@ -113,12 +123,12 @@ const brands = [
         canvasWidth: 800, // max width of the canvas before making the text wrap
         negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
         hasIcon: true,
-        icon: '/pngs/SW_Side_Element_Live.png'
+        icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       },
       {
         id: 'wayback-b',
         name: 'Wayback B',
-        image: '/pngs/SW_Side_Element_D.png',
+        image: '/pngs/wilkos/SW_Side_Element_D.png',
         hasCustomText: true,
         fontSize: 170,
         normalFontSize: 170,
@@ -128,12 +138,12 @@ const brands = [
         canvasWidth: 870, // max width of the canvas before making the text wrap
         negLineGap: 65, // this is the gap between the lines. increase to move the lines closer together
         hasIcon: true,
-        icon: '/pngs/SW_Side_Element_Live.png'
+        icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       },
       {
         id: 'new-a',
         name: 'New A',
-        image: '/pngs/SW_Side_Element_B.png',
+        image: '/pngs/wilkos/SW_Side_Element_B.png',
         hasCustomText: true,
         fontSize: 145,
         normalFontSize: 145,
@@ -143,12 +153,12 @@ const brands = [
         canvasWidth: 800, // max width of the canvas before making the text wrap
         negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
         hasIcon: true,
-        icon: '/pngs/SW_Side_Element_Live.png'
+        icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       },
       {
         id: 'new-b',
         name: 'New B',
-        image: '/pngs/SW_Side_Element_B1.png',
+        image: '/pngs/wilkos/SW_Side_Element_B1.png',
         hasCustomText: true,
         fontSize: 145,
         normalFontSize: 145,
@@ -158,7 +168,7 @@ const brands = [
         canvasWidth: 800, // max width of the canvas before making the text wrap
         negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
         hasIcon: true,
-        icon: '/pngs/SW_Side_Element_Live.png'
+        icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       }
 
     ]

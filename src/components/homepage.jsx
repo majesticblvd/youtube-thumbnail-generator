@@ -84,7 +84,7 @@ export function Homepage() {
     }
 
     // Set text
-    if (text) {
+    if (text && segment.id !== 'access-exclusive') {
       setText(text);
     } else if (segment.text) {
       setText(segment.text);
