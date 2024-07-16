@@ -1,6 +1,6 @@
 import { createCanvas } from 'canvas';
 
-export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing, segment, isIconEnabled }) {
+export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled }) {
     const lineHeight = (fontSize * 1.2);
     console.log('lineHeight', lineHeight);
     let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
@@ -11,15 +11,15 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
 
     // Function to wrap text
     function wrapText(context, text, maxWidth) {
-        let words = text.split(' '); // Split the text into words
-        let lines = []; // Array to hold the lines
-        let line = ''; // Variable to hold the current line
-
+        let words = text.split(' ');
+        let lines = [];
+        let line = '';
+    
         words.forEach(word => {
-            let testLine = line + word + ' '; // builds the lines one word at a time increasing the width with each word
+            let testLine = line + word + ' ';
             let metrics = context.measureText(testLine);
-            let testWidth = metrics.width;
-
+            let testWidth = metrics.width + (testLine.length - 1) * letterSpacing;
+    
             if (testWidth > maxWidth && line !== '') {
                 lines.push(line.trim());
                 line = word + ' ';
@@ -27,7 +27,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
                 line = testLine;
             }
         });
-
+    
         lines.push(line.trim());
         return lines;
     }
@@ -38,7 +38,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     
 
     let lineMaxWidth = wrappedLines.reduce((maxWidth, line) => {
-        let lineWidth = tempContext.measureText(line).width + 15;
+        let lineWidth = tempContext.measureText(line).width + (line.length - 1) * letterSpacing + 15;
         return Math.max(maxWidth, lineWidth);
     }, 0);
 
@@ -114,9 +114,15 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     const rightShift = segment.rightShift || 0; // Use 0 as default if not specified
     const upwardShift = segment.upwardShift || 0; // Use 0 as default if not specified
  
-    wrappedLines.forEach((line, index) => {
-        const yPos = index * (lineHeight - negLineGap) + padding - upwardShift; // this is the y position of the line. You can increase the lineHeight to increase the gap between the lines.
-        context.fillText(line, (bgWidth - canvasWidth) / 2 + bgPadding + rightShift, yPos); // Adjust the x position to align text within the background
+    wrappedLines.forEach((line, lineIndex) => {
+        let xPos = (bgWidth - canvasWidth) / 2 + bgPadding + rightShift;
+        const yPos = lineIndex * (lineHeight - negLineGap) + padding - upwardShift;
+        
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            context.fillText(char, xPos, yPos);
+            xPos += context.measureText(char).width + letterSpacing;
+        }
     });
 
     const buffer = mainCanvas.toBuffer('image/png');
