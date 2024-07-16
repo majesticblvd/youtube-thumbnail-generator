@@ -93,7 +93,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     // Color the main canvas for visualization
     // context.fillStyle = 'rgba(0, 0, 255, 0.5)'; // Semi-transparent blue
 
-    // context.fillRect(0, 0, bgWidth, bgHeight);
+    // context.fillRect(0, 0, bgWidth, bgHeight); // Fill the entire canvas with the color for debugging
     context.clearRect(0, 0, bgWidth, bgHeight);
 
     // Draw the background canvas onto the main canvas
