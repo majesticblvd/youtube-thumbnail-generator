@@ -802,8 +802,8 @@ export function Homepage() {
                     type="range"
                     id="fontSizeSlider"
                     name="fontSizeSlider"
-                    min={minYPosition} // Minimum font size
-                    max={maxYPosition} // Maximum font size
+                    min={minYPosition} // Minimum y position
+                    max={maxYPosition} // Maximum y position
                     value={(maxYPosition + minYPosition) - yPosition} // Adjust this calculation to invert the slider's effect
                     onChange={(e) => {
                       const sliderValue = e.target.value;

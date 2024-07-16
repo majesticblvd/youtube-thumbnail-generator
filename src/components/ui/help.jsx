@@ -91,7 +91,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                         <h4 className="text-md font-semibold mt-4">Step 5: Click <span className="font-bold ">Generate Thumbnail</span> to see the finished product!</h4>
                         <h4 className="text-md font-semibold mt-4">Step 6: Toggle the <span className="font-bold ">Adjust</span> switch to make any changes</h4>
                         <h4 className="text-md font-semibold mt-4">Step 7: Click the <span className="font-bold ">Reset Thumbnail</span> button at any time to start over from the original image</h4>
-                        <h4 className="text-md font-semibold mt-4">Step 8: Click <span className="font-bold ">Download Thumbnail</span> to save your image</h4>
+                        <h4 className="text-md font-semibold mt-4">Step 8: Click <span className="font-bold ">Download Thumbnail (cmd + enter)</span> to save your image</h4>
                         <div className="flex flex-col p-2 pb-4  rounded-md dark:border-gray-900 border-gray-100 mt-4 outline-dotted">
                             <h4 className="text-md font-semibold">How to Crop</h4>
                             <h5 className="text-sm ml-4 mt-2">- Drag to select the area on the image that you would like to crop</h5>

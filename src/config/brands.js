@@ -3,8 +3,8 @@ const brands = [
     id: 'access-hollywood',
     name: 'Access Hollywood',
     minYPosition: 0.60,
-    maxYPosition: 0.80,
-    minXPosition: 260,
+    maxYPosition: 0.90,
+    minXPosition: 0,
     maxXPosition: 400,
     segments: [
       {
@@ -33,6 +33,22 @@ const brands = [
         hasCustomText: true,
         textXPosition: 307,
         letterSpacing: 0.0,
+      },
+      {
+        id: 'access-interview-short-b',
+        name: 'Access Interview (short) B',
+        image: '/pngs/access/interview-short-b.png',
+        fontSize: 153,
+        normalFontSize: 153,
+        smallFontSize: 143,
+        textTargetPositionTopRatio: 0.817,
+        hasCustomText: true,
+        textXPosition: 10,
+        letterSpacing: 0.0,
+        rightShift: 60, // this will move the text to the right by 60px
+        extraWidth: 250, // this will increase the width of the background canvas that the text is drawn on to 
+        upwardShift: 10, // this will move the text up by 50px
+        pngOverlay: true,
       },
       {
         id: 'access-interview-long',
