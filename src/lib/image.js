@@ -75,8 +75,15 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     // bgContext.fillRect(0, 0, bgWidth, bgHeight);
 
     // Draw background only for interview-short-b
-    if (segment.id === 'access-interview-short-b') {
-        bgContext.fillStyle = '#061414';
+    if (segment.dynamicBG) {
+        if (segment.id === 'access-interview-short-b') {
+            bgContext.fillStyle = '#061414';
+        } else if (segment.id === 'access-olympics-interview') {
+            bgContext.fillStyle = '#ffffff';
+            color = '#073298';
+        } else {
+            bgContext.fillStyle = '#000000';
+        }
         bgContext.beginPath();
         bgContext.moveTo(0, 0);
         bgContext.lineTo(bgWidth - bgHeight / 2, 0);

@@ -38,6 +38,7 @@ const brands = [
         id: 'access-interview-short-b',
         name: 'Access Interview (short) B',
         image: '/pngs/access/interview-short-b.png',
+        dynamicBG: true,
         fontSize: 153,
         normalFontSize: 153,
         smallFontSize: 143,
@@ -115,6 +116,28 @@ const brands = [
         id: 'access-espanol-label',
         name: 'Access Español Label',
         image: '/pngs/access/Espanol_Star_Label.png',
+      },
+      {
+        id: 'access-olympics',
+        name: 'Access Olympics',
+        image: '/pngs/access/Paris_Olympics_C.png',
+      },
+      {
+        id: 'access-olympics-interview',
+        name: 'Access Olympics Interview',
+        image: '/pngs/access/Paris_Olympics_H.png',
+        dynamicBG: true,
+        fontSize: 153,
+        normalFontSize: 153,
+        smallFontSize: 143,
+        textTargetPositionTopRatio: 0.817,
+        hasCustomText: true,
+        textXPosition: 10,
+        letterSpacing: 0.0,
+        rightShift: 70, // this will move the text to the right by 60px
+        extraWidth: 250, // this will increase the width of the background canvas that the text is drawn on to 
+        upwardShift: 10, // this will move the text up by 50px
+        pngOverlay: true,
       },
     ],
   },
