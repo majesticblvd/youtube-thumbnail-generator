@@ -13,7 +13,6 @@ import { downloadFile } from '@/lib/file';
 import HelpComponent from "./ui/help"
 import Switch from "./ui/switch"
 import { resetToDefault, resetStates } from "@/lib/helper-func"
-import Compressor from 'compressorjs';
 import GradientSwitch from "./ui/GradientToggle"
 import IconToggle from "./ui/IconToggle"
 
@@ -50,10 +49,66 @@ export function Homepage() {
   const [minXPosition, setMinXPosition] = useState(null);
   const [maxXPosition, setMaxXPosition] = useState(null);
   const [isIconEnabled, setIsIconEnabled] = useState(false);
-
+  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+  const [dragBounds, setDragBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 });
 
   // REFs
   const canvasRef = useRef(null);
+  const textRef = useRef(null);
+  const containerRef = useRef(null);
+
+
+  /** 
+   * Drag n Drop Text
+   * 1. Get the container and text element using refs
+   * 2. Calculate the container and text element dimensions
+   * 3. Calculate the drag position based on the container and text element dimensions
+   *  -- Get the same units that are being used by sharp to render the x and y positions for the text**** 7/17/24
+   */
+  useEffect(() => {
+    if (canvasRef.current && textRef.current) {
+      const containerRect = canvasRef.current.getBoundingClientRect();
+      const textRect = textRef.current.getBoundingClientRect();
+
+      setDragBounds({
+        left: 0,
+        top: 0,
+        right: containerRect.width - textRect.width,
+        bottom: containerRect.height - textRect.height
+      });
+
+      // Initialize text position
+      setDragPosition({
+        x: (xPosition / 1920) * containerRect.width,
+        y: (yPosition / 1080) * containerRect.height
+      });
+    }
+  }, [xPosition, yPosition, text, fontSize]); // Re-calculate when these change
+
+  const handleDrag = (event, info) => {
+    if (canvasRef.current) {
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      const textRect = textRef.current.getBoundingClientRect();
+
+      // Calculate new position relative to canvas
+      let newX = info.point.x - canvasRect.left;
+      let newY = info.point.y - canvasRect.top;
+
+      // Constrain within canvas bounds
+      newX = Math.max(0, Math.min(newX, canvasRect.width - textRect.width));
+      newY = Math.max(0, Math.min(newY, canvasRect.height - textRect.height));
+
+      // Update position
+      setDragPosition({ x: newX, y: newY });
+
+      // Convert to 1920x1080 coordinate system for backend
+      const scaledX = Math.round((newX / canvasRect.width));
+      const scaledY = Math.round((newY / canvasRect.height));
+
+      setXPosition(scaledX);
+      setYPosition(scaledY);
+    }
+  };
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -307,6 +362,9 @@ export function Homepage() {
     }
   };
 
+  /**
+   * Function to handle the form submission  
+   */
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -870,7 +928,7 @@ export function Homepage() {
             layout
             >
             {imageUrl ? (
-               <div className="flex flex-col relative w-full aspect-video hover:cursor-crosshair">
+               <motion.div className="flex flex-col relative w-full aspect-video hover:cursor-crosshair" ref={containerRef}>
                 {/* Crop Icon */}
                 <p onClick={displayCroppedImage} className="absolute group flex top-0 border-2 rounded-lg backdrop-blur-lg border-slate-800 px-2 py-2 text-sm text-slate-900 cursor-pointer right-0 mt-2 mr-2 hover:shadow-thicc bg-slate-50 transition-all duration-200">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -878,13 +936,32 @@ export function Homepage() {
                     <path d="M1 6.13L16 6a2 2 0 012 2v15" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 <p className="pointer-events-none absolute sm:-top-14 -top-12 z-10 backdrop-blur-sm dark:bg-slate-700 p-2 rounded-md delay-700 left-0 w-max opacity-0 dark:text-gray-100 text-gray-900 bg-slate-800 transition-opacity group-hover:opacity-100">Crop</p>
-                </p>
-                {/* uncomment for tool-tip for cropping */}
-                
+                </p>                
                 <canvas 
                   className="max-w-full"
                   ref={canvasRef}
                 ></canvas>
+                {isTextInputEnabled && (
+                  <motion.div
+                    ref={textRef}
+                    drag
+                    dragMomentum={false}
+                    dragConstraints={dragBounds}
+                    onDrag={handleDrag}
+                    dragElastic={0.1}
+                    style={{
+                      position: 'absolute',
+                      cursor: 'move',
+                      userSelect: 'none',
+                      x: dragPosition.x,
+                      y: dragPosition.y,
+                    }}
+                  >
+                    <p style={{ color: 'white', fontSize: `${fontSize / 2}px` }}>
+                    {text.toUpperCase()}
+                  </p>
+                </motion.div>
+                )}
                 <Button
                   type="button"
                   onClick={() => downloadImage(imageUrl)} 
@@ -893,7 +970,7 @@ export function Homepage() {
                 >
                   Download Image
                 </Button>
-              </div>
+              </motion.div>
             ) : (
               <NextImage
                 alt="Placeholder"

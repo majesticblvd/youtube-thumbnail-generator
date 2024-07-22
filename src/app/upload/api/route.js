@@ -15,8 +15,6 @@ export async function POST(req) {
         
         const brand = brands.find((brand) => brand.id === brandId);
 
-        console.log('gradient state', isGradientSelected);
-
         if (!brand) {
             throw new Error('Brand not found');
         }
@@ -103,7 +101,7 @@ export async function POST(req) {
             
             composites = [
                 { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
-                { input: textBuffer, blend: 'over', top: textYPos, left: textXPos},
+                { input: textBuffer, blend: 'over', top: parseInt(textYPos), left: parseInt(textXPos)},
             ];
         } else if (text && segment.pngOverlay) {
 
@@ -132,7 +130,7 @@ export async function POST(req) {
             const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
 
             composites = [
-                { input: textBuffer, blend: 'over', top: textYPos, left: textXPos},
+                { input: textBuffer, blend: 'over', top: parseInt(textYPos), left: parseInt(textXPos)},
                 { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
             ];
         } else {

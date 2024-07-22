@@ -2,8 +2,9 @@ import { createCanvas } from 'canvas';
 
 export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled }) {
     const lineHeight = (fontSize * 1.2);
-    console.log('lineHeight', lineHeight);
     let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
+
+    console.log('text', text);
 
     const tempCanvas = createCanvas(100, 100);
     const tempContext = tempCanvas.getContext('2d');
