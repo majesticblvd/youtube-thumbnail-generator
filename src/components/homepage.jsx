@@ -51,11 +51,22 @@ export function Homepage() {
   const [isIconEnabled, setIsIconEnabled] = useState(false);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [dragBounds, setDragBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // REFs
   const canvasRef = useRef(null);
   const textRef = useRef(null);
   const containerRef = useRef(null);
+
+
+
+  const getMousePos = (canvas, evt) => {
+    const rect = canvas.getBoundingClientRect(); // Gets the canvas position relative to the viewport
+    return {
+      x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+      y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
+  };
 
 
   /** 
@@ -67,7 +78,8 @@ export function Homepage() {
    */
   useEffect(() => {
     if (canvasRef.current && textRef.current) {
-      const containerRect = canvasRef.current.getBoundingClientRect();
+      const canvas = canvasRef.current;
+      const containerRect = canvas.getBoundingClientRect();
       const textRect = textRef.current.getBoundingClientRect();
 
       setDragBounds({
@@ -79,36 +91,46 @@ export function Homepage() {
 
       // Initialize text position
       setDragPosition({
-        x: (xPosition / 1920) * containerRect.width,
-        y: (yPosition / 1080) * containerRect.height
+        x: (xPosition / 1920) * canvas.width,
+        y: (yPosition / 1080) * canvas.height
       });
     }
-  }, [xPosition, yPosition, text, fontSize]); // Re-calculate when these change
+  }, [xPosition, yPosition, text, fontSize]);
 
-  const handleDrag = (event, info) => {
-    if (canvasRef.current) {
-      const canvasRect = canvasRef.current.getBoundingClientRect();
+  const handleDragStart = (event, info) => {
+    if (textRef.current) {
       const textRect = textRef.current.getBoundingClientRect();
+      setDragOffset({
+        x: event.clientX - textRect.left,
+        y: event.clientY - textRect.top
+      });
+    }
+  };
 
-      // Calculate new position relative to canvas
-      let newX = info.point.x - canvasRect.left;
-      let newY = info.point.y - canvasRect.top;
+  const handleDrag = useCallback((event, info) => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const canvasRect = canvas.getBoundingClientRect();
 
-      // Constrain within canvas bounds
-      newX = Math.max(0, Math.min(newX, canvasRect.width - textRect.width));
-      newY = Math.max(0, Math.min(newY, canvasRect.height - textRect.height));
+      // Calculate position relative to canvas, accounting for the initial click offset
+      const x = event.clientX - canvasRect.left - dragOffset.x;
+      const y = event.clientY - canvasRect.top - dragOffset.y;
+
+      // Constrain the position within the canvas bounds
+      const constrainedX = Math.max(1, Math.min(x, canvas.width - textRef.current.offsetWidth));
+      const constrainedY = Math.max(0, Math.min(y, canvas.height - textRef.current.offsetHeight));
 
       // Update position
-      setDragPosition({ x: newX, y: newY });
+      setDragPosition({ x: constrainedX, y: constrainedY });
 
       // Convert to 1920x1080 coordinate system for backend
-      const scaledX = Math.round((newX / canvasRect.width));
-      const scaledY = Math.round((newY / canvasRect.height));
+      const scaledX = Math.round((constrainedX / canvas.width) * 1920);
+      const scaledY = Math.round((constrainedY / canvas.height) * 1080);
 
       setXPosition(scaledX);
       setYPosition(scaledY);
     }
-  };
+  }, [dragOffset]);
 
   // Handle segment selection
   const handleSegmentSelect = (segment) => {
@@ -244,14 +266,6 @@ export function Homepage() {
       }
     };
   }, [imageUrl, cropStart, cropEnd]);
-
-  const getMousePos = (canvas, evt) => {
-    const rect = canvas.getBoundingClientRect(); // Gets the canvas position relative to the viewport
-    return {
-      x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-      y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -948,7 +962,8 @@ export function Homepage() {
                     dragMomentum={false}
                     dragConstraints={dragBounds}
                     onDrag={handleDrag}
-                    dragElastic={0.1}
+                    onDragStart={handleDragStart}
+                    dragElastic={0}
                     style={{
                       position: 'absolute',
                       cursor: 'move',
@@ -957,9 +972,9 @@ export function Homepage() {
                       y: dragPosition.y,
                     }}
                   >
-                    <p style={{ color: 'white', fontSize: `${fontSize / 2}px` }}>
-                    {text.toUpperCase()}
-                  </p>
+                    <p style={{ color: 'white', fontSize: `${fontSize / 2.5}px`, lineHeight: '1'}}>
+                      {text.toUpperCase()}
+                    </p>
                 </motion.div>
                 )}
                 <Button

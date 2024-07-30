@@ -98,6 +98,8 @@ export async function POST(req) {
             
             const textXPos = parseInt(xPosition) || 350;
             const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
+            console.log('textYPos', textYPos);
+            console.log('textXPos', textXPos);
             
             composites = [
                 { input: overlayPngFullPath, blend: 'over', top: 0, left: 0},
@@ -127,7 +129,10 @@ export async function POST(req) {
             const textTargetPositionTopRatio = yPosition || config.defaultTextTargetPositionTopRatio;  
             
             const textXPos = parseInt(xPosition) || 350;
-            const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
+            // const textYPos = parseInt(processedImageSize.height * textTargetPositionTopRatio); // this will use the top left corner of the text as the reference point
+            const textYPos = parseInt(textTargetPositionTopRatio);
+            console.log('textYPos', textYPos);
+            console.log('textXPos', textXPos);
 
             composites = [
                 { input: textBuffer, blend: 'over', top: parseInt(textYPos), left: parseInt(textXPos)},
