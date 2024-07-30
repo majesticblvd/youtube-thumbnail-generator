@@ -11,7 +11,7 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected, isIconEnabled } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected, isIconEnabled, filter } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
 
@@ -152,15 +152,42 @@ export async function POST(req) {
             composites.push({ input: iconPngFullPath, blend: 'over', top: 30, left: 30});
         }
 
-        const processedImage = await sharp(buffer)
+        let sharpInstance = sharp(buffer) // create a sharp instance with the buffer
             .resize(processedImageSize.width, processedImageSize.height, {
                 fit: 'cover',
                 position: 'center',
-            })
+            }); // resize the image to fit the processed image size
+
+        switch (filter) {
+            case 'sepia':
+                sharpInstance = sharpInstance.modulate({ brightness: 1, saturation: 0.7, hue: 30 });
+                break;
+            case 'grayscale':
+                sharpInstance = sharpInstance.grayscale();
+                break;
+            case 'blur':
+                sharpInstance = sharpInstance.blur(5);
+                break;
+            case 'sharpen':
+                sharpInstance = sharpInstance.sharpen(5);
+                break;
+        }
+
+        const processedImage = await sharpInstance
             .composite(composites)
             .toFormat('jpeg')
             .jpeg({ quality: 85 })
             .toBuffer();
+
+        // const processedImage = await sharp(buffer)
+        //     .resize(processedImageSize.width, processedImageSize.height, {
+        //         fit: 'cover',
+        //         position: 'center',
+        //     })
+        //     .composite(composites)
+        //     .toFormat('jpeg')
+        //     .jpeg({ quality: 85 })
+        //     .toBuffer();
         
         const processedImageSizeInBytes = processedImage.length;
 

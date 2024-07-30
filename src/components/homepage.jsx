@@ -16,6 +16,7 @@ import { resetToDefault, resetStates } from "@/lib/helper-func"
 import Compressor from 'compressorjs';
 import GradientSwitch from "./ui/GradientToggle"
 import IconToggle from "./ui/IconToggle"
+import FilterSelector from "./ui/FilterSelector"
 
 const initialState = {
   message: null,
@@ -50,6 +51,7 @@ export function Homepage() {
   const [minXPosition, setMinXPosition] = useState(null);
   const [maxXPosition, setMaxXPosition] = useState(null);
   const [isIconEnabled, setIsIconEnabled] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('none');
 
 
   // REFs
@@ -326,7 +328,8 @@ export function Homepage() {
       yPosition: yPosition,
       letterSpacing, letterSpacing,
       isGradientSelected: isGradientSelected,
-      isIconEnabled: isIconEnabled
+      isIconEnabled: isIconEnabled,
+      filter: selectedFilter,
     }; 
 
     try {
@@ -589,6 +592,13 @@ export function Homepage() {
                 </motion.div>
                 )}
               </motion.div>
+              
+              {/* ----- Image Filter ----- */}
+              <FilterSelector 
+                  devActive={devActive} 
+                  selectedFilter={selectedFilter}
+                  setSelectedFilter={setSelectedFilter} 
+                />
 
               {/* Text Input Fields */}
               <AnimatePresence mode="wait" >
