@@ -171,6 +171,9 @@ export async function POST(req) {
             case 'sharpen':
                 sharpInstance = sharpInstance.sharpen(5);
                 break;
+            case 'brighten':
+                sharpInstance = sharpInstance.modulate({ brightness: 1.3 });
+                break;
         }
 
         const processedImage = await sharpInstance

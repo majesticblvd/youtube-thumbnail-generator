@@ -9,6 +9,7 @@ const filterOptions = [
   { id: 'grayscale', name: 'Grayscale' },
   { id: 'blur', name: 'Blur' },
   { id: 'sharpen', name: 'Sharpen' },
+  { id: 'brighten', name: 'Brighten' },
 ];
 
 const FilterSelector = ({ selectedFilter, setSelectedFilter }) => {
@@ -34,6 +35,7 @@ const FilterSelector = ({ selectedFilter, setSelectedFilter }) => {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+    
   );
 };
 

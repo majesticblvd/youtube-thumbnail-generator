@@ -72,7 +72,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                     <motion.div 
                         layout 
                         style={{borderRadius: 20}} 
-                        className="flex flex-col dark:bg-gray-200 dark:text-gray-950 overflow-scroll lg:max-w-40w md:max-w-70w sm:max-w-80w max-w-80w max-h-70 bg-gray-900 text-gray-100 z-50 relative p-6 " 
+                        className="flex flex-col dark:bg-gray-200 dark:text-gray-950 overflow-scroll lg:max-w-60w md:max-w-70w sm:max-w-80w max-w-80w max-h-70 bg-gray-900 text-gray-100 z-50 relative p-6 " 
                         initial={{ scale: 0.5 }} 
                         animate={{ scale: 1 }} 
                         exit={{ scale: 0.5 }}
