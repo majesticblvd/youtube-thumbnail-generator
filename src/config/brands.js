@@ -31,7 +31,8 @@ const brands = [
         smallFontSize: 120,
         textTargetPositionTopRatio: 0.758,
         hasCustomText: true,
-        textXPosition: 307,
+        extraWidth: 50,
+        textXPosition: 295,
         letterSpacing: 0.0,
       },
       {
@@ -61,7 +62,8 @@ const brands = [
         smallFontSize: 100,
         hasCustomSecondText: true,
         textTargetPositionTopRatio: 0.712,
-        textXPosition: 369,
+        textXPosition: 355,
+        extraWidth: 50,
         letterSpacing: 0.0,
         negLineGap: 35, // this is the gap between the lines. increase to move the lines closer together
       },
@@ -210,6 +212,58 @@ const brands = [
         icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       }
 
+    ]
+  },
+  {
+    id: 'karamo',
+    name: 'Karamo Show',
+    minYPosition: -0.02,
+    maxYPosition: 0.50,
+    minXPosition: 0,
+    maxXPosition: 110,
+    segments: [
+      {
+        id: 'standard-a',
+        name: 'Standard A',
+        image: '/pngs/karamo/karamo-standard-a.png',
+        hasCustomText: true,
+        fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
+        textTargetPositionTopRatio: 0.04,
+        textXPosition: 25,
+        extraWidth: 40,
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: false,
+      },
+      {
+        id: 'standard-b',
+        name: 'Standard B',
+        image: '/pngs/karamo/karamo-standard-b.png',
+        hasCustomText: true,
+        fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
+        textTargetPositionTopRatio: 0.03,
+        textXPosition: 25,
+        extraWidth: 40,
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: false,
+      },
+      {
+        id: 'reacts',
+        name: 'Reacts',
+        image: '/pngs/karamo/karamo-reacts.png',
+        hasCustomText: true,
+        fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
+        textTargetPositionTopRatio: 0.01,
+        textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: false,
+      },
     ]
   }
 ];

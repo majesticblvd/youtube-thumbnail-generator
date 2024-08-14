@@ -61,7 +61,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     
     // Create background canvas
     const bgPadding = 0; // padding around the text
-    const extraWidth = segment.extraWidth || 10; // Use 0 as default if not specified
+    const extraWidth = segment.extraWidth || 10; // Use 10 as default if not specified
     const bgWidth = canvasWidth + extraWidth + 2 * bgPadding; // Add extra width to the background
     const bgHeight = height + bgPadding * 2;
     const bgX = -extraWidth / 2; // Center the extra width around the text
@@ -100,7 +100,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     // Color the main canvas for visualization
     // context.fillStyle = 'rgba(0, 0, 255, 0.5)'; // Semi-transparent blue
 
-    // context.fillRect(0, 0, bgWidth, bgHeight); // Fill the entire canvas with the color for debugging
+    context.fillRect(0, 0, bgWidth, bgHeight); // Fill the entire canvas with the color for debugging
     context.clearRect(0, 0, bgWidth, bgHeight);
 
     // Draw the background canvas onto the main canvas

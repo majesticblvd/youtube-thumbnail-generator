@@ -35,10 +35,12 @@ export async function POST(req) {
         const fontPath = path.join(publicDirectory, '/fonts/MarkOT-CondBoldItalic.otf');
         const heavyFontPath = path.join(publicDirectory, '/fonts/MarkOT-Heavy.otf');
         const wilkosHeavyFontPath = path.join(publicDirectory, '/fonts/TradeGothicHeavy.ttf');
+        const karamoFontPath = path.join(publicDirectory, '/fonts/Mont-BlackItalic.otf');
 
         registerFont(fontPath, { family: 'MarkOT-CondBoldItalic' });
         registerFont(heavyFontPath, { family: 'MarkOT-CondHeavy'});
         registerFont(wilkosHeavyFontPath, { family: 'TradeGothicHeavy'});
+        registerFont(karamoFontPath, { family: 'Mont-BlackItalic'});
 
         // Use Heavy Font if segment is interview (long)
         let fontFam = ''
@@ -52,6 +54,10 @@ export async function POST(req) {
             fontFam = 'TradeGothicHeavy'
         } else if (segmentId == 'new-b') {
             fontFam = 'TradeGothicHeavy'
+        } else if (segmentId === 'standard-a') {
+            fontFam = 'Mont-BlackItalic'
+        } else if (segmentId === 'standard-b') {
+            fontFam = 'Mont-BlackItalic'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }
