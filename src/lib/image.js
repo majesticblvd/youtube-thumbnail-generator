@@ -1,6 +1,7 @@
 import { createCanvas } from 'canvas';
 
-export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled }) {
+export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled, imageWidth }) {
+    
     const lineHeight = (fontSize * 1.2);
     console.log('lineHeight', lineHeight);
     let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
@@ -36,7 +37,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
         return [...acc, ...wrapText(tempContext, line, canvasWidth)];
     }, []);
     
-
+    // Calculate the maximum width of the wrapped lines
     let lineMaxWidth = wrappedLines.reduce((maxWidth, line) => {
         let lineWidth = tempContext.measureText(line).width + (line.length - 1) * letterSpacing + 15;
         return Math.max(maxWidth, lineWidth);
@@ -45,6 +46,10 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     // Adjust the canvas width if not specified
     if (!canvasWidth) {
         canvasWidth = lineMaxWidth; // Add some padding from the left
+    }
+
+    if (segment.textCenter) {
+        canvasWidth = imageWidth - 50; // Set canvas width to image width if text is centered
     }
 
     // Sets the top padding to fit the icon above the text
@@ -100,8 +105,8 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     // Color the main canvas for visualization
     // context.fillStyle = 'rgba(0, 0, 255, 0.5)'; // Semi-transparent blue
 
-    context.fillRect(0, 0, bgWidth, bgHeight); // Fill the entire canvas with the color for debugging
-    context.clearRect(0, 0, bgWidth, bgHeight);
+    // context.fillRect(0, 0, bgWidth, bgHeight); // Fill the entire canvas with the color for debugging
+    // context.clearRect(0, 0, bgWidth, bgHeight);
 
     // Draw the background canvas onto the main canvas
     context.drawImage(backgroundCanvas, 0, 0);
@@ -117,12 +122,25 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     context.textBaseline = 'top';
 
     const negLineGap = segment.negLineGap || 35; // this is the gap between the lines. increase to move the lines closer together
-
     const rightShift = segment.rightShift || 0; // Use 0 as default if not specified
     const upwardShift = segment.upwardShift || 0; // Use 0 as default if not specified
  
     wrappedLines.forEach((line, lineIndex) => {
-        let xPos = (bgWidth - canvasWidth) / 2 + bgPadding + rightShift;
+        let xPos;
+        if (segment.textCenter) {
+            // Calculate the width of the current line
+            const lineWidth = context.measureText(line).width + (line.length - 1) * letterSpacing;
+
+            // Check if the line is too long
+            if (lineWidth > 1720) {
+                throw new Error('Text too long, decrease font size or word count');
+            }
+
+            // Center the line horizontally
+            xPos = (bgWidth - lineWidth) / 2;
+        } else {
+            xPos = (bgWidth - canvasWidth) / 2 + bgPadding + rightShift;
+        }
         const yPos = lineIndex * (lineHeight - negLineGap) + padding - upwardShift;
         
         for (let i = 0; i < line.length; i++) {

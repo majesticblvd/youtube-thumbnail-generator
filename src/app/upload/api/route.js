@@ -36,11 +36,17 @@ export async function POST(req) {
         const heavyFontPath = path.join(publicDirectory, '/fonts/MarkOT-Heavy.otf');
         const wilkosHeavyFontPath = path.join(publicDirectory, '/fonts/TradeGothicHeavy.ttf');
         const karamoFontPath = path.join(publicDirectory, '/fonts/Mont-BlackItalic.otf');
+        const karamoTestFontPath2 = path.join(publicDirectory, '/fonts/Mont-HeavyDEMO.otf');
 
         registerFont(fontPath, { family: 'MarkOT-CondBoldItalic' });
         registerFont(heavyFontPath, { family: 'MarkOT-CondHeavy'});
         registerFont(wilkosHeavyFontPath, { family: 'TradeGothicHeavy'});
-        registerFont(karamoFontPath, { family: 'Mont-BlackItalic'});
+        registerFont(karamoFontPath, { family: 'Mont-BlackItalic' });
+        registerFont(karamoFontPath, { family: 'Mont Black Italic'});
+        registerFont(karamoFontPath, { family: 'MontBlackItalic'});
+        registerFont(karamoTestFontPath2, { family: 'Mont-HeavyDEMO' });
+
+        console.log(segmentId);
 
         // Use Heavy Font if segment is interview (long)
         let fontFam = ''
@@ -54,10 +60,8 @@ export async function POST(req) {
             fontFam = 'TradeGothicHeavy'
         } else if (segmentId == 'new-b') {
             fontFam = 'TradeGothicHeavy'
-        } else if (segmentId === 'standard-a') {
-            fontFam = 'Mont-BlackItalic'
-        } else if (segmentId === 'standard-b') {
-            fontFam = 'Mont-BlackItalic'
+        } else if (segmentId == 'standard-a' || segmentId == 'standard-b') {
+            fontFam = 'Mont-HeavyDEMO'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }
@@ -88,9 +92,9 @@ export async function POST(req) {
             
             // Convert letter spacing to int
             const letterSpacingInt = parseInt(letterSpacing); 
-            
+
             // Create text
-            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled });
+            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled, imageWidth: processedImageSize.width });
             
             // Get the dimensions of the text buffer
             const textImage = sharp(textBuffer);

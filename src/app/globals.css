@@ -58,3 +58,9 @@ body {
   src: url('/fonts/TradeGothicHeavy.ttf') format('truetype');
   font-weight: bold;
 }
+@font-face {
+  font-family: 'Mont Black Italic';
+  src: url('/fonts/Mont-BlackItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
