@@ -251,7 +251,7 @@ const brands = [
         normalFontSize: 128,
         smallFontSize: 120,
         letterSpacing: 1.0,
-        textTargetPositionTopRatio: 0.035,
+        textTargetPositionTopRatio: 0.035 ,
         textXPosition: 1,
         extraWidth: 40,
         negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
