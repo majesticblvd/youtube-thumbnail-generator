@@ -60,7 +60,7 @@ export async function POST(req) {
         } else if (segmentId == 'new-b') {
             fontFam = 'TradeGothicHeavy'
         } else if (segmentId == 'standard-a' || segmentId == 'standard-b') {
-            fontFam = 'Mont-Black'
+            fontFam = 'Mont-HeavyDEMO'
         } else {
             fontFam = 'MarkOT-CondBoldItalic'
         }
