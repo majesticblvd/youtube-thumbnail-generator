@@ -141,6 +141,8 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
         } else {
             xPos = (bgWidth - canvasWidth) / 2 + bgPadding + rightShift;
         }
+        
+        // Calculate the y position of the line based on the line index
         const yPos = lineIndex * (lineHeight - negLineGap) + padding - upwardShift;
         
         for (let i = 0; i < line.length; i++) {

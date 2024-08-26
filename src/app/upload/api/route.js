@@ -35,12 +35,14 @@ export async function POST(req) {
         const fontPath = path.join(publicDirectory, '/fonts/MarkOT-CondBoldItalic.otf');
         const heavyFontPath = path.join(publicDirectory, '/fonts/MarkOT-Heavy.otf');
         const wilkosHeavyFontPath = path.join(publicDirectory, '/fonts/TradeGothicHeavy.ttf');
+        const wilkosHeavyItalicFontPath = path.join(publicDirectory, '/fonts/TradeGothicHeavyItalic.otf');
         const karamoFontPath = path.join(publicDirectory, '/fonts/Mont-Black.woff');
         const karamoTestFontPath2 = path.join(publicDirectory, '/fonts/Mont-HeavyDEMO.otf');
 
         registerFont(fontPath, { family: 'MarkOT-CondBoldItalic' });
         registerFont(heavyFontPath, { family: 'MarkOT-CondHeavy'});
         registerFont(wilkosHeavyFontPath, { family: 'TradeGothicHeavy'});
+        registerFont(wilkosHeavyItalicFontPath, { family: 'TradeGothicHeavyItalic'});
         registerFont(karamoTestFontPath2, { family: 'Mont-HeavyDEMO' });
         registerFont(karamoFontPath, { family: 'Mont-Black' });
 
@@ -53,8 +55,8 @@ export async function POST(req) {
             fontFam = 'MarkOT-CondHeavy'
         }  else if (segmentId == 'wayback-a') {
             fontFam = 'TradeGothicHeavy'
-        } else if (segmentId == 'wayback-b') {
-            fontFam = 'TradeGothicHeavy'
+        } else if (segmentId == 'wayback-b' || segmentId == 'wayback-c') {
+            fontFam = 'TradeGothicHeavyItalic'
         } else if (segmentId == 'new-a') {
             fontFam = 'TradeGothicHeavy'
         } else if (segmentId == 'new-b') {

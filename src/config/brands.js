@@ -184,6 +184,22 @@ const brands = [
         icon: '/pngs/wilkos/SW_Side_Element_Live.png'
       },
       {
+        id: 'wayback-c',
+        name: 'Wayback C',
+        image: '/pngs/wilkos/wilkos-wayback-c.png',
+        hasCustomText: true,
+        fontSize: 170,
+        normalFontSize: 170,
+        smallFontSize: 160,
+        letterSpacing: 1.0,
+        textTargetPositionTopRatio: 0.325,
+        textXPosition: 25,
+        canvasWidth: 870, // max width of the canvas before making the text wrap
+        negLineGap: 65, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: true,
+        icon: '/pngs/wilkos/SW_Side_Element_Live.png'
+      },
+      {
         id: 'new-a',
         name: 'New A',
         image: '/pngs/wilkos/SW_Side_Element_B.png',
