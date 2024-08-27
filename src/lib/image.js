@@ -1,10 +1,10 @@
 import { createCanvas } from 'canvas';
 
-export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled, imageWidth }) {
+export async function generateTextBuffer({ text, fontSize, fontFamily, color, shadowColor = 'rgba(0,0,0,0.8)', shadowOffsetX = -1, shadowOffsetY = 3, shadowBlur = 3, letterSpacing = 0, segment, isIconEnabled, imageWidth, lineHeight, canvasWidth }) {
     
-    const lineHeight = (fontSize * 1.2);
-    console.log('lineHeight', lineHeight);
-    let canvasWidth = segment.canvasWidth ? segment.canvasWidth : undefined;
+    const lineHeightCalc = (fontSize * lineHeight);
+
+    let adjCanvasWidth = segment.canvasWidth ? canvasWidth : undefined;
 
     const tempCanvas = createCanvas(100, 100);
     const tempContext = tempCanvas.getContext('2d');
@@ -34,7 +34,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     }
 
     let wrappedLines = text.split('\n').reduce((acc, line) => {
-        return [...acc, ...wrapText(tempContext, line, canvasWidth)];
+        return [...acc, ...wrapText(tempContext, line, adjCanvasWidth)];
     }, []);
     
     // Calculate the maximum width of the wrapped lines
@@ -44,12 +44,12 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     }, 0);
 
     // Adjust the canvas width if not specified
-    if (!canvasWidth) {
-        canvasWidth = lineMaxWidth; // Add some padding from the left
+    if (!adjCanvasWidth) {
+        adjCanvasWidth = lineMaxWidth; // Add some padding from the left
     }
 
     if (segment.textCenter) {
-        canvasWidth = imageWidth - 50; // Set canvas width to image width if text is centered
+        adjCanvasWidth = imageWidth - 50; // Set canvas width to image width if text is centered
     }
 
     // Sets the top padding to fit the icon above the text
@@ -62,22 +62,23 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
         }
     }
 
-    const height = (lineHeight * wrappedLines.length) + padding; // Calculate the height of the canvas
+    const height = (lineHeightCalc * wrappedLines.length) + padding; // Calculate the height of the canvas
     
     // Create background canvas
     const bgPadding = 0; // padding around the text
     const extraWidth = segment.extraWidth || 10; // Use 10 as default if not specified
-    const bgWidth = canvasWidth + extraWidth + 2 * bgPadding; // Add extra width to the background
-    const bgHeight = height + bgPadding * 2;
+    const bgWidth = adjCanvasWidth + extraWidth + 2 * bgPadding; // Add extra width to the background
+    const bgHeight = height + bgPadding * 2; // Add padding to the height
     const bgX = -extraWidth / 2; // Center the extra width around the text
     const bgY = -bgPadding;
     
     const backgroundCanvas = createCanvas(bgWidth, bgHeight);
     const bgContext = backgroundCanvas.getContext('2d');
 
-    // Color the background canvas for visualization
-    // bgContext.fillStyle = 'rgba(255, 0, 0, 0.0)'; // Semi-transparent red
+    // Add a temporary background color for debugging
+    // bgContext.fillStyle = '#ff0000';
     // bgContext.fillRect(0, 0, bgWidth, bgHeight);
+
 
     // Draw background only for interview-short-b
     if (segment.dynamicBG) {
@@ -120,6 +121,7 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
     context.font = `${fontSize}px '${fontFamily}'`;
     context.fillStyle = color;
     context.textBaseline = 'top';
+    
 
     const negLineGap = segment.negLineGap || 35; // this is the gap between the lines. increase to move the lines closer together
     const rightShift = segment.rightShift || 0; // Use 0 as default if not specified
@@ -139,11 +141,11 @@ export async function generateTextBuffer({ text, fontSize, fontFamily, color, sh
             // Center the line horizontally
             xPos = (bgWidth - lineWidth) / 2;
         } else {
-            xPos = (bgWidth - canvasWidth) / 2 + bgPadding + rightShift;
+            xPos = (bgWidth - adjCanvasWidth) / 2 + bgPadding + rightShift;
         }
         
         // Calculate the y position of the line based on the line index
-        const yPos = lineIndex * (lineHeight - negLineGap) + padding - upwardShift;
+        const yPos = lineIndex * (lineHeightCalc - negLineGap) + padding - upwardShift;
         
         for (let i = 0; i < line.length; i++) {
             const char = line[i];

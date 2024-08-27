@@ -11,7 +11,7 @@ import { formatSize } from '@/lib/file';
 
 export async function POST(req) {
     try {
-        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected, isIconEnabled, filter } = await req.json();
+        const { brandId, segmentId, text, file, secondText, fontSize, xPosition, yPosition, letterSpacing, isGradientSelected, isIconEnabled, filter, lineHeight, canvasWidth } = await req.json();
         
         const brand = brands.find((brand) => brand.id === brandId);
 
@@ -95,7 +95,7 @@ export async function POST(req) {
             const letterSpacingInt = parseInt(letterSpacing); 
 
             // Create text
-            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled, imageWidth: processedImageSize.width });
+            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled, imageWidth: processedImageSize.width, lineHeight, canvasWidth });
             
             // Get the dimensions of the text buffer
             const textImage = sharp(textBuffer);
@@ -125,7 +125,7 @@ export async function POST(req) {
             const letterSpacingInt = parseInt(letterSpacing); 
             
             // Create text
-            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled });
+            const { buffer: textBuffer, height: textBufferHeight } = await generateTextBuffer({ text: formattedText, fontSize, fontFamily: fontFam, color: textColor, letterSpacing: letterSpacingInt, segment, isIconEnabled, lineHeight, canvasWidth });
             
             // Get the dimensions of the text buffer
             const textImage = sharp(textBuffer);

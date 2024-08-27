@@ -52,6 +52,8 @@ export function Homepage() {
   const [maxXPosition, setMaxXPosition] = useState(null);
   const [isIconEnabled, setIsIconEnabled] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('none');
+  const [lineHeight, setLineHeight] = useState(1.2); // Default line height
+  const [canvasWidth, setCanvasWidth] = useState(1600); // Default canvas width
 
 
   // REFs
@@ -61,7 +63,7 @@ export function Homepage() {
   const handleSegmentSelect = (segment) => {
     // Set selected segment
     setSelectedSegment(segment); // Update the selected segment state 
-
+    console.log('Selected Segment:', segment);
     // Set font size
     if (typeof segment.fontSize === 'number') {
       setFontSize(segment.fontSize);
@@ -93,6 +95,17 @@ export function Homepage() {
     } else {
       setText('');
     }
+
+    // Set the width of the canvas
+    if (segment.canvasWidth) {
+      setCanvasWidth(segment.canvasWidth);
+    }
+
+    // Set the line height
+    setLineHeight(segment.lineHeight || 1.2);
+
+    // Set the Button Active State to Normal when a segment is selected
+    setButtonActive('normal');
   };
 
   // Check if text input should be enabled
@@ -140,7 +153,10 @@ export function Homepage() {
       setMaxXPosition(brand.maxXPosition) // Set the maxXPosition value
     }
 
-    setSelectedSegment(''); // Reset the selected segment
+    if (brand.segments && brand.segments.length > 0) {
+      handleSegmentSelect(brand.segments[0]);
+    }
+
     setIsIconEnabled(false); // Reset the icon toggle
   }
 
@@ -309,6 +325,7 @@ export function Homepage() {
     }
   };
 
+  // Pass the Data to the Backend
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -330,6 +347,8 @@ export function Homepage() {
       isGradientSelected: isGradientSelected,
       isIconEnabled: isIconEnabled,
       filter: selectedFilter,
+      lineHeight: lineHeight,
+      canvasWidth: canvasWidth,
     }; 
 
     try {
@@ -738,7 +757,7 @@ export function Homepage() {
                 <>
                 <motion.div 
                   layout
-                  className="grid gap-2"
+                  className="grid "
                   initial='hidden'
                   animate='visible'
                   transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.06 }}
@@ -746,7 +765,8 @@ export function Homepage() {
                   exit='exit'
                   key='fontSizeSlider'
                 >
-                    <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                  <label htmlFor="fontSizeSlider" className="text-sm font-medium mt-4">Font Size - {fontSize}</label>
+                  <div className="group relative">
                     <input
                       type="range"
                       id="fontSizeSlider"
@@ -756,11 +776,15 @@ export function Homepage() {
                       value={fontSize}
                       onChange={(e) => setFontSize(e.target.value)}
                       className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
-                    />
+                      />
+                    {/* <div className="pointer-events-none absolute -top-8 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-sm dark:bg-slate-700 p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity delay-500 duration-300 text-sm">
+                      Font Size Selector
+                    </div> */}
                     <div className="flex justify-between text-xs px-2">
                       <span>90</span>
                       <span>195</span>
                     </div>
+                  </div>
                 </motion.div>
               </>
               )}
@@ -860,6 +884,71 @@ export function Homepage() {
                   </div>
               </motion.div>
               )}
+
+              {/* Line Height */}
+              {isTextInputEnabled && devActive && (
+                <>
+                  <motion.div 
+                    layout
+                    className="grid gap-2"
+                    initial='hidden'
+                    animate='visible'
+                    transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.3 }}
+                    variants={textVariants}
+                    exit='exit'
+                    key='lineHeightSlider'
+                  >
+                    <label htmlFor="lineHeightSlider" className="text-sm font-medium mt-4">Line Height - {lineHeight.toFixed(2)}</label>
+                    <input
+                      type="range"
+                      id="lineHeightSlider"
+                      name="lineHeightSlider"
+                      min="1"
+                      max="2"
+                      step="0.05"
+                      value={lineHeight}
+                      onChange={(e) => setLineHeight(parseFloat(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                    />
+                    <div className="flex justify-between text-xs px-2">
+                      <span>1</span>
+                      <span>2</span>
+                    </div>
+                  </motion.div>
+
+                {/* Canvas Width */}
+                {selectedSegment.canvasWidth && (
+
+                  <motion.div 
+                  layout
+                  className="grid gap-2"
+                  initial='hidden'
+                  animate='visible'
+                  transition={{ type: 'spring', damping: 50, stiffness: 200, mass: 5, delay: 0.4 }}
+                  variants={textVariants}
+                  exit='exit'
+                  key='canvasWidthSlider'
+                  >
+                    <label htmlFor="canvasWidthSlider" className="text-sm font-medium mt-4">Canvas Width - {canvasWidth}</label>
+                    <input
+                      type="range"
+                      id="canvasWidthSlider"
+                      name="canvasWidthSlider"
+                      min="800"
+                      max="1920"
+                      step="10"
+                      value={canvasWidth}
+                      onChange={(e) => setCanvasWidth(parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"
+                      />
+                    <div className="flex justify-between text-xs px-2">
+                      <span>800</span>
+                      <span>1920</span>
+                    </div>
+                  </motion.div>
+                  )}
+                  </>
+                )}
               </AnimatePresence>
                
 
@@ -907,7 +996,7 @@ export function Homepage() {
             ) : (
               <NextImage
                 alt="Placeholder"
-                className="object-cover w-full h-48"
+                className="object-cover h-50 w-90 rounded-lg"
                 src={'/placeholder.svg'}
                 style={{
                   aspectRatio: "400/200",
