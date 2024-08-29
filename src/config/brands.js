@@ -176,7 +176,7 @@ const brands = [
         normalFontSize: 170,
         smallFontSize: 160,
         letterSpacing: 1.0,
-        textTargetPositionTopRatio: 0.325,
+        textTargetPositionTopRatio: 0.305,
         textXPosition: 25,
         canvasWidth: 870, // max width of the canvas before making the text wrap
         negLineGap: 65, // this is the gap between the lines. increase to move the lines closer together
@@ -192,7 +192,7 @@ const brands = [
         normalFontSize: 170,
         smallFontSize: 160,
         letterSpacing: 1.0,
-        textTargetPositionTopRatio: 0.325,
+        textTargetPositionTopRatio: 0.305,
         textXPosition: 25,
         canvasWidth: 870, // max width of the canvas before making the text wrap
         negLineGap: 65, // this is the gap between the lines. increase to move the lines closer together

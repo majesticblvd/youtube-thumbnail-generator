@@ -101,6 +101,8 @@ export function Homepage() {
       setCanvasWidth(segment.canvasWidth);
     }
 
+    setDevActive(false); // Reset the dev toggle
+
     // Set the line height
     setLineHeight(segment.lineHeight || 1.2);
 
@@ -108,14 +110,23 @@ export function Homepage() {
     setButtonActive('normal');
   };
 
+  
   // Check if text input should be enabled
   const isTextInputEnabled = useMemo(() => {
     if (!selectedSegment) {
       return false;
     }
-
+    
     return selectedSegment.hasCustomText === true;
   }, [selectedSegment]);
+  
+  // useEffect to set devActive to false when text input is disabled
+  useEffect(() => {
+    if (!isTextInputEnabled) {
+      setDevActive(false);
+    }
+    console.log('isTextInputEnabled:', isTextInputEnabled);
+  }, [isTextInputEnabled]);
 
   // Clear the text input when the segment changes
   useEffect(() => {
@@ -507,6 +518,18 @@ export function Homepage() {
   }
   , [isGradientSelected, isIconEnabled]);
 
+
+  // Small / Large Font size button click function
+  const handleFontSize = (size, position, buttonType) => {
+    setFontSize(size);
+    setButtonActive(buttonType);
+
+    // Only adjust Y position for wayback-b and wayback-c segments
+    if (selectedSegment.id === 'wayback-b' || selectedSegment.id === 'wayback-c') {
+      setYPosition(position);
+    }
+  }
+
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
       <motion.form layout>
@@ -693,10 +716,7 @@ export function Homepage() {
                     </label>
                     <Button 
                       type="button"
-                      onClick={() => {
-                        setFontSize(selectedSegment.normalFontSize),
-                        setButtonActive('normal')
-                      }} 
+                      onClick={handleFontSize.bind(this, selectedSegment.normalFontSize, 0.305, 'normal')}  
                       className={`mt-2  ${buttonActive === 'normal' ? 'ring-2 dark:ring-gray-50 dark:bg-gray-700 bg-gray-300' : '' }`}
                       variant="outline"
                     >
@@ -704,10 +724,7 @@ export function Homepage() {
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => {
-                        setFontSize(selectedSegment.smallFontSize), 
-                        setButtonActive('small')
-                      }}
+                      onClick={handleFontSize.bind(this, selectedSegment.smallFontSize, 0.325, 'small')}
                       className={`mt-2  ${buttonActive === 'small' ? 'ring-2 dark:ring-gray-50 dark:bg-gray-700 bg-gray-300' : '' } `}
                       variant="outline"
                     >
@@ -720,8 +737,8 @@ export function Homepage() {
 
               {/* RESET AND DEV TOGGLE */}
 
-                <AnimatePresence mode="wait" >
-                {selectedSegment.hasCustomText === true && (
+              <AnimatePresence mode="wait" key={isTextInputEnabled ? 'editable' : 'non-editable'}> 
+                {isTextInputEnabled && (
                   <motion.div 
                     layout
                     className="grid grid-cols-2 justify-between items-end gap-10"
@@ -736,7 +753,6 @@ export function Homepage() {
                       key='switch'
                       setDevActive={setDevActive}
                       devActive={devActive}
-                      
                       />
                     {devActive && (
                       <Button
