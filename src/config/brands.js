@@ -290,6 +290,46 @@ const brands = [
         hasIcon: false,
       },
     ]
+  },
+  {
+    id: 'kelly-clarkson',
+    name: 'The Kelly Clarkson Show',
+    minYPosition: -0.02,
+    maxYPosition: 0.50,
+    minXPosition: 0,
+    maxXPosition: 110,
+    segments: [
+      {
+        id: 'standard-a',
+        name: 'Standard A',
+        image: '/pngs/kelly-clarkson/kelly-standard-a.png',
+        hasCustomText: false,
+        fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
+        letterSpacing: 1.0,
+        textTargetPositionTopRatio: 0.01,
+        textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: false,
+      },
+      {
+        id: 'standard-b',
+        name: 'Standard B',
+        image: '/pngs/kelly-clarkson/kelly-standard-b.png',
+        hasCustomText: false,
+        fontSize: 145,
+        normalFontSize: 145,
+        smallFontSize: 130,
+        letterSpacing: 1.0,
+        textTargetPositionTopRatio: 0.01,
+        textXPosition: 25,
+        canvasWidth: 800, // max width of the canvas before making the text wrap
+        negLineGap: 50, // this is the gap between the lines. increase to move the lines closer together
+        hasIcon: false,
+      }
+    ]
   }
 ];
 
