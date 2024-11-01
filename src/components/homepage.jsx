@@ -561,11 +561,11 @@ export function Homepage() {
                 </DropdownMenu>
               </div>
               <div className="grid gap-2">
-                <label className="text-sm font-medium mt-4">Segment</label>
+                <label className="text-sm font-medium mt-4">Series</label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button className="!rounded-lg !text-left w-full" id="theme" variant="outline">
-                      {selectedSegment ? selectedSegment.name : 'Select Segment'}
+                      {selectedSegment ? selectedSegment.name : 'Select Series'}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>

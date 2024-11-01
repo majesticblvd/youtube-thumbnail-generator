@@ -7,10 +7,6 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
         setModalOpen(!modalOpen)
     }
 
-    useEffect(() => {
-        console.log('modalOpen', modalOpen);
-    }, [modalOpen])
-
     const modalVariants = {
         visible: {
             opacity: 1,
@@ -70,9 +66,13 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
 
     return (
         <>
-            <div className="flex justify-center items-center border-2 rounded-full *:hover:text-gray-500 w-8 h-8 border-gray-950 dark:border-gray-100 hover:cursor-pointer hover:border-gray-500 hover:text-grey-500 transition duration-300" onClick={toggleModal}>
-                <h3 className="text-sm font-semibold leading-none tracking-tight hover:cursor-pointer hover:text-gray-500 transition duration-300">?</h3>
-            </div>
+            <motion.div className="flex justify-center items-center border-2 rounded-full w-8 h-8 border-gray-95 hover:cursor-pointer " 
+                onClick={toggleModal}
+                whileHover={{ rotate: 30 }}
+                transition={{ type: 'spring', stiffness: 160, damping: 5, mass: 0.9 }}
+            >
+                <h3 className="text-sm font-semibold leading-none tracking-tight hover:cursor-pointer">?</h3>
+            </motion.div>
 
             <AnimatePresence>
                 {modalOpen && (
@@ -106,7 +106,7 @@ const HelpComponent = memo(function Help({ modalOpen, setModalOpen }) {
                                     <p>How-to Guide</p>
                                 </motion.div>
                                 <motion.h4 variants={itemVariants} className="text-md font-semibold mt-4">Step 1: Select Brand</motion.h4>
-                                <motion.h4 variants={itemVariants} className="text-md font-semibold mt-4">Step 2: Select your Segment</motion.h4>
+                                <motion.h4 variants={itemVariants} className="text-md font-semibold mt-4">Step 2: Select your Series</motion.h4>
                                 <motion.h4 variants={itemVariants} className="text-md font-semibold mt-4">Step 3: Upload your thumbnail image</motion.h4>
                                 <motion.h5 variants={itemVariants} className="text-sm ml-4 mt-2">a. Paste your YouTube video URL and pull the current thumbnail</motion.h5>
                                 <motion.h5 variants={itemVariants} className="text-sm ml-4 mt-2">b. Upload an image file from your computer</motion.h5>
