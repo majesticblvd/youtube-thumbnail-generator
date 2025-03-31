@@ -17,6 +17,7 @@ import Compressor from 'compressorjs';
 import GradientSwitch from "./ui/GradientToggle"
 import IconToggle from "./ui/IconToggle"
 import FilterSelector from "./ui/FilterSelector"
+import VideoFrameSelector from "./VideoFrameSelector"
 
 const initialState = {
   message: null,
@@ -530,6 +531,12 @@ export function Homepage() {
     }
   }
 
+  // Frame selection
+  const handleFrameSelect = (frameBase64) => {
+    setImageUrl(frameBase64);
+    setOriginalImageUrl(frameBase64);
+  };
+
   return (
     (<Card className="my-10 lg:min-w-96 md:min-w-96 max-w-90w">
       <motion.form layout>
@@ -594,6 +601,7 @@ export function Homepage() {
                   Fetch Thumbnail
                 </Button>
               </div>
+              <VideoFrameSelector onFrameSelect={handleFrameSelect} />
               <motion.div layout className="grid mt-4 gap-2">
                   <label className="text-sm font-medium" htmlFor="upload">
                     Upload Image
